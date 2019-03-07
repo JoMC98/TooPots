@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Crear nou tipus d'activitat</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+    <h2>Nou tipus d'activitat</h2>
+        <form action="#" th:action="@{/activityType/add}" th:object="${activityType}" method="post">
+            <table>
+                <tr>
+                    <td><label>Id</label></td>
+                    <td><input type="number" th:field="*{id}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Nom</label></td>
+                    <td><input type="text" th:field="*{name}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Nivell (Low, Middle, High, Extreme)</label></td>
+                    <td><input type="text" th:field="*{level}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Descripció</label></td>
+                    <td><input type="text" th:field="*{description}" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Afegeix tipus d'activitat" /></td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar Tipus d'Activitats</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <h1>Llista de Tipus d'Activitats</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Nivell</th>
+                    <th>Descripció</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="activityType: ${activityTypes}">
+                    <td th:text="${activityType.id}"></td>
+                    <td th:text="${activityType.name}"></td>
+                    <td th:text="${activityType.level}"></td>
+                    <td th:text="${activityType.description}"></td>
+                    <td><a th:href="@{/activityType/update/{id}(id=${activityType.id})}">Edita</a>
+                    </td>
+                    <td><a th:href="@{/activityType/delete/{id}(id=${activityType.id})}">Esborra</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="add">Afegeix un tipus d'activitat</a>
+        <a href="/">Tornar</a>
+    </body>
+</html>
