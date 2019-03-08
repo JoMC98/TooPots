@@ -11,10 +11,6 @@
         <form action="#" th:action="@{/activityType/update/{id}(id=${activityType.id})}" th:object="${activityType}" method="post">
             <table>
                 <tr>
-                    <td><label>Id</label></td>
-                    <td><input type="number" th:field="*{id}" /></td>
-                </tr>
-                <tr>
                     <td><label>Nom</label></td>
                     <td><input type="text" th:field="*{name}" /></td>
                 </tr>
@@ -27,7 +23,7 @@
                     <td><input type="text" th:field="*{description}" /></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" value="Afegeix tipus d'activitat" /></td>
+                    <td colspan="2"><input type="submit" value="Edita tipus d'activitat" /></td>
                 </tr>
             </table>
         </form>

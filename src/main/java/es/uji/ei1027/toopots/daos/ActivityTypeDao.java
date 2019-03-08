@@ -22,8 +22,8 @@ public class ActivityTypeDao {
 
     /* Afegeix el Tipus de Activitat a la base de dades */
     public void addActivityType(ActivityType activityType) {
-        jdbcTemplate.update("INSERT INTO Activity_Type VALUES(?, ?, ?, ?)",
-                activityType.getId(), activityType.getName(), activityType.getLevel(),
+        jdbcTemplate.update("INSERT INTO Activity_Type VALUES(DEFAULT, ?, ?, ?)",
+                activityType.getName(), activityType.getLevel(),
                 activityType.getDescription());
     }
 

@@ -11,7 +11,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th>Nom</th>
                     <th>Nivell</th>
                     <th>Descripció</th>
@@ -19,7 +18,6 @@
             </thead>
             <tbody>
                 <tr th:each="activityType: ${activityTypes}">
-                    <td th:text="${activityType.id}"></td>
                     <td th:text="${activityType.name}"></td>
                     <td th:text="${activityType.level}"></td>
                     <td th:text="${activityType.description}"></td>
