@@ -60,6 +60,7 @@ public class ActivityTypeController {
         return "redirect:../list";
     }
 
+    //Esborra un tipus de activitat
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {
         activityTypeDao.deleteActivityType(id);
