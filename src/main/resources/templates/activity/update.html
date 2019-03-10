@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Editar activitat</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+    <h2>Editar activitat</h2>
+        <form action="#" th:action="@{/activity/update/{id}(id=${activity.id})}" th:object="${activity}" method="post">
+            <table>
+                <tr>
+                    <td><label>Nom</label></td>
+                    <td><input type="text" th:field="*{name}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Ubicació</label></td>
+                    <td><input type="text" th:field="*{place}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Descripció</label></td>
+                    <td><input type="number" th:field="*{pricePerPerson}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Nombre màxim de persones</label></td>
+                    <td><input type="number" th:field="*{maxNumberPeople}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Nombre mínim de persones</label></td>
+                    <td><input type="number" th:field="*{minNumberPeople}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Punt de trobada</label></td>
+                    <td><input type="text" th:field="*{meetingPoint}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Hora de trobada</label></td>
+                    <td><input type="text" th:field="*{meetingTime}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Tipus d'Activitat</label></td>
+                    <td><input type="number" th:field="*{activityType}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Instructor</label></td>
+                    <td><input type="number" th:field="*{idInstructor}" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Editar activitat" /></td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>

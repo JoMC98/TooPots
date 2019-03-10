@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar Tipus d'Activitats</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <h1>Llista de Tipus d'Activitats</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Ubicació</th>
+                    <th>Preu per persona</th>
+                    <th>Nombre màxim de persones</th>
+                    <th>Nombre mínim de persones</th>
+                    <th>Punt de trobada</th>
+                    <th>Hora de trobada</th>
+                    <th>Data de creació</th>
+                    <th>Estat</th>
+                    <th>Tipus d'Activitat</th>
+                    <th>Instructor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="activity: ${activities}">
+                    <td th:text="${activity.name}"></td>
+                    <td th:text="${activity.place}"></td>
+                    <td th:text="${activity.pricePerPerson}"></td>
+                    <td th:text="${activity.maxNumberPeople}"></td>
+                    <td th:text="${activity.minNumberPeople}"></td>
+                    <td th:text="${activity.meetingPoint}"></td>
+                    <td th:text="${{activity.meetingTime}}"></td>
+                    <td th:text="${activity.creationDate}"></td>
+                    <td th:text="${activity.state}"></td>
+                    <td th:text="${activity.activityType}"></td>
+                    <td th:text="${activity.idInstructor}"></td>
+                    <td><a th:href="@{/activity/update/{id}(id=${activity.id})}">Edita</a>
+                    </td>
+                    <td><a th:href="@{/activity/delete/{id}(id=${activity.id})}">Esborra</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="add">Afegeix una activitat</a><br>
+        <a href="/">Tornar</a>
+    </body>
+</html>
