@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Editar instructor</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body>
+<h2>Editar instructor</h2>
+<form action="#" th:action="@{/instructor/update/{id}(id=${instructor.id})}" th:object="${instructor}" method="post">
+    <table>
+        <tr>
+            <td><label>Nom</label></td>
+            <td><input type="text" th:field="*{name}" /></td>
+        </tr>
+        <tr>
+            <td><label>Nif</label></td>
+            <td><input type="text" th:field="*{nif}" /></td>
+        </tr>
+        <tr>
+            <td><label>Mail</label></td>
+            <td><input type="text" th:field="*{mail}" /></td>
+        </tr>
+        <tr>
+            <td><label>Residencia</label></td>
+            <td><input type="text" th:field="*{residence}" /></td>
+        </tr>
+        <tr>
+            <td><label>Numero de compte bancari</label></td>
+            <td><input type="text" th:field="*{accountNumber}" /></td>
+        </tr>
+        <tr>
+            <td><label>Username</label></td>
+            <td><input type="text" th:field="*{username}" /></td>
+        </tr>
+        <tr>
+            <td><label>Contrasenya</label></td>
+            <td><input type="text" th:field="*{passwd}" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Afegeix Instructor" /></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
