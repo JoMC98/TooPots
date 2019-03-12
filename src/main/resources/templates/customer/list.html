@@ -17,6 +17,8 @@
         <th>Sexe</th>
         <th>Data de naixement</th>
         <th>Data de creació</th>
+        <th>Username</th>
+        <th>Contrasenya</th>
     </tr>
     </thead>
     <tbody>
@@ -27,6 +29,8 @@
         <td th:text="${customer.sex}"></td>
         <td th:text="${customer.birthDate}"></td>
         <td th:text="${customer.registerDate}"></td>
+        <td th:text="${customer.username}"></td>
+        <td th:text="${customer.passwd}"></td>
         <td><a th:href="@{/customer/update/{id}(id=${customer.id})}">Edita</a>
         </td>
         <td><a th:href="@{/customer/delete/{id}(id=${customer.id})}">Esborra</a>

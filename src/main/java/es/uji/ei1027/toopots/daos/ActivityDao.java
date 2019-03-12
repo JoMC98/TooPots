@@ -26,7 +26,7 @@ public class ActivityDao {
         jdbcTemplate.update("INSERT INTO Activity VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, DEFAULT, ?, ?, ?)",
                 activity.getName(), activity.getPlace(), activity.getPricePerPerson(), activity.getMaxNumberPeople(),
                 activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
-                "Opened", activity.getActivityType(), activity.getIdInstructor());
+                "Oberta", activity.getActivityType(), activity.getIdInstructor());
     }
 
     /* Esborra l'Activitat de la base de dades */

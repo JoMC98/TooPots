@@ -16,8 +16,8 @@
         <th>Mail</th>
         <th>Residencia</th>
         <th>Numero de compte bancari</th>
-        <th>Username</th>
         <th>Data de registre</th>
+        <th>Username</th>
         <th>Contrasenya</th>
         <th>Estat</th>
     </tr>
@@ -29,8 +29,8 @@
         <td th:text="${instructor.mail}"></td>
         <td th:text="${instructor.residence}"></td>
         <td th:text="${instructor.accountNumber}"></td>
-        <td th:text="${instructor.username}"></td>
         <td th:text="${instructor.registerDate}"></td>
+        <td th:text="${instructor.username}"></td>
         <td th:text="${instructor.passwd}"></td>
         <td th:text="${instructor.state}"></td>
         <td><a th:href="@{/instructor/update/{id}(id=${instructor.id})}">Edita</a>

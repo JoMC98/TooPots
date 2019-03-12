@@ -12,6 +12,8 @@ public class Customer {
     private String sex;
     private Date birthDate;
     private Date registerDate;
+    private String username;
+    private String passwd;
 
     //Constructor
     public Customer() {
@@ -48,6 +50,14 @@ public class Customer {
         return registerDate;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPasswd() {
+        return passwd;
+    }
+
     //Setters
     public void setId(int id) {
         this.id = id;
@@ -77,6 +87,14 @@ public class Customer {
         this.registerDate = registerDate;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPasswd(String passwd) {
+        this.passwd = passwd;
+    }
+
     //ToString
 
     @Override
@@ -89,6 +107,8 @@ public class Customer {
                 ", sex='" + sex + '\'' +
                 ", birthDate=" + birthDate +
                 ", registerDate=" + registerDate +
+                ", username='" + username + '\'' +
+                ", passwd='" + passwd + '\'' +
                 '}';
     }
 }

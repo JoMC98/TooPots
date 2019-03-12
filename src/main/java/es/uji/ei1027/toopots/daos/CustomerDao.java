@@ -25,8 +25,9 @@ public class CustomerDao {
 
     /* Afegeix el Client a la base de dades */
     public void addCustomer(Customer customer) {
-        jdbcTemplate.update("INSERT INTO Customer VALUES(DEFAULT, ?, ?, ?, ?, ?, DEFAULT)",
-                customer.getNif(), customer.getName(), customer.getMail(), customer.getSex(), customer.getBirthDate());
+        jdbcTemplate.update("INSERT INTO Customer VALUES(DEFAULT, ?, ?, ?, ?, ?, DEFAULT, ?, ?)",
+                customer.getNif(), customer.getName(), customer.getMail(), customer.getSex(), customer.getBirthDate(),
+                customer.getUsername(), customer.getPasswd());
     }
 
     /* Esborra el Client de la base de dades */
@@ -38,9 +39,10 @@ public class CustomerDao {
     /* Actualitza els atributs del Client
        (excepte el id, que és la clau primària) */
     public void updateCustomer(Customer customer) {
-        jdbcTemplate.update("UPDATE Customer SET nif=?, name=?, mail=?, sex=?, birthDate=?, registerDate=?",
+        jdbcTemplate.update("UPDATE Customer SET nif=?, name=?, mail=?, sex=?, birthDate=?, registerDate=?, username=?," +
+                        "passwd=?",
                 customer.getNif(), customer.getName(), customer.getMail(), customer.getSex(), customer.getBirthDate(),
-                customer.getRegisterDate());
+                customer.getRegisterDate(),customer.getUsername(), customer.getPasswd());
     }
 
     /* Obté el client amb el id donat. Torna null si no existeix. */
