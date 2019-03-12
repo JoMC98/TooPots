@@ -39,9 +39,9 @@ public class ActivityDao {
        (excepte el id, que és la clau primària) */
     public void updateActivity(Activity activity) {
         jdbcTemplate.update("UPDATE Activity SET name=?, place=?, pricePerPerson=?, maxNumberPeople=?, minNumberPeople=?," +
-                        "meetingPoint=?, meetingTime=?, creationDate=?, state=?, activityType=?, idInstructor=? where idActivity=?",
+                        "meetingPoint=?, meetingTime=?, state=?, activityType=?, idInstructor=? where idActivity=?",
                 activity.getName(), activity.getPlace(), activity.getPricePerPerson(), activity.getMaxNumberPeople(),
-                activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(), activity.getCreationDate(),
+                activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
                 activity.getState(), activity.getActivityType(), activity.getIdInstructor(), activity.getId());
     }
 

@@ -38,9 +38,9 @@ public class InstructorDao {
        (excepte el id, que és la clau primària) */
     public void updateInstructor(Instructor instructor) {
         jdbcTemplate.update("UPDATE Instructor SET name=?, nif=?, mail=?, residence=?, accountNumber=?, username=?, "+
-                        "registerDate=?, passwd=?, state=?",
+                        "passwd=?, state=?",
                 instructor.getName(), instructor.getNif(), instructor.getMail(), instructor.getResidence(), instructor.getAccountNumber(),
-                instructor.getUsername(),instructor.getRegisterDate(), instructor.getPasswd(), instructor.getState());
+                instructor.getUsername(), instructor.getPasswd(), instructor.getState());
     }
 
     /* Obté l'Instructor amb el id donat. Torna null si no existeix. */
