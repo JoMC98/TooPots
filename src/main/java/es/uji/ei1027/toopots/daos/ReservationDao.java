@@ -24,8 +24,8 @@ public class ReservationDao {
 
     /* Afegeix la reserva a la base de dades */
     public void addReservation(Reservation reservation) {
-        jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT)",
-                reservation.getBookingDate(),reservation.getActivityDate(),reservation.getNumberPeople(),
+        jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)",
+                reservation.getActivityDate(),reservation.getNumberPeople(),
                 reservation.getPricePerPerson(), reservation.getTotalPrice(), reservation.getTransactionNumber(), reservation.getIdActivity(),
                 reservation.getIdCustomer(), "Pendent");
     }
