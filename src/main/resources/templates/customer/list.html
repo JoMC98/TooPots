@@ -26,8 +26,8 @@
         <td th:text="${customer.name}"></td>
         <td th:text="${customer.mail}"></td>
         <td th:text="${customer.sex}"></td>
-        <td th:text="${customer.birthDate}"></td>
-        <td th:text="${customer.registerDate}"></td>
+        <td th:text="${{customer.birthDate}}"></td>
+        <td th:text="${{customer.registerDate}}"></td>
         <td th:text="${customer.username}"></td>
         <td><a th:href="@{/customer/update/{id}(id=${customer.id})}">Edita</a>
         </td>

@@ -1,5 +1,7 @@
 package es.uji.ei1027.toopots.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Instructor {
@@ -13,7 +15,10 @@ public class Instructor {
     private String residence;
     private int accountNumber;
     private String username;
+
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Date registerDate;
+
     private String passwd;
     private String state;
 
