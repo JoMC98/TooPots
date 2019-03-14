@@ -13,6 +13,7 @@ public class ActivityTypeRowMapper implements RowMapper<ActivityType> {
         activityType.setName(rs.getString("nameType"));
         activityType.setLevel(rs.getString("activityLevel"));
         activityType.setDescription(rs.getString("description"));
+        activityType.setPhoto(rs.getString("photo"));
         return activityType;
     }
 }

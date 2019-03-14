@@ -23,7 +23,7 @@ public class CertificationDao {
 
     /* Afegeix el Certificat a la base de dades */
     public void addCertification(Certification certification) {
-        jdbcTemplate.update("INSERT INTO Certification VALUES(DEFAULT, ?, ?, DEFAULT, ?)",
+        jdbcTemplate.update("INSERT INTO Certification VALUES(DEFAULT, ?, ?, ?, ?)",
                 certification.getCertificate(), certification.getDoc(), "Pendent" ,certification.getIdInstructor());
     }
 

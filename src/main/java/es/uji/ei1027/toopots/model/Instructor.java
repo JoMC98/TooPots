@@ -16,7 +16,7 @@ public class Instructor {
     private int accountNumber;
     private String username;
 
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date registerDate;
 
     private String passwd;

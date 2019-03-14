@@ -13,10 +13,10 @@ public class Customer {
     private String mail;
     private String sex;
 
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
 
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date registerDate;
 
     private String username;

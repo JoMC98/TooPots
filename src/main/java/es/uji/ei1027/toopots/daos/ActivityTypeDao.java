@@ -22,9 +22,9 @@ public class ActivityTypeDao {
 
     /* Afegeix el Tipus de Activitat a la base de dades */
     public void addActivityType(ActivityType activityType) {
-        jdbcTemplate.update("INSERT INTO Activity_Type VALUES(DEFAULT, ?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO Activity_Type VALUES(DEFAULT, ?, ?, ?, ?)",
                 activityType.getName(), activityType.getLevel(),
-                activityType.getDescription());
+                activityType.getDescription(), activityType.getPhoto());
     }
 
     /* Esborra el activityType de la base de dades */
@@ -36,9 +36,9 @@ public class ActivityTypeDao {
     /* Actualitza els atributs del activityType
        (excepte el id, que és la clau primària) */
     public void updateActivityType(ActivityType activityType) {
-        jdbcTemplate.update("UPDATE Activity_Type SET nameType=?, activityLevel=?, description=? where idActivityType=?",
+        jdbcTemplate.update("UPDATE Activity_Type SET nameType=?, activityLevel=?, description=?, photo=? where idActivityType=?",
                 activityType.getName(), activityType.getLevel(),
-                activityType.getDescription(), activityType.getId());
+                activityType.getDescription(), activityType.getId(), activityType.getPhoto());
     }
 
     /* Obté el activityType amb el id donat. Torna null si no existeix. */

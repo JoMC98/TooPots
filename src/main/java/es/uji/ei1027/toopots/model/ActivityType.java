@@ -7,6 +7,7 @@ public class ActivityType {
     private String name;
     private String level;
     private String description;
+    private String photo;
 
     //Constructor
     public ActivityType() {
@@ -29,6 +30,10 @@ public class ActivityType {
         return description;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
     //Setters
     public void setId(int id) {
         this.id = id;
@@ -46,7 +51,12 @@ public class ActivityType {
         this.description = description;
     }
 
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     //ToString
+
     @Override
     public String toString() {
         return "ActivityType{" +
@@ -54,6 +64,7 @@ public class ActivityType {
                 ", name='" + name + '\'' +
                 ", level='" + level + '\'' +
                 ", description='" + description + '\'' +
+                ", photo='" + photo + '\'' +
                 '}';
     }
 }

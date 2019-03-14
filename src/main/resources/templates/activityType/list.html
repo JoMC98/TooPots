@@ -21,6 +21,7 @@
                     <td th:text="${activityType.name}"></td>
                     <td th:text="${activityType.level}"></td>
                     <td th:text="${activityType.description}"></td>
+                    <td th:text="${activityType.photo}"></td>
                     <td><a th:href="@{/activityType/update/{id}(id=${activityType.id})}">Edita</a>
                     </td>
                     <td><a th:href="@{/activityType/delete/{id}(id=${activityType.id})}">Esborra</a>

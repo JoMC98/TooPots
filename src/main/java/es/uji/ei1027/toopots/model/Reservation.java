@@ -10,10 +10,10 @@ public class Reservation {
 
     private int id;
 
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date bookingDate;
 
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date activityDate;
 
     private int numberPeople;

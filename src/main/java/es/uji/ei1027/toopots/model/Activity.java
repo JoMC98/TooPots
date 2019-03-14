@@ -17,7 +17,7 @@ public class Activity {
     private String meetingPoint;
     private LocalTime meetingTime;
 
-    @DateTimeFormat(pattern = "dd/mm/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date creationDate;
 
     private String state;
