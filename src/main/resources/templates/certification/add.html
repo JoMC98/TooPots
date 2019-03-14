@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear un nou certificat</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body>
+<h2>Nou certificat</h2>
+<form action="#" th:action="@{/certification/add}" th:object="${certification}" method="post">
+    <table>
+        <tr>
+            <td><label>Nom certificat</label></td>
+            <td><input type="text" th:field="*{certificate}" /></td>
+        </tr>
+        <tr>
+            <td><label>Document adjunt</label></td>
+            <td><input type="text" th:field="*{doc}" /></td>
+        </tr>
+        <tr>
+            <td><label>Estat</label></td>
+            <td><input type="text" th:field="*{state}" /></td>
+        </tr>
+        <tr>
+            <td><label>Instructor</label></td>
+            <td><input type="number" th:field="*{idInstructor}" /></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" value="Afegeix certificat" /></td>
+        </tr>
+    </table>
+    <a href="/certification/list">Tornar</a>
+</form>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar certificats</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <h1>Llista de certificats</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nom certificat</th>
+                <th>Document adjunt</th>
+                <th>Estat</th>
+                <th>Instructor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="certification: ${certifications}">
+                <td th:text="${certification.certificate}"></td>
+                <td th:text="${certification.doc}"></td>
+                <td th:text="${certification.state}"></td>
+                <td th:text="${certification.idInstructor}"></td>
+                <td><a th:href="@{/certification/update/{id}(id=${certification.id})}">Edita</a>
+                </td>
+                <td><a th:href="@{/certification/delete/{id}(id=${certification.id})}">Esborra</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="add">Afegeix una activitat</a><br>
+        <a href="/">Tornar</a>
+    </body>
+</html>
