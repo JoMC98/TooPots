@@ -52,7 +52,7 @@ public class CertificationDao {
     }
 
     /* Obté tots els certificats. Torna una llista buida si no n'hi ha cap. */
-    public List<Certification> getCertification() {
+    public List<Certification> getCertifications() {
         try {
             return jdbcTemplate.query("SELECT * from Certification", new CertificationRowMapper());
         }

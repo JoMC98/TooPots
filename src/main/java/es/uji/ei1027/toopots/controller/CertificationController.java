@@ -1,8 +1,7 @@
 package es.uji.ei1027.toopots.controller;
 
-import es.uji.ei1027.toopots.daos.ActivityDao;
-import es.uji.ei1027.toopots.model.Activity;
-import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.daos.CertificationDao;
+import es.uji.ei1027.toopots.model.Certification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
