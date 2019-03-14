@@ -24,8 +24,8 @@
     </thead>
     <tbody>
     <tr th:each="reservation: ${reserves}">
-        <td th:text="${reservation.bookingDate}"></td>
-        <td th:text="${reservation.activityDate}"></td>
+        <td th:text="${{reservation.bookingDate}}"></td>
+        <td th:text="${{reservation.activityDate}}"></td>
         <td th:text="${reservation.numberPeople}"></td>
         <td th:text="${reservation.pricePerPerson}"></td>
         <td th:text="${reservation.totalPrice}"></td>

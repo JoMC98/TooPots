@@ -1,5 +1,7 @@
 package es.uji.ei1027.toopots.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Reservation {
@@ -7,8 +9,13 @@ public class Reservation {
     //Atributos
 
     private int id;
+
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Date bookingDate;
+
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Date activityDate;
+
     private int numberPeople;
     private int pricePerPerson;
     private int totalPrice;

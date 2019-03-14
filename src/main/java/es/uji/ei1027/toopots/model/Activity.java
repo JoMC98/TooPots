@@ -1,5 +1,7 @@
 package es.uji.ei1027.toopots.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -14,7 +16,10 @@ public class Activity {
     private int minNumberPeople;
     private String meetingPoint;
     private LocalTime meetingTime;
+
+    @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Date creationDate;
+
     private String state;
     private int activityType;
     private int idInstructor;

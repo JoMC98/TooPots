@@ -24,9 +24,10 @@ public class ReservationDao {
 
     /* Afegeix la reserva a la base de dades */
     public void addReservation(Reservation reservation) {
+        int totalPrice = reservation.getNumberPeople() * reservation.getPricePerPerson();
         jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)",
                 reservation.getActivityDate(),reservation.getNumberPeople(),
-                reservation.getPricePerPerson(), reservation.getTotalPrice(), reservation.getTransactionNumber(), reservation.getIdActivity(),
+                reservation.getPricePerPerson(), totalPrice, reservation.getTransactionNumber(), reservation.getIdActivity(),
                 reservation.getIdCustomer(), "Pendent");
     }
 
