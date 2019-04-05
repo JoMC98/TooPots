@@ -16,11 +16,10 @@ public class InstructorRowMapper implements RowMapper<Instructor> {
         instructor.setName(rs.getString("name"));
         instructor.setNif(rs.getString("nif"));
         instructor.setMail(rs.getString("mail"));
+        instructor.setPhoto(rs.getString("photo"));
         instructor.setResidence(rs.getString("residence"));
         instructor.setAccountNumber(rs.getInt("accountNumber"));
-        instructor.setUsername(rs.getString("username"));
         instructor.setRegisterDate(rs.getDate("registerDate"));
-        instructor.setPasswd(rs.getString("passwd"));
         instructor.setState(rs.getString("state"));
         return instructor;
     }

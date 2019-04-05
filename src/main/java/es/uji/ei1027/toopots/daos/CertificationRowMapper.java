@@ -13,7 +13,6 @@ public class CertificationRowMapper implements RowMapper<Certification> {
         certification.setId(rs.getInt("idCertification"));
         certification.setCertificate(rs.getString("certificate"));
         certification.setDoc(rs.getString("doc"));
-        certification.setState(rs.getString("state"));
         certification.setIdInstructor(rs.getInt("idInstructor"));
         return certification;
     }

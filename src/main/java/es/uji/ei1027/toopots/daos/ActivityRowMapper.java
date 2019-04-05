@@ -13,6 +13,8 @@ public class ActivityRowMapper implements RowMapper<Activity> {
         activity.setId(rs.getInt("idActivity"));
         activity.setName(rs.getString("name"));
         activity.setPlace(rs.getString("place"));
+        activity.setDescription(rs.getString("description"));
+        activity.setDates(rs.getDate("dates"));
         activity.setPricePerPerson(rs.getFloat("pricePerPerson"));
         activity.setMaxNumberPeople(rs.getInt("maxNumberPeople"));
         activity.setMinNumberPeople(rs.getInt("minNumberPeople"));

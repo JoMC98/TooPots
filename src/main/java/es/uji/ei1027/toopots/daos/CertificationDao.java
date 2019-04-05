@@ -23,8 +23,8 @@ public class CertificationDao {
 
     /* Afegeix el Certificat a la base de dades */
     public void addCertification(Certification certification) {
-        jdbcTemplate.update("INSERT INTO Certification VALUES(DEFAULT, ?, ?, ?, ?)",
-                certification.getCertificate(), certification.getDoc(), "Pendent" ,certification.getIdInstructor());
+        jdbcTemplate.update("INSERT INTO Certification VALUES(DEFAULT, ?, ?, ?)",
+                certification.getCertificate(), certification.getDoc(),certification.getIdInstructor());
     }
 
     /* Esborra el Certificat de la base de dades */
@@ -36,8 +36,8 @@ public class CertificationDao {
     /* Actualitza els atributs del certificat
        (excepte el id, que és la clau primària) */
     public void updateCertification(Certification certification) {
-        jdbcTemplate.update("UPDATE Certification SET certificate=?, doc=?, state=?, idInstructor=?",
-                certification.getCertificate(), certification.getDoc(), certification.getState(), certification.getIdInstructor());
+        jdbcTemplate.update("UPDATE Certification SET certificate=?, doc=?, idInstructor=?",
+                certification.getCertificate(), certification.getDoc(), certification.getIdInstructor());
     }
 
     /* Obté el certificat amb el id donat. Torna null si no existeix. */

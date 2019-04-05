@@ -7,7 +7,6 @@ public class Certification {
     private int id;
     private String certificate;
     private String doc;
-    private String state;
     private int idInstructor;
 
     //Contruvtor
@@ -31,10 +30,6 @@ public class Certification {
         return doc;
     }
 
-    public String getState() {
-        return state;
-    }
-
     public int getIdInstructor() {
         return idInstructor;
     }
@@ -54,10 +49,6 @@ public class Certification {
         this.doc = doc;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public void setIdInstructor(int idInstructor) {
         this.idInstructor = idInstructor;
     }
@@ -71,7 +62,6 @@ public class Certification {
                 "id=" + id +
                 ", certificate='" + certificate + '\'' +
                 ", doc='" + doc + '\'' +
-                ", state='" + state + '\'' +
                 ", idInstructor=" + idInstructor +
                 '}';
     }

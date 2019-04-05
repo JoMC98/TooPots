@@ -22,6 +22,14 @@
                     <td><label>Mail</label></td>
                     <td><input type="text" th:field="*{mail}" /></td>
                 </tr>
+                <!--<tr>
+                    <td><label>Foto</label></td>
+                    <td><input type="text" th:field="*{photo}" /></td>
+                </tr>-->
+                <tr>
+                    <td>Foto </td>
+                    <td><input type="file" th:field="*{photo}" accept="image/*"/></td>
+                </tr>
                 <tr>
                     <td><label>Residencia</label></td>
                     <td><input type="text" th:field="*{residence}" /></td>
@@ -29,14 +37,6 @@
                 <tr>
                     <td><label>Numero de compte bancari</label></td>
                     <td><input type="text" th:field="*{accountNumber}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Username</label></td>
-                    <td><input type="text" th:field="*{username}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Contrasenya</label></td>
-                    <td><input type="password" th:field="*{passwd}" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><input type="submit" value="Edita Instructor" /></td>

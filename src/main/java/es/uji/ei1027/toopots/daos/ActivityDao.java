@@ -23,9 +23,9 @@ public class ActivityDao {
 
     /* Afegeix l'Activitat a la base de dades */
     public void addActivity(Activity activity) {
-        jdbcTemplate.update("INSERT INTO Activity VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, DEFAULT, ?, ?, ?)",
-                activity.getName(), activity.getPlace(), activity.getPricePerPerson(), activity.getMaxNumberPeople(),
-                activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
+        jdbcTemplate.update("INSERT INTO Activity VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, ?, ?, ?)",
+                activity.getName(), activity.getPlace(), activity.getDescription(), activity.getDates(), activity.getPricePerPerson(),
+                activity.getMaxNumberPeople(), activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
                 "Oberta", activity.getActivityType(), activity.getIdInstructor());
     }
 
@@ -38,10 +38,10 @@ public class ActivityDao {
     /* Actualitza els atributs de l'Activitat
        (excepte el id, que és la clau primària) */
     public void updateActivity(Activity activity) {
-        jdbcTemplate.update("UPDATE Activity SET name=?, place=?, pricePerPerson=?, maxNumberPeople=?, minNumberPeople=?," +
+        jdbcTemplate.update("UPDATE Activity SET name=?, place=?, description=?, dates=?, pricePerPerson=?, maxNumberPeople=?, minNumberPeople=?," +
                         "meetingPoint=?, meetingTime=?, state=?, activityType=?, idInstructor=? where idActivity=?",
-                activity.getName(), activity.getPlace(), activity.getPricePerPerson(), activity.getMaxNumberPeople(),
-                activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
+                activity.getName(), activity.getPlace(), activity.getDescription(), activity.getDates(), activity.getPricePerPerson(),
+                activity.getMaxNumberPeople(), activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
                 activity.getState(), activity.getActivityType(), activity.getIdInstructor(), activity.getId());
     }
 

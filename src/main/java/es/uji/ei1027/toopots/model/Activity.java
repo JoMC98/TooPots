@@ -11,6 +11,8 @@ public class Activity {
     private int id;
     private String name;
     private String place;
+    private String description;
+    private Date dates;
     private float pricePerPerson;
     private int maxNumberPeople;
     private int minNumberPeople;
@@ -40,6 +42,14 @@ public class Activity {
 
     public String getPlace() {
         return place;
+    }
+
+    public Date getDates() {
+        return dates;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public float getPricePerPerson() {
@@ -78,6 +88,7 @@ public class Activity {
         return idInstructor;
     }
 
+
     //Setters
 
     public void setId(int id) {
@@ -90,6 +101,14 @@ public class Activity {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDates(Date dates) {
+        this.dates = dates;
     }
 
     public void setPricePerPerson(float pricePerPerson) {
@@ -128,13 +147,16 @@ public class Activity {
         this.idInstructor = idInstructor;
     }
 
-    //ToString
+
+    //To String
     @Override
     public String toString() {
         return "Activity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", place='" + place + '\'' +
+                ", description='" + description + '\'' +
+                ", dates=" + dates +
                 ", pricePerPerson=" + pricePerPerson +
                 ", maxNumberPeople=" + maxNumberPeople +
                 ", minNumberPeople=" + minNumberPeople +
@@ -146,4 +168,6 @@ public class Activity {
                 ", idInstructor=" + idInstructor +
                 '}';
     }
+
 }
+

@@ -12,14 +12,13 @@ public class Instructor {
     private String name;
     private String nif;
     private String mail;
+    private String photo;
     private String residence;
     private int accountNumber;
-    private String username;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date registerDate;
 
-    private String passwd;
     private String state;
 
     //Constructor
@@ -28,7 +27,8 @@ public class Instructor {
 
     }
 
-    //Getters
+
+//Getters
 
     public int getId() {
         return id;
@@ -46,6 +46,10 @@ public class Instructor {
         return mail;
     }
 
+    public String getPhoto() {
+        return photo;
+    }
+
     public String getResidence() {
         return residence;
     }
@@ -54,16 +58,8 @@ public class Instructor {
         return accountNumber;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
     public Date getRegisterDate() {
         return registerDate;
-    }
-
-    public String getPasswd() {
-        return passwd;
     }
 
     public String getState() {
@@ -89,6 +85,10 @@ public class Instructor {
         this.mail = mail;
     }
 
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
     public void setResidence(String residence) {
         this.residence = residence;
     }
@@ -97,16 +97,8 @@ public class Instructor {
         this.accountNumber = accountNumber;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setRegisterDate(Date registerDate) {
         this.registerDate = registerDate;
-    }
-
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
     }
 
     public void setState(String state) {
@@ -115,7 +107,6 @@ public class Instructor {
 
 
     //toString
-
     @Override
     public String toString() {
         return "Instructor{" +
@@ -123,13 +114,11 @@ public class Instructor {
                 ", name='" + name + '\'' +
                 ", nif='" + nif + '\'' +
                 ", mail='" + mail + '\'' +
+                ", photo='" + photo + '\'' +
                 ", residence='" + residence + '\'' +
                 ", accountNumber=" + accountNumber +
-                ", username='" + username + '\'' +
                 ", registerDate=" + registerDate +
-                ", passwd='" + passwd + '\'' +
                 ", state='" + state + '\'' +
                 '}';
     }
-
 }
