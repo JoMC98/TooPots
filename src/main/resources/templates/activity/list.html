@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/baseCustomer}">
     <head>
         <title>Gestionar Tipus d'Activitats</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
-    <body>
+    <body layout:fragment="content">
         <h1>Llista de Tipus d'Activitats</h1>
         <table class="table table-striped">
             <thead>

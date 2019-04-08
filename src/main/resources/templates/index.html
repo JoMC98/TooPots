@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/baseAdmin}">
     <head>
         <meta charset="UTF-8" />
         <title>TooPots</title>
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
-    <body>
+    <body layout:fragment="content">
         <h1>TooPots</h1>
         <ul>
             <li><a href="activityType/list">Gestió de tipus d'activitats</a></li>

@@ -1,0 +1,63 @@
+/*Fondo*/
+.body {
+    background-color: #EEEEEE;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/*Logo*/
+#logo {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+
+/*Titulo TooPots*/
+#toopots {
+    text-align: center;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+/*Centrar*/
+.center {
+    text-align: center;
+}
+
+/*Encabezado*/
+.header {
+    padding-bottom: 40px;
+}
+
+/*Navigation bar*/
+.navTable {
+    width: 100%;
+}
+.navbar {
+    background-color: #2D8E0B;
+    border: 1px black solid;
+}
+
+/*Color blanco*/
+.white, .white:hover  {
+    color: white;
+}
+
+/*Color negro*/
+.black, .black:hover {
+    color: black;
+}
+
+
+
+
+/*Menu*/
+#celdaMenu {
+    padding: 30px;
+    width: 22.5%;
+    background-color: #CCCCCC;
+}
+.enlaceMenu {
+    padding: 20px 0px;
+    color: black;
+    text-align: center;
+}
