@@ -33,7 +33,21 @@
         <table class="navTable">
             <tr>
                 <td id="celdaMenu">
-                    <div th:replace="fragments/menuAdmin"></div>
+
+                    <div th:if="*{user == null}">
+                        <div th:case="Customer" th:replace="fragments/menuCustomer"></div>
+                    </div>
+                    <div th:unless="*{user == null}">
+
+                        <div th:switch="${session.role}">
+                            <div th:case="Instructor" th:replace="fragments/menuInstructor"></div>
+                            <div th:case="Admin" th:replace="fragments/menuAdmin"></div>
+                            <div th:case="Customer" th:replace="fragments/menuCustomer"></div>
+                        </div>
+                    </div>
+
+
+
                 </td>
                 <td id="celdaContenido">
 
