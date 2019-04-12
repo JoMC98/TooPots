@@ -20,34 +20,42 @@
         <!-- font OpenSans -->
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
+        <!-- Font Awesome Icons-->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
         <title layout:title-pattern="$CONTENT_TITLE">TooPots</title>
     </head>
 
     <body class="container-fluid body">
         <header class="header">
-            <img id="logo" th:src="@{/images/logo.png}">
-            <h1 id="toopots">TooPots</h1>
-            <!--<div th:replace="fragments/logininfo"></div>-->
+            <table id="tableHeader">
+                <tr>
+                    <td class="tdLados">
+                        <img id="logo" th:src="@{/images/logo.png}">
+                    </td>
+                    <td id="t">
+                        <h1 id="toopots">TooPots</h1>
+                    </td>
+                    <td class="tdLados">
+                        <div th:replace="fragments/logininfo"></div>
+                    </td>
+                </tr>
+            </table>
         </header>
         <div th:replace="fragments/nav"></div>
-        <table class="navTable">
+        <table id="contentTable">
             <tr>
-                <td id="celdaMenu">
+                <td class="menu" th:object="${session}">
 
                     <div th:if="*{user == null}">
                         <div th:case="Customer" th:replace="fragments/menuCustomer"></div>
                     </div>
                     <div th:unless="*{user == null}">
-
-                        <div th:switch="${session.role}">
-                            <div th:case="Instructor" th:replace="fragments/menuInstructor"></div>
-                            <div th:case="Admin" th:replace="fragments/menuAdmin"></div>
-                            <div th:case="Customer" th:replace="fragments/menuCustomer"></div>
-                        </div>
+                        <div th:if="*{user.rol == Instructor}" th:replace="fragments/menuInstructor"></div>
+                        <input type="text" th:field="*{user.rol}">
+                        <div th:if="*{user.rol == Admin}" th:replace="fragments/menuAdmin"></div>
+                        <div th:if="*{user.rol == Customer}" th:replace="fragments/menuCustomer"></div>
                     </div>
-
-
-
                 </td>
                 <td id="celdaContenido">
 

@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Crear Client</title>
+        <title>Registrar-se</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body>
-        <h2>Nou Client</h2>
-        <form action="#" th:action="@{/customer/add}" th:object="${customer}" method="post">
+        <h1>Registrar-se</h1>
+        <form action="#" th:action="@{/customer/add}" method="post">
             <table>
                 <tr>
-                    <td><label>Nif</label></td>
-                    <td><input type="text" th:field="*{nif}" /></td>
+                    <td><label>Nom</label></td>
+                    <td><input type="text" th:field="${user.name}" /></td>
                 </tr>
                 <tr>
-                    <td><label>Nom</label></td>
-                    <td><input type="text" th:field="*{name}" /></td>
+                    <td><label>Nif</label></td>
+                    <td><input type="text" th:field="${user.nif}" /></td>
                 </tr>
                 <tr>
                     <td><label>Mail</label></td>
-                    <td><input type="text" th:field="*{mail}" /></td>
+                    <td><input type="text" th:field="${user.mail}" /></td>
                 </tr>
                 <tr>
                     <td><label>Sexe</label></td>
-                    <td><input type="text" th:field="*{sex}" /></td>
+                    <td><input type="text" th:field="${customer.sex}" /></td>
                 </tr>
                 <tr>
                     <td><label>Data de naixement</label></td>
-                    <td><input type="text" th:field="*{birthDate}" /></td>
+                    <td><input type="text" th:field="${customer.birthDate}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Nom d'usuari</label></td>
+                    <td><input type="text" th:field="${user.username}" /></td>
+                </tr>
+                <tr>
+                    <td><label>Contrasenya</label></td>
+                    <td><input type="password" th:field="${user.passwd}" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><input type="submit" value="Afegeix Client" /></td>

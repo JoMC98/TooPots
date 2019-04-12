@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>EI1027</title>
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <div class="loggeduser" th:object="${session}">
+            <div th:if="*{user == null}">
+                <table>
+                    <tr>
+                        <td>
+                            No autenticat
+                        </td>
+                        <td class="paddingLeft">
+                            <a class="icon-power-off iconoLog" href="/login" th:href="@{/login}"></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div th:unless="*{user == null}">
+                <table>
+                    <tr>
+                        <td>
+                            <span th:text="*{user.name}"></span>
+                        </td>
+                        <td class="paddingLeft">
+                            <a class="icon-power-off iconoLog" href="/logout" th:href="@{/logout}"></a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

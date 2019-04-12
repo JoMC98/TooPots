@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Login</title>
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <div layout:fragment="content" class="center">
+            <div id="loginArea">
+                <br><br>
+                <h1 id="loginTitle">Login</h1><br><br>
+                <form action="#" th:action="@{/login}" th:object="${user}" method="post">
+                    <table id="loginTable">
+                        <tr>
+                            <td class="paddingRight">
+                                Nom d'usuari
+                            </td>
+                            <td>
+                                <input type="text" th:field="*{username}"/>
+                            </td>
+                            <td class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></td>
+                        </tr>
+                        <tr>
+                            <td><br></td>
+                        </tr>
+                        <tr>
+                            <td class="paddingRight">
+                                Contrasenya
+                            </td>
+                            <td>
+                                <input type="password" th:field="*{passwd}"/>
+                            </td>
+                            <td class="error" th:if="${#fields.hasErrors('passwd')}" th:errors="*{passwd}"></td>
+                        </tr>
+                    </table>
+                    <br><br>
+                    <input class="btn btn-success" type="submit" value="Accedir" />
+                    <br><br>
+
+                </form>
+                <a class="otherLogin" href="/">He oblidat la contrasenya</a>
+                <a class="otherLogin" href="customer/add">Registrar-se</a><br><br>
+            </div>
+        </div>
+    </body>
+</html>
