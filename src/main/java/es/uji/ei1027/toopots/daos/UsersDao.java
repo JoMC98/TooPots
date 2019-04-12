@@ -1,7 +1,6 @@
 package es.uji.ei1027.toopots.daos;
 
-
-import es.uji.ei1027.toopots.model.Customer;
+import es.uji.ei1027.toopots.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CustomerDao {
+public class UsersDao {
+
 
     private JdbcTemplate jdbcTemplate;
 
@@ -23,29 +23,30 @@ public class CustomerDao {
     }
 
     /* Afegeix el Client a la base de dades */
-    public void addCustomer(Customer customer, int id) {
-        jdbcTemplate.update("INSERT INTO Customer VALUES(?, ?, ?)",
-                id, customer.getSex(), customer.getBirthDate());
+    public void addUser(Users user) {
+        jdbcTemplate.update("INSERT INTO Users VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, DEFAULT)",
+                user.getId(), user.getUsername(), user.getPasswd(), user.getRol(), user.getNif(), user.getName(), user.getMail());
+
     }
 
     /* Esborra el Client de la base de dades */
-    public void deleteCustomer(int id) {
-        jdbcTemplate.update("DELETE from Customer where idCustomer=?", id);
+    public void deleteUser(int id) {
+        jdbcTemplate.update("DELETE from Users where idUser=?", id);
     }
 
 
     /* Actualitza els atributs del Client
        (excepte el id, que és la clau primària) */
-    public void updateCustomer(Customer customer) {
-        jdbcTemplate.update("UPDATE Customer SET sex=?, birthDate=? where idCustomer=?",
-                customer.getSex(), customer.getBirthDate(), customer.getId());
+    public void updateUser(Users user) {
+        jdbcTemplate.update("UPDATE Users SET username=?, passwd=?, rol=?, nif=?, name=?, mail=? where idUser=?",
+                user.getUsername(), user.getPasswd(), user.getRol(), user.getNif(), user.getName(), user.getMail(), user.getId());
     }
 
     /* Obté el client amb el id donat. Torna null si no existeix. */
-    public Customer getCustomer(int id) {
+    public Users getUser(int id) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * from Customer WHERE idCustomer=?",
-                    new CustomerRowMapper(), id);
+            return jdbcTemplate.queryForObject("SELECT * from Users WHERE idUser=?",
+                    new UsersRowMapper(), id);
         }
         catch(EmptyResultDataAccessException e) {
             return null;
@@ -53,12 +54,12 @@ public class CustomerDao {
     }
 
     /* Obté tots els clients. Torna una llista buida si no n'hi ha cap. */
-    public List<Customer> getCustomers() {
+    public List<Users> getUsers() {
         try {
-            return jdbcTemplate.query("SELECT * from Customer", new CustomerRowMapper());
+            return jdbcTemplate.query("SELECT * from Users", new UsersRowMapper());
         }
         catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Customer>();
+            return new ArrayList<Users>();
         }
     }
 

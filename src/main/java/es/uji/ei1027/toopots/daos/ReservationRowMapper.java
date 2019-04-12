@@ -14,8 +14,10 @@ public class ReservationRowMapper implements RowMapper<Reservation> {
         reservation.setId(rs.getInt("idReservation"));
         reservation.setBookingDate(rs.getDate("bookingDate"));
         reservation.setActivityDate(rs.getDate("activityDate"));
-        reservation.setNumberPeople(rs.getInt("numberPeople"));
-        reservation.setPricePerPerson(rs.getInt("pricePerPerson"));
+        reservation.setNumUnder16(rs.getInt("numUnder16"));
+        reservation.setNumStudents(rs.getInt("numStudents"));
+        reservation.setNumAdults(rs.getInt("numAdults"));
+        reservation.setNumOver60(rs.getInt("numOver60"));
         reservation.setTotalPrice(rs.getInt("totalPrice"));
         reservation.setTransactionNumber(rs.getInt("transactionNumber"));
         reservation.setIdActivity(rs.getInt("idActivity"));

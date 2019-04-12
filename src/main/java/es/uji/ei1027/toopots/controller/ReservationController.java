@@ -1,6 +1,8 @@
 package es.uji.ei1027.toopots.controller;
 
+import es.uji.ei1027.toopots.daos.ActivityDao;
 import es.uji.ei1027.toopots.daos.ReservationDao;
+import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,7 @@ public class ReservationController {
     private ReservationDao reservationDao;
 
     @Autowired
-    public void setActivityDao(ReservationDao reservationDao) {
+    public void setReservationDao(ReservationDao reservationDao) {
         this.reservationDao=reservationDao;
     }
 

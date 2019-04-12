@@ -16,8 +16,12 @@ public class Reservation {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date activityDate;
 
-    private int numberPeople;
-    private int pricePerPerson;
+    //Por edad
+    private int numUnder16;
+    private int numStudents;
+    private int numAdults;
+    private int numOver60;
+
     private int totalPrice;
     private int transactionNumber;
     private int idActivity;
@@ -30,8 +34,6 @@ public class Reservation {
     }
 
     //Getters
-
-
     public int getId() {
         return id;
     }
@@ -44,12 +46,20 @@ public class Reservation {
         return activityDate;
     }
 
-    public int getNumberPeople() {
-        return numberPeople;
+    public int getNumUnder16() {
+        return numUnder16;
     }
 
-    public int getPricePerPerson() {
-        return pricePerPerson;
+    public int getNumStudents() {
+        return numStudents;
+    }
+
+    public int getNumAdults() {
+        return numAdults;
+    }
+
+    public int getNumOver60() {
+        return numOver60;
     }
 
     public int getTotalPrice() {
@@ -72,6 +82,10 @@ public class Reservation {
         return state;
     }
 
+    public int getNumPeople() {
+        return numUnder16 + numStudents + numAdults + numOver60;
+    }
+
     //Setters
 
 
@@ -87,12 +101,20 @@ public class Reservation {
         this.activityDate = activityDate;
     }
 
-    public void setNumberPeople(int numberPeople) {
-        this.numberPeople = numberPeople;
+    public void setNumUnder16(int numUnder16) {
+        this.numUnder16 = numUnder16;
     }
 
-    public void setPricePerPerson(int pricePerPerson) {
-        this.pricePerPerson = pricePerPerson;
+    public void setNumStudents(int numStudents) {
+        this.numStudents = numStudents;
+    }
+
+    public void setNumAdults(int numAdults) {
+        this.numAdults = numAdults;
+    }
+
+    public void setNumOver60(int numOver60) {
+        this.numOver60 = numOver60;
     }
 
     public void setTotalPrice(int totalPrice) {
@@ -116,16 +138,16 @@ public class Reservation {
     }
 
     //toString
-
-
     @Override
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
                 ", bookingDate=" + bookingDate +
                 ", activityDate=" + activityDate +
-                ", numberPeople=" + numberPeople +
-                ", pricePerPerson=" + pricePerPerson +
+                ", numUnder16=" + numUnder16 +
+                ", numStudents=" + numStudents +
+                ", numAdults=" + numAdults +
+                ", numOver60=" + numOver60 +
                 ", totalPrice=" + totalPrice +
                 ", transactionNumber=" + transactionNumber +
                 ", idActivity=" + idActivity +

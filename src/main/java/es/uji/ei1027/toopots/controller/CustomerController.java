@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
@@ -38,10 +40,10 @@ public class CustomerController {
 
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
+    public String processAddSubmit(HttpSession session, @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "customer/add";
-        customerDao.addCustomer(customer);
+        customerDao.addCustomer(customer, (int) session.getAttribute("user"));
         return "redirect:list";
     }
 

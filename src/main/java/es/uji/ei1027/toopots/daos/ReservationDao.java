@@ -13,6 +13,12 @@ import java.util.List;
 
 @Repository
 public class ReservationDao {
+    private ActivityDao activityDao;
+
+    @Autowired
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao=activityDao;
+    }
 
     private JdbcTemplate jdbcTemplate;
 
@@ -24,11 +30,56 @@ public class ReservationDao {
 
     /* Afegeix la reserva a la base de dades */
     public void addReservation(Reservation reservation) {
-        int totalPrice = reservation.getNumberPeople() * reservation.getPricePerPerson();
-        jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?)",
-                reservation.getActivityDate(),reservation.getNumberPeople(),
-                reservation.getPricePerPerson(), totalPrice, reservation.getTransactionNumber(), reservation.getIdActivity(),
-                reservation.getIdCustomer(), "Pendent");
+        float totalPrice = calcularPrecio(reservation);
+        jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                reservation.getActivityDate(), reservation.getNumUnder16(), reservation.getNumStudents(),
+                reservation.getNumAdults(), reservation.getNumOver60(), totalPrice, reservation.getTransactionNumber(),
+                reservation.getIdActivity(), reservation.getIdCustomer(), "Pendent");
+    }
+
+    private float calcularPrecio(Reservation r) {
+        float totalAdults;
+        float totalUnder16;
+        float totalOver60;
+        float totalStudents;
+
+        Activity a = activityDao.getActivity(r.getIdActivity());
+
+        float priceBase = a.getPricePerPerson();
+
+        boolean grupo = false;
+
+//        //ADULTS
+//        if (r.getNumPeople() > 9 && t.containsKey("Grups de 10 persones o mes")) {
+//            priceBase = t.get("Grups de 10 persones o mes");
+//            grupo = true;
+//        }
+//
+//        totalAdults = priceBase * r.getNumAdults();
+//
+//        //MENORS 16
+//        if (t.containsKey("Menors de 16 anys")) {
+//            totalUnder16 = t.get("Menors de 16 anys") * r.getNumUnder16();
+//        } else {
+//            totalUnder16 = priceBase * r.getNumUnder16();
+//        }
+//
+//        //MAJORS 60
+//        if (t.containsKey("Majors de 60 anys")){
+//            totalOver60 = t.get("Majors de 60 anys") * r.getNumOver60();
+//        } else {
+//            totalOver60 = priceBase * r.getNumOver60();
+//        }
+//
+//        //ESTUDIANTS
+//        if (t.containsKey("Estudiants")){
+//            totalStudents = t.get("Estudiants") * r.getNumStudents();
+//        } else {
+//            totalStudents = priceBase * r.getNumStudents();
+//        }
+
+//        return totalUnder16 + totalStudents + totalAdults + totalOver60;
+        return 0f;
     }
 
     /* Esborra la reserva de la base de dades */
@@ -40,10 +91,11 @@ public class ReservationDao {
     /* Actualitza els atributs de la reserva
        (excepte el id, que és la clau primària) */
     public void updateReservation(Reservation reservation) {
-        jdbcTemplate.update("UPDATE Reservation SET bookingDate=?, activityDate=?, numberPeople=?, PricePerPerson=?, totalPrice=?," +
-                        "transactionNumber=?, idActivity=?, idCustomer=?, state=? where idReservation=?",
-                reservation.getBookingDate(), reservation.getActivityDate(), reservation.getNumberPeople(), reservation.getPricePerPerson(), reservation.getTotalPrice(),
-                reservation.getTransactionNumber(), reservation.getIdActivity(), reservation.getIdCustomer(), reservation.getId());
+        jdbcTemplate.update("UPDATE Reservation SET activityDate=?, numUnder16=?, numStudents=?, numAdults=?, numOver60=?, " +
+                        "totalPrice=?, transactionNumber=?, idActivity=?, idCustomer=?, state=? where idReservation=?",
+                reservation.getActivityDate(), reservation.getNumUnder16(), reservation.getNumStudents(),
+                reservation.getNumAdults(), reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
+                reservation.getIdActivity(), reservation.getIdCustomer(), reservation.getState(), reservation.getId());
     }
 
     /* Obté la reserva amb el id donat. Torna null si no existeix. */

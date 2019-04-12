@@ -36,8 +36,8 @@ public class CertificationDao {
     /* Actualitza els atributs del certificat
        (excepte el id, que és la clau primària) */
     public void updateCertification(Certification certification) {
-        jdbcTemplate.update("UPDATE Certification SET certificate=?, doc=?, idInstructor=?",
-                certification.getCertificate(), certification.getDoc(), certification.getIdInstructor());
+        jdbcTemplate.update("UPDATE Certification SET certificate=?, doc=?, idInstructor=? where idCertification=?",
+                certification.getCertificate(), certification.getDoc(), certification.getIdInstructor(), certification.getId());
     }
 
     /* Obté el certificat amb el id donat. Torna null si no existeix. */
