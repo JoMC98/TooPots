@@ -51,8 +51,10 @@ public class CustomerController {
     @RequestMapping(value="/add", method=RequestMethod.POST)
     public String processAddSubmit(HttpSession session, @ModelAttribute("user") Users user, @ModelAttribute("customer") Customer customer,
                                    BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.toString());
             return "customer/add";
+        }
         user.setRol("Customer");
         userDao.addUser(user);
         Users newUser = userDao.getUser(user.getUsername());

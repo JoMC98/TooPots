@@ -1,48 +1,65 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
     <head>
-        <title>Crear Instructor</title>
+        <title>Sol·licitar registre</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
-    <body>
-        <h2>Nou Instructor</h2>
-        <form action="#" th:action="@{/instructor/add}" th:object="${instructor}" method="post">
-            <table>
+    <body layout:fragment="content">
+        <br>
+        <h1>Sol·licitar registre</h1><br>
+        <form action="#" th:action="@{/instructor/add}" method="post">
+            <table class="marginAuto">
                 <tr>
-                    <td><label>Nom</label></td>
-                    <td><input type="text" th:field="*{name}" /></td>
+                    <td colspan="2"><label class="inputLabel">Foto de perfil</label></td>
                 </tr>
                 <tr>
-                    <td><label>Nif</label></td>
-                    <td><input type="text" th:field="*{nif}" /></td>
+                    <td colspan="2" class="marginAuto">
+                        <img id="profileFoto" hidden/>
+                    </td>
                 </tr>
                 <tr>
-                    <td><label>Mail</label></td>
-                    <td><input type="text" th:field="*{mail}" /></td>
-                </tr>
-                <!--<tr>
-                    <td><label>Foto</label></td>
-                    <td><input type="text" th:field="*{photo}" /></td>
-                </tr>-->
-                <tr>
-                    <td>Foto </td>
-                    <td><input type="file" th:field="*{photo}" accept="image/*"/></td>
+                    <td colspan="2"  class="marginAuto">
+                        <input type="file" onchange="document.getElementById('profileFoto').src = window.URL.createObjectURL(this.files[0]); document.getElementById('profileFoto').hidden=false"
+                               accept="image/*" class="inputFoto">
+                    </td>
                 </tr>
                 <tr>
-                    <td><label>Residencia</label></td>
-                    <td><input type="text" th:field="*{residence}" /></td>
+                    <td colspan="2"><label class="inputLabel inputGrande">Nom Complet</label></td>
                 </tr>
                 <tr>
-                    <td><label>Numero de compte bancari</label></td>
-                    <td><input type="text" th:field="*{accountNumber}" /></td>
+                    <td colspan="2"><input class="input inputGrande" type="text" th:field="${user.name}"/></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input type="submit" value="Afegeix Instructor" /></td>
+                    <td><label class="inputLabel inputPequeño">NIF</label></td>
+                    <td><label class="inputLabel inputPequeño">Correo</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="text" th:field="${user.nif}"/></td>
+                    <td><input class="input inputPequeño" type="email" th:field="${user.mail}"/></td>
+                </tr>
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Residencia</label></td>
+                    <td><label class="inputLabel inputPequeño">Compte corrent</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="text" th:field="${instructor.residence}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:field="${instructor.accountNumber}"/></td>
+                </tr>
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Nom d'usuari</label></td>
+                    <td><label class="inputLabel inputPequeño">Contrasenya</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="text" th:field="${user.username}"/></td>
+                    <td><input class="input inputPequeño" type="password" th:field="${user.passwd}"/></td>
                 </tr>
             </table>
-            <a href="/instructor/list">Tornar</a>
+            <br>
+            <input class="btn btn-success" type="submit" value="Enviar sol·licitud" />
         </form>
     </body>
 </html>

@@ -2,6 +2,7 @@ package es.uji.ei1027.toopots.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Customer {
@@ -9,9 +10,7 @@ public class Customer {
     //Atributos
     private int id;
     private String sex;
-
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date birthDate;
+    private LocalDate birthDate;
 
 
     //Constructor
@@ -27,7 +26,7 @@ public class Customer {
         return sex;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
@@ -41,7 +40,7 @@ public class Customer {
         this.sex = sex;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

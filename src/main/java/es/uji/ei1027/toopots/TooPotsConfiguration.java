@@ -4,8 +4,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.Formatter;
 
 import javax.sql.DataSource;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @Configuration
 public class TooPotsConfiguration {
@@ -18,4 +23,20 @@ public class TooPotsConfiguration {
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
 }
+
+    @Bean
+    public Formatter<LocalDate> localDateFormatterES() {
+        return new Formatter<LocalDate>() {
+            @Override
+            public LocalDate parse(String text, Locale locale) throws ParseException {
+                return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            }
+
+            @Override
+            public String print(LocalDate object, Locale locale) {
+                return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(object);
+            }
+        };
+    }
+
 }
