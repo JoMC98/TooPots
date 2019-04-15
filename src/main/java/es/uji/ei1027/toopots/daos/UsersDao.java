@@ -31,13 +31,16 @@ public class UsersDao implements UserDao {
     @Override
     public Users loadUserByUsername(String username, String passwd) {
         Users user = getUser(username);
+
         if (user == null)
             return null; // Usuari no trobat
 
         // Contrasenya
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
-        if (passwordEncryptor.checkPassword(passwd, user.getPasswd())) {
-            // Es deuria esborrar de manera segura el camp password abans de tornar-lo
+
+        boolean ret = passwordEncryptor.checkPassword(passwd, user.getPasswd());
+
+        if (ret) {
             return user;
         }
         else {
@@ -45,23 +48,29 @@ public class UsersDao implements UserDao {
         }
     }
 
-    /* Afegeix el Client a la base de dades */
+    /* Afegeix el Usuari a la base de dades */
     public void addUser(Users user) {
         jdbcTemplate.update("INSERT INTO Users VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, DEFAULT)",
                 user.getUsername(), user.getPasswd(), user.getRol(), user.getNif(), user.getName(), user.getMail());
     }
 
-    /* Esborra el Client de la base de dades */
+    /* Esborra el Usuari de la base de dades */
     public void deleteUser(int id) {
         jdbcTemplate.update("DELETE from Users where idUser=?", id);
     }
 
 
-    /* Actualitza els atributs del Client
+    /* Actualitza els atributs del Usuari
        (excepte el id, que és la clau primària) */
     public void updateUser(Users user) {
-        jdbcTemplate.update("UPDATE Users SET username=?, passwd=?, rol=?, nif=?, name=?, mail=? where idUser=?",
-                user.getUsername(), user.getPasswd(), user.getRol(), user.getNif(), user.getName(), user.getMail(), user.getId());
+        jdbcTemplate.update("UPDATE Users SET username=?, nif=?, name=?, mail=? where idUser=?",
+                user.getUsername(), user.getNif(), user.getName(), user.getMail(), user.getId());
+    }
+
+    /* Actualitza la contrasenya */
+    public void updatePassword(Users user) {
+        jdbcTemplate.update("UPDATE Users SET passwd=? where idUser=?",
+                user.getPasswd(), user.getId());
     }
 
     /* Obté el client amb el id donat. Torna null si no existeix. */
@@ -84,7 +93,6 @@ public class UsersDao implements UserDao {
             return null;
         }
     }
-
 
     /* Obté tots els clients. Torna una llista buida si no n'hi ha cap. */
     public List<Users> getUsers() {

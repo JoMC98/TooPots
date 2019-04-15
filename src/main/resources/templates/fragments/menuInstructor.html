@@ -7,18 +7,18 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body>
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" th:object="${session}">
             <li class="enlaceMenu">
                 <a class="black" href="#">Inici</a>
             </li>
             <li class="enlaceMenu">
-                <a class="black" href="#">Presentar sol·licitud</a>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" href="#">Perfil</a>
-            </li>
-            <li class="enlaceMenu">
                 <a class="black" href="#">Gestió activitats</a>
+            </li>
+            <li class="enlaceMenu">
+                <a class="black" th:href="@{/instructor/update/{id}(id=${session.user.id})}">Modificar perfil</a>
+            </li>
+            <li class="enlaceMenu">
+                <a class="black" th:href="@{/instructor/updatePasswd/{id}(id=${session.user.id})}">Modificar contrasenya</a>
             </li>
         </ul>
     </body>

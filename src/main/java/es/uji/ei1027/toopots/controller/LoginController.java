@@ -2,6 +2,7 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,19 +27,22 @@ public class LoginController {
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String checkLogin(@ModelAttribute("user") Users user,
                              BindingResult bindingResult, HttpSession session) {
-//        UserValidator userValidator = new UserValidator();
-//        userValidator.validate(user, bindingResult);
+        UserValidator userValidator = new UserValidator();
+        userValidator.validate(user, bindingResult);
+
         if (bindingResult.hasErrors()) {
             return "login";
         }
 
         // Comprova que el login siga correcte
         // intentant carregar les dades de l'usuari
+
         user = userDao.loadUserByUsername(user.getUsername(),user.getPasswd());
         if (user == null) {
             bindingResult.rejectValue("password", "badpw", "Contrasenya incorrecta");
             return "login";
         }
+
         // Autenticats correctament.
         // Guardem les dades de l'usuari autenticat a la sessió
         session.setAttribute("user", user);

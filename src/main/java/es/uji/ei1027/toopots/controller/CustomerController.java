@@ -5,6 +5,7 @@ import es.uji.ei1027.toopots.daos.CustomerDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Customer;
 import es.uji.ei1027.toopots.model.Users;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpSession;
 public class CustomerController {
     private CustomerDao customerDao;
     private UsersDao userDao;
+    private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
     public void setCustomerDao(CustomerDao customerDao) {
@@ -35,6 +37,7 @@ public class CustomerController {
     //Llistar tots els clients
     @RequestMapping("/list")
     public String listCustomers(Model model) {
+        model.addAttribute("users", userDao.getUsers());
         model.addAttribute("customers", customerDao.getCustomers());
         return "customer/list";
     }
@@ -56,6 +59,7 @@ public class CustomerController {
             return "customer/add";
         }
         user.setRol("Customer");
+        user.setPasswd(passwordEncryptor.encryptPassword(user.getPasswd()));
         userDao.addUser(user);
         Users newUser = userDao.getUser(user.getUsername());
 
@@ -68,15 +72,18 @@ public class CustomerController {
     //Actualitzar un client
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
     public String editCustomer(Model model, @PathVariable int id) {
+        model.addAttribute("user", userDao.getUser(id));
         model.addAttribute("customer", customerDao.getCustomer(id));
         return "customer/update";
     }
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
+    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
+                                      @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "customer/update";
+        userDao.updateUser(user);
         customerDao.updateCustomer(customer);
         return "redirect:../list";
     }
@@ -84,6 +91,7 @@ public class CustomerController {
     //Esborra un client
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {
+        userDao.deleteUser(id);
         customerDao.deleteCustomer(id);
         return "redirect:../list";
     }

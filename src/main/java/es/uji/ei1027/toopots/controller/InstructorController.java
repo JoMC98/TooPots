@@ -4,6 +4,8 @@ import es.uji.ei1027.toopots.daos.InstructorDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Instructor;
 import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.validator.UserValidator;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpSession;
 public class InstructorController {
     private InstructorDao instructorDao;
     private UsersDao userDao;
+    private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
     public void setInstructorDao(InstructorDao instructorDao) {
@@ -34,6 +37,7 @@ public class InstructorController {
     //Llistar tots els instructors
     @RequestMapping("/list")
     public String listInstructors(Model model) {
+        model.addAttribute("users", userDao.getUsers());
         model.addAttribute("instructors", instructorDao.getInstructors());
         return "instructor/list";
     }
@@ -54,11 +58,15 @@ public class InstructorController {
             return "instructor/add";
 
         user.setRol("Instructor");
+        user.setPasswd(passwordEncryptor.encryptPassword(user.getPasswd()));
+
         userDao.addUser(user);
         Users newUser = userDao.getUser(user.getUsername());
 
         session.setAttribute("user", newUser);
 
+        //TODO FICAR FOTO BE
+        instructor.setPhoto("");
         instructorDao.addInstructor(instructor, newUser.getId());
         return "redirect:../";
     }
@@ -66,22 +74,59 @@ public class InstructorController {
     //Actualitzar un instructor
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
     public String editInstructor(Model model, @PathVariable int id) {
+        model.addAttribute("user", userDao.getUser(id));
         model.addAttribute("instructor", instructorDao.getInstructor(id));
         return "instructor/update";
     }
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
+    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
+                                      @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors())
             return "instructor/update";
+        userDao.updateUser(user);
         instructorDao.updateInstructor(instructor);
         return "redirect:../list";
+    }
+
+    //Actualitzar contrasenya
+    @RequestMapping(value="/updatePasswd/{id}", method = RequestMethod.GET)
+    public String editPasswd(Model model, @PathVariable int id) {
+        model.addAttribute("newUser", userDao.getUser(id));
+        return "instructor/updatePasswd";
+    }
+
+    //Processa la informació de la actualització de contrasenya
+    @RequestMapping(value="/updatePasswd/{id}", method = RequestMethod.POST)
+    public String processUpdatePasswdSubmit(@PathVariable int id, @ModelAttribute("newUser") Users newUser, BindingResult bindingResult) {
+
+        Users user = userDao.getUser(id);
+
+        BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+
+        System.out.println(user);
+        System.out.println(newUser);
+
+        boolean ret = passwordEncryptor.checkPassword(newUser.getUsername(), user.getPasswd());
+
+        if (ret) {
+            System.out.println("SI");
+            user.setPasswd(passwordEncryptor.encryptPassword(newUser.getPasswd()));
+            System.out.println(user);
+            userDao.updatePassword(user);
+            return "redirect:/";
+        }
+        else {
+            return "instructor/updatePasswd";
+        }
     }
 
     //Esborra un instructor
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {
+        userDao.deleteUser(id);
         instructorDao.deleteInstructor(id);
         return "redirect:../list";
     }

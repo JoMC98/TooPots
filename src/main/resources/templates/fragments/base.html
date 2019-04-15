@@ -46,15 +46,20 @@
         <table id="contentTable">
             <tr>
                 <td class="menu" th:object="${session}">
-
+                    <!--<div th:replace="fragments/menuCustomer">-->
                     <div th:if="*{user == null}">
-                        <div th:case="Customer" th:replace="fragments/menuCustomer"></div>
+                        <div th:replace="fragments/menuCustomer"></div>
                     </div>
                     <div th:unless="*{user == null}">
-                        <div th:if="*{user.rol == Instructor}" th:replace="fragments/menuInstructor"></div>
-                        <input type="text" th:field="*{user.rol}">
-                        <div th:if="*{user.rol == Admin}" th:replace="fragments/menuAdmin"></div>
-                        <div th:if="*{user.rol == Customer}" th:replace="fragments/menuCustomer"></div>
+                        <div th:if="*{user.rol} == Customer">
+                            <div th:replace="fragments/menuCustomer"></div>
+                        </div>
+                        <div th:if="*{user.rol} == Admin">
+                            <div th:replace="fragments/menuAdmin"></div>
+                        </div>
+                        <div th:if="*{user.rol} == Instructor">
+                            <div th:replace="fragments/menuInstructor"></div>
+                        </div>
                     </div>
                 </td>
                 <td id="celdaContenido">

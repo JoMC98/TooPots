@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+          xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+          layout:decorate="~{fragments/base}">
+    <head>
+        <title>Modificar contrasenya</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body layout:fragment="content">
+        <br>
+        <h1>Modificar contrasenya</h1><br>
+        <form action="#" th:action="@{/instructor/updatePasswd/{id}(id=${newUser.id})}" method="post">
+            <table class="marginAuto">
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Contrasenya anterior</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="password" th:field="${newUser.username}"/></td>
+                </tr>
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Nova contrasenya</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="password" th:field="${newUser.passwd}"/></td>
+                </tr>
+            </table>
+            <br>
+            <input class="btn btn-success" type="submit" value="Modificar contrasenya" />
+        </form>
+    </body>
+</html>

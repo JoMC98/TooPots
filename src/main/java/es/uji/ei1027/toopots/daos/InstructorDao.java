@@ -25,7 +25,7 @@ public class InstructorDao {
     /* Afegeix el Instructor a la base de dades */
     public void addInstructor(Instructor instructor, int id) {
         jdbcTemplate.update("INSERT INTO Instructor VALUES(?, ?, ?, ?, ?)",
-                id, instructor.getPhoto(), instructor.getResidence(), instructor.getAccountNumber(),"Acceptat");
+                id, instructor.getPhoto(), instructor.getResidence(), instructor.getAccountNumber(),"Pendent");
     }
 
     /* Esborra el Instructor de la base de dades */
@@ -36,9 +36,8 @@ public class InstructorDao {
     /* Actualitza els atributs del Instructor
        (excepte el id, que és la clau primària) */
     public void updateInstructor(Instructor instructor) {
-        jdbcTemplate.update("UPDATE Instructor SET name=?, nif=?, mail=?, photo=?, residence=?, accountNumber=?, state=? " +
-                        "where idInstructor = ?", instructor.getPhoto(), instructor.getResidence(), instructor.getAccountNumber(),
-                instructor.getState(), instructor.getId());
+        jdbcTemplate.update("UPDATE Instructor SET residence=?, accountNumber=? where idInstructor = ?",
+                instructor.getResidence(), instructor.getAccountNumber(), instructor.getId());
     }
 
     /* Obté l'Instructor amb el id donat. Torna null si no existeix. */
