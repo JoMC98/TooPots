@@ -152,8 +152,13 @@ footer {
     text-align: left;
     font-size: 16px;
 }
+.inputLabelGrande {
+    text-align: left;
+    font-size: 32px;
+}
 .inputPequeño {
     width: 250px;
+    text-align: left;
 }
 .inputDoble {
     width: 540px;

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Perfil monitor</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body layout:fragment="content">
+<h1>Perfil monitor</h1><br>
+<form action="#" th:action="@{/instructor/profile/{id}(id=${user.id})}" method="post">
+    <table class="marginAuto">
+        <tr>
+            <td colspan="2"><label class="inputLabel inputGrande">Nom Complet</label></td>
+        </tr>
+        <tr>
+            <td colspan="2"><input class="input inputGrande" type="text" th:field="${user.name}"/></td>
+        </tr>
+        <tr>
+            <td><label class="inputLabel inputPequeño">Correu</label></td>
+            <td><label class="inputLabel inputPequeño">NIF</label></td>
+        </tr>
+        <tr>
+            <td><input class="input inputPequeño" type="email" th:field="${user.mail}"/></td>
+            <td><input class="input inputPequeño" type="text" th:field="${user.nif}"/></td>
+
+        </tr>
+        <tr>
+            <td><label class="inputLabel inputPequeño">Número conte</label></td>
+            <td><label class="inputLabel inputPequeño">Direcció</label></td>
+        </tr>
+        <tr>
+            <td><input class="input inputPequeño" type="text" th:field="${instructor.accountNumber}"/></td>
+            <td><input class="input inputPequeño" type="text" th:field="${instructor.residence}"/></td>
+        </tr>
+        <tr>
+            <td><label class="inputLabelGrande inputPequeño">Activitats assignades</label></td>
+            <td><label class="inputLabelGrande inputPequeño">Certificats</label></td>
+        </tr>
+    </table>
+    <br>
+    <input class="btn btn-success" type="submit" value="Assignar activitats" />
+    <input class="btn btn-danger" type="submit" value="Donar de baixa" />
+</form>
+</body>
+</html>
+
+

@@ -98,4 +98,14 @@ public class InstructorController {
         instructorDao.deleteInstructor(id);
         return "redirect:../list";
     }
+
+    //Veure perfil monitor
+    @RequestMapping("/profile/{id}")
+    public String seeInstructor(Model model, @PathVariable int id) {
+        model.addAttribute("users", userDao.getInstructors());
+        model.addAttribute("instructors", instructorDao.getInstructors());
+        model.addAttribute("user", userDao.getUser(id));
+        model.addAttribute("instructor", instructorDao.getInstructor(id));
+        return "instructor/profile";
+    }
 }
