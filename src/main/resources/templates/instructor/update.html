@@ -3,14 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Editar perfil</title>
+        <title>Modificar perfil</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br>
-        <h1>Editar perfil</h1><br>
+        <h1>Modificar perfil</h1><br>
         <form action="#" th:action="@{/instructor/update/{id}(id=${instructor.id})}" method="post">
             <table class="marginAuto">
                 <!--<tr>-->

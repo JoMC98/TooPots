@@ -12,7 +12,7 @@
     width: 100%;
 }
 .tdLados {
-    width: 200px;
+    width: 250px;
 }
 
 
@@ -25,6 +25,8 @@ footer {
 #logo {
     width: 90px;
     height: 90px;
+    float: left;
+    left: 5px;
 }
 
 /*Titulo TooPots*/
@@ -32,14 +34,16 @@ footer {
     text-align: center;
     font-size: 40px;
     font-weight: bold;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 /*Info usuario conectado*/
 .loggeduser {
      text-align: center;
      color: gray;
+     float: right;
+     right: 5px;
 }
 
 .iconoLog, .iconoLog:hover {
@@ -110,6 +114,7 @@ footer {
     margin: auto;
 }
 .loginInput {
+    padding: 0px 10px;
     background-color: #E1E5AC;
 }
 .otherLogin, .otherLogin:hover {
@@ -141,16 +146,17 @@ footer {
     border-style: solid;
     border: 0.5px solid black;
     padding: 0px 10px;
+    font-size: 16px;
 }
 .inputLabel {
     text-align: left;
     font-size: 16px;
 }
 .inputPequeño {
-    width: 220px;
+    width: 250px;
 }
 .inputGrande {
-    width: 470px;
+    width: 540px;
 }
 .inputFoto {
     margin: 0px 40px 20px 40px;

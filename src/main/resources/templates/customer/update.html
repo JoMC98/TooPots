@@ -3,14 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Registrar-se</title>
+        <title>Modificar perfil</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <h1>Nou Client</h1><br>
-        <form action="#" th:action="@{/customer/add}" method="post">
+        <h1>Modificar perfil</h1><br>
+        <form action="#" th:action="@{/customer/update/{id}(id=${customer.id})}" method="post">
             <table class="marginAuto">
                 <tr>
                     <td colspan="2"><label class="inputLabel inputGrande">Nom Complet</label></td>
@@ -33,7 +33,6 @@
                 <tr>
                     <td>
                         <select class="input inputPequeño" th:field="${customer.sex}">
-                            <option value=""></option>
                             <option value="Masculi">Masculi</option>
                             <option value="Femeni">Femeni</option>
                         </select>
@@ -42,16 +41,14 @@
                     <!--<td><input class="input inputPequeño" type="date" th:field="${#temporals.format(customer.birthDate,'dd/MMMM/yyyy')}" size="25"/></td>-->
                 </tr>
                 <tr>
-                    <td><label class="inputLabel inputPequeño">Nom d'usuari</label></td>
-                    <td><label class="inputLabel inputPequeño">Contrasenya</label></td>
+                    <td colspan="2"><label class="inputLabel inputPequeño">Nom d'usuari</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="text" th:field="${user.username}"/></td>
-                    <td><input class="input inputPequeño" type="password" th:field="${user.passwd}"/></td>
+                    <td colspan="2"><input class="input inputPequeño" type="text" th:field="${user.username}"/></td>
                 </tr>
             </table>
             <br>
-            <input class="btn btn-success" type="submit" value="Registrar-se" />
+            <input class="btn btn-success" type="submit" value="Modificar perfil" />
         </form>
     </body>
 </html>

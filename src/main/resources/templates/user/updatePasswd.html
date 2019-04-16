@@ -9,9 +9,8 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br>
         <h1>Modificar contrasenya</h1><br>
-        <form action="#" th:action="@{/instructor/updatePasswd/{id}(id=${newUser.id})}" method="post">
+        <form action="#" th:action="@{/user/updatePasswd/{id}(id=${newUser.id})}" method="post">
             <table class="marginAuto">
                 <tr>
                     <td><label class="inputLabel inputPequeño">Contrasenya anterior</label></td>

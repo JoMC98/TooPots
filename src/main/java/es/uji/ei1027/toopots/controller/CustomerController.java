@@ -37,7 +37,7 @@ public class CustomerController {
     //Llistar tots els clients
     @RequestMapping("/list")
     public String listCustomers(Model model) {
-        model.addAttribute("users", userDao.getUsers());
+        model.addAttribute("users", userDao.getCustomers());
         model.addAttribute("customers", customerDao.getCustomers());
         return "customer/list";
     }
@@ -60,6 +60,7 @@ public class CustomerController {
         }
         user.setRol("Customer");
         user.setPasswd(passwordEncryptor.encryptPassword(user.getPasswd()));
+
         userDao.addUser(user);
         Users newUser = userDao.getUser(user.getUsername());
 
