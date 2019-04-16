@@ -2,6 +2,7 @@ package es.uji.ei1027.toopots.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Users {
@@ -14,8 +15,7 @@ public class Users {
     private String name;
     private String mail;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date registerDate;
+    private LocalDate registerDate;
 
     //Constructor
     public Users() {
@@ -50,7 +50,7 @@ public class Users {
         return mail;
     }
 
-    public Date getRegisterDate() {
+    public LocalDate getRegisterDate() {
         return registerDate;
     }
 
@@ -83,7 +83,7 @@ public class Users {
         this.mail = mail;
     }
 
-    public void setRegisterDate(Date registerDate) {
+    public void setRegisterDate(LocalDate registerDate) {
         this.registerDate = registerDate;
     }
 

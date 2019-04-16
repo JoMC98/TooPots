@@ -4,15 +4,20 @@ import es.uji.ei1027.toopots.model.Activity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ActivityDao {
-
     private JdbcTemplate jdbcTemplate;
 
     // Obté el jdbcTemplate a partir del Data Source
@@ -23,10 +28,10 @@ public class ActivityDao {
 
     /* Afegeix l'Activitat a la base de dades */
     public void addActivity(Activity activity) {
-        jdbcTemplate.update("INSERT INTO Activity VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, ?, ?, ?)",
-                activity.getName(), activity.getPlace(), activity.getDescription(), activity.getDates(), activity.getPricePerPerson(),
-                activity.getMaxNumberPeople(), activity.getMinNumberPeople(), activity.getMeetingPoint(), activity.getMeetingTime(),
-                "Oberta", activity.getActivityType(), activity.getIdInstructor());
+        jdbcTemplate.update("INSERT INTO Activity VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT, ?, ?, ?)", activity.getName(),
+                activity.getPlace(), activity.getDescription(),activity.getDates(), activity.getPricePerPerson(), activity.getMaxNumberPeople(),
+                activity.getMinNumberPeople(),activity.getMeetingPoint(), activity.getMeetingTime(), "Oberta", activity.getActivityType(),
+                activity.getIdInstructor());
     }
 
     /* Esborra l'Activitat de la base de dades */
@@ -56,6 +61,16 @@ public class ActivityDao {
         }
     }
 
+    public Activity getActivity(LocalDate dates, int idInstructor) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * from Activity WHERE dates=? AND idInstructor=?",
+                    new ActivityRowMapper(), dates, idInstructor);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     /* Obté totes les activitats. Torna una llista buida si no n'hi ha cap. */
     public List<Activity> getActivities() {
         try {
@@ -65,5 +80,6 @@ public class ActivityDao {
             return new ArrayList<Activity>();
         }
     }
+
     
 }

@@ -1,64 +1,157 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
     <head>
         <title>Crear nova activitat</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
-    <body>
-    <h2>Nova activitat</h2>
-        <form action="#" th:action="@{/activity/add}" th:object="${activity}" method="post">
-            <table>
+    <body layout:fragment="content">
+        <br><h1>Crear activitat</h1><br>
+        <form action="#" th:action="@{/activity/add}" method="post">
+            <table class="marginAuto">
                 <tr>
-                    <td><label>Nom</label></td>
-                    <td><input type="text" th:field="*{name}" /></td>
+                    <td colspan="5"><label class="inputLabel">Fotos (màxim 4)</label></td>
                 </tr>
                 <tr>
-                    <td><label>Ubicació</label></td>
-                    <td><input type="text" th:field="*{place}" /></td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo1" hidden/>
+                        </div>
+                    </td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo2" hidden/>
+                        </div>
+                    </td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo3" hidden/>
+                        </div>
+                    </td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo4" hidden/>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
-                    <td><label>Descripció</label></td>
-                    <td><input type="text" th:field="*{description}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Data</label></td>
-                    <td><input type="date" th:field="*{dates}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Preu per persona</label></td>
-                    <td><input type="number" th:field="*{pricePerPerson}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Nombre màxim de persones</label></td>
-                    <td><input type="number" th:field="*{maxNumberPeople}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Nombre mínim de persones</label></td>
-                    <td><input type="number" th:field="*{minNumberPeople}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Punt de trobada</label></td>
-                    <td><input type="text" th:field="*{meetingPoint}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Hora de trobada</label></td>
-                    <td><input type="text" th:field="*{meetingTime}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Tipus d'Activitat</label></td>
-                    <td><input type="number" th:field="*{activityType}" /></td>
-                </tr>
-                <tr>
-                    <td><label>Instructor</label></td>
-                    <td><input type="number" th:field="*{idInstructor}" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><input type="submit" value="Afegeix activitat" /></td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo1').hidden=false;">
+                    </td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo2').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo2').hidden=false;">
+                    </td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo3').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo3').hidden=false;">
+                    </td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo4').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo4').hidden=false;">
+                    </td>
                 </tr>
             </table>
-            <a href="/activity/list">Tornar</a>
+            <br>
+            <table class="marginAuto" th:object="${activity}">
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Nom</label></td>
+                    <td><label class="inputLabel inputPequeño">Data</label></td>
+                    <td><label class="inputLabel inputPequeño">Ubicació</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="text" th:field="*{name}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:field="*{dates}" /></td>
+                    <!--TODO PONER FECHA EN FORMATO HORA y no texto-->
+                    <!--<td><input class="input inputPequeño" type="date" th:field="${#temporals.format(dates,'dd/MMMM/yyyy')}"/></td>-->
+                    <td><input class="input inputPequeño" type="text" th:field="*{place}" /></td>
+
+                </tr>
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Tipus d'Activitat</label></td>
+                    <td><label class="inputLabel inputPequeño">Nombre mínim de persones</label></td>
+                    <td><label class="inputLabel inputPequeño">Nombre màxim de persones</label></td>
+                </tr>
+                <tr>
+                    <td>
+                        <!--TODO PONER ACTIVITY TYPES POSIBLES-->
+                        <!--<select class="input inputPequeño" th:field="*{activityType}">-->
+                            <!--<option value="1">1</option>-->
+                            <!--<option value="2">2</option>-->
+                            <!--<option value="3">3</option>-->
+                        <!--</select>-->
+                        <input class="input inputPequeño" type="number" th:field="*{activityType}" />
+                    </td>
+                    <td><input class="input inputPequeño" type="number" th:field="*{minNumberPeople}" /></td>
+                    <td><input class="input inputPequeño" type="number" th:field="*{maxNumberPeople}" /></td>
+                </tr>
+                <tr>
+                    <td><label class="inputLabel inputPequeño">Preu estándar per persona</label></td>
+                    <td><label class="inputLabel inputPequeño">Punt de trobada</label></td>
+                    <td><label class="inputLabel inputPequeño">Hora de trobada</label></td>
+                </tr>
+                <tr>
+                    <td><input class="input inputPequeño" type="text" th:field="*{pricePerPerson}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:field="*{meetingPoint}"/></td>
+                    <!--TODO PONER HORA EN FORMATO HORA y no texto-->
+                    <td><input class="input inputPequeño" type="text" th:field="*{meetingTime}"/></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><label class="inputLabel inputTriple">Descripció</label></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <textarea class="input inputTriple inputAlto" rows="2" cols="50" th:field="*{description}"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><br><label class="inputLabel"><b>Selecciona las tarifas a aplicar e indica el precio</b></label></td>
+                </tr>
+            </table>
+            <table class="marginAuto">
+                <tr th:object="${activity.tarifaMenores}">
+                    <td>
+                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                    </td>
+                    <td>
+                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                    </td>
+                </tr>
+                <tr th:object="${activity.tarifaEstudiantes}">
+                    <td>
+                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                    </td>
+                    <td>
+                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                    </td>
+                </tr>
+                <tr th:object="${activity.tarifaMayores}">
+                    <td>
+                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                    </td>
+                    <td>
+                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                    </td>
+                </tr>
+                <tr th:object="${activity.tarifaGrupos}">
+                    <td>
+                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                    </td>
+                    <td>
+                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <input class="btn btn-success" type="submit" value="Crear actividad" />
         </form>
     </body>
 </html>

@@ -2,8 +2,11 @@ package es.uji.ei1027.toopots.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Activity {
 
@@ -12,22 +15,39 @@ public class Activity {
     private String name;
     private String place;
     private String description;
-    private Date dates;
+    private LocalDate dates;
     private float pricePerPerson;
     private int maxNumberPeople;
     private int minNumberPeople;
     private String meetingPoint;
     private LocalTime meetingTime;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date creationDate;
+    private LocalDate creationDate;
 
     private String state;
     private int activityType;
     private int idInstructor;
 
+    private ActivityRates tarifaMenores;
+    private ActivityRates tarifaEstudiantes;
+    private ActivityRates tarifaMayores;
+    private ActivityRates tarifaGrupos;
+    private static String[] rateNames = {"Menors de 16 anys", "Estudiants", "Majors de 60 anys", "Grups de 10 persones o més"};
+
     //Constructor
     public Activity() {
+        tarifaMenores = new ActivityRates();
+        tarifaMenores.setRateName(rateNames[0]);
+
+        tarifaEstudiantes = new ActivityRates();
+        tarifaEstudiantes.setRateName(rateNames[1]);
+
+        tarifaMayores = new ActivityRates();
+        tarifaMayores.setRateName(rateNames[2]);
+
+        tarifaGrupos = new ActivityRates();
+        tarifaGrupos.setRateName(rateNames[3]);
+
     }
 
     //Getters
@@ -44,7 +64,7 @@ public class Activity {
         return place;
     }
 
-    public Date getDates() {
+    public LocalDate getDates() {
         return dates;
     }
 
@@ -72,7 +92,7 @@ public class Activity {
         return meetingTime;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
@@ -88,6 +108,21 @@ public class Activity {
         return idInstructor;
     }
 
+    public ActivityRates getTarifaMenores() {
+        return tarifaMenores;
+    }
+
+    public ActivityRates getTarifaEstudiantes() {
+        return tarifaEstudiantes;
+    }
+
+    public ActivityRates getTarifaMayores() {
+        return tarifaMayores;
+    }
+
+    public ActivityRates getTarifaGrupos() {
+        return tarifaGrupos;
+    }
 
     //Setters
 
@@ -107,7 +142,7 @@ public class Activity {
         this.description = description;
     }
 
-    public void setDates(Date dates) {
+    public void setDates(LocalDate dates) {
         this.dates = dates;
     }
 
@@ -131,7 +166,7 @@ public class Activity {
         this.meetingTime = meetingTime;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -147,6 +182,21 @@ public class Activity {
         this.idInstructor = idInstructor;
     }
 
+    public void setTarifaMenores(ActivityRates tarifaMenores) {
+        this.tarifaMenores = tarifaMenores;
+    }
+
+    public void setTarifaEstudiantes(ActivityRates tarifaEstudiantes) {
+        this.tarifaEstudiantes = tarifaEstudiantes;
+    }
+
+    public void setTarifaMayores(ActivityRates tarifaMayores) {
+        this.tarifaMayores = tarifaMayores;
+    }
+
+    public void setTarifaGrupos(ActivityRates tarifaGrupos) {
+        this.tarifaGrupos = tarifaGrupos;
+    }
 
     //To String
     @Override

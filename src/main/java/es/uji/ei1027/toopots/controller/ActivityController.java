@@ -1,8 +1,11 @@
 package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityDao;
+import es.uji.ei1027.toopots.daos.ActivityRatesDao;
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.model.ActivityRates;
+import es.uji.ei1027.toopots.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,14 +15,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/activity")
 public class ActivityController {
     private ActivityDao activityDao;
+    private ActivityRatesDao activityRatesDao;
 
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
         this.activityDao=activityDao;
+    }
+
+    @Autowired
+    public void setActivityRatesDao(ActivityRatesDao activityRatesDao) {
+        this.activityRatesDao=activityRatesDao;
     }
 
     //Llistar totes les activitats
@@ -33,15 +46,53 @@ public class ActivityController {
     @RequestMapping("/add")
     public String addActivity(Model model) {
         model.addAttribute("activity", new Activity());
+
         return "activity/add";
     }
 
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("activity") Activity activity, BindingResult bindingResult) {
+    public String processAddSubmit(HttpSession session, @ModelAttribute("activity") Activity activity, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "activity/add";
+        //TODO FOTOS
+
+        Users user = (Users) session.getAttribute("user");
+        activity.setIdInstructor(user.getId());
+
         activityDao.addActivity(activity);
+
+        Activity newActivity = activityDao.getActivity(activity.getDates(), activity.getIdInstructor());
+        int id = newActivity.getId();
+
+
+
+        if (activity.getTarifaMenores().getPrice() > 0.0) {
+            System.out.println("menor");
+            ActivityRates tarifa = activity.getTarifaMenores();
+            tarifa.setIdActivity(id);
+            activityRatesDao.addActivityRates(tarifa);
+        }
+
+        if (activity.getTarifaEstudiantes().getPrice() > 0.0) {
+            System.out.println("est");
+            ActivityRates tarifa = activity.getTarifaEstudiantes();
+            tarifa.setIdActivity(id);
+            activityRatesDao.addActivityRates(tarifa);
+        }
+        if (activity.getTarifaMayores().getPrice() > 0.0) {
+            System.out.println("may");
+            ActivityRates tarifa = activity.getTarifaMayores();
+            tarifa.setIdActivity(id);
+            activityRatesDao.addActivityRates(tarifa);
+        }
+        if (activity.getTarifaGrupos().getPrice() > 0.0) {
+            System.out.println("gru");
+            ActivityRates tarifa = activity.getTarifaGrupos();
+            tarifa.setIdActivity(id);
+            activityRatesDao.addActivityRates(tarifa);
+        }
+
         return "redirect:list";
     }
 

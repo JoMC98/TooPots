@@ -94,10 +94,20 @@ public class UsersDao implements UserDao {
         }
     }
 
-    /* Obté tots els instructors. Torna una llista buida si no n'hi ha cap. */
+    /* Obté tots els instructors ja acceptats. Torna una llista buida si no n'hi ha cap. */
     public List<Users> getInstructors() {
         try {
             return jdbcTemplate.query("SELECT * from Users where rol='Instructor'", new UsersRowMapper());
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Users>();
+        }
+    }
+
+    /* Obté totes les sol·licituds de monitor. Torna una llista buida si no n'hi ha cap. */
+    public List<Users> getRequests() {
+        try {
+            return jdbcTemplate.query("SELECT * from Users where rol='Request'", new UsersRowMapper());
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Users>();

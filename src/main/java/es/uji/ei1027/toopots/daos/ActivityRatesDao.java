@@ -23,27 +23,27 @@ public class ActivityRatesDao {
 
     /* Afegeix l'Activitat a la base de dades */
     public void addActivityRates(ActivityRates activityRates) {
-        jdbcTemplate.update("INSERT INTO ActivityRates VALUES(?, ?, ?)",
+        jdbcTemplate.update("INSERT INTO Activity_rates VALUES(?, ?, ?)",
                 activityRates.getIdActivity(), activityRates.getRateName(), activityRates.getPrice());
     }
 
     /* Esborra l'Activitat de la base de dades */
     public void deleteActivityRates(int id, String rateName) {
-        jdbcTemplate.update("DELETE from ActivityRates where idActivity=? AND rateName=?", id, rateName);
+        jdbcTemplate.update("DELETE from Activity_rates where idActivity=? AND rateName=?", id, rateName);
     }
 
 
     /* Actualitza els atributs de l'Activitat
        (excepte el id, que és la clau primària) */
     public void updateActivityRates(ActivityRates activityRates) {
-        jdbcTemplate.update("UPDATE ActivityRates SET price=? where idActivity=? AND rateName=?",
+        jdbcTemplate.update("UPDATE Activity_rates SET price=? where idActivity=? AND rateName=?",
                 activityRates.getPrice(), activityRates.getIdActivity(), activityRates.getRateName());
     }
 
     /* Obté l'Activitat amb el id donat. Torna null si no existeix. */
     public ActivityRates getActivityRates(int id) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * from ActivityRates WHERE idActivity=? AND rateName=?",
+            return jdbcTemplate.queryForObject("SELECT * from Activity_rates WHERE idActivity=? AND rateName=?",
                     new ActivityRatesRowMapper(), id);
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -53,7 +53,7 @@ public class ActivityRatesDao {
     /* Obté totes les activitats. Torna una llista buida si no n'hi ha cap. */
     public List<ActivityRates> getActivities() {
         try {
-            return jdbcTemplate.query("SELECT * from ActivityRates", new ActivityRatesRowMapper());
+            return jdbcTemplate.query("SELECT * from Activity_rates", new ActivityRatesRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<ActivityRates>();
         }

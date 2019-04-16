@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class UsersRowMapper implements RowMapper<Users> {
     public Users mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -16,7 +17,7 @@ public class UsersRowMapper implements RowMapper<Users> {
         users.setNif(rs.getString("nif"));
         users.setName(rs.getString("name"));
         users.setMail(rs.getString("mail"));
-        users.setRegisterDate(rs.getDate("registerDate"));
+        users.setRegisterDate(rs.getObject("registerDate", LocalDate.class));
         return users;
     }
 }

@@ -155,19 +155,55 @@ footer {
 .inputPequeño {
     width: 250px;
 }
-.inputGrande {
+.inputDoble {
     width: 540px;
+}
+.inputTriple {
+    width: 830px;
+}
+.inputAlto {
+    height: 70px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 .inputFoto {
     margin: 0px 40px 20px 40px;
     font-size: 16px;
     text-align: center;
-    width: 400px;
+    width: 163px;
 }
+.inputFotoMultiple {
+    margin: 0px 40px 20px 40px;
+    font-size: 16px;
+    text-align: center;
+    width: 128px;
+}
+/*Foto instructor*/
 #profileFoto {
     width: 100px;
     height: 100px;
     margin: 10px 0px;
 }
+/*Fotos actividades*/
+.activityFoto {
+    width: 250px;
+    height: 150px;
+}
+.activityFotoSpace {
+    border: 1px black solid;
+    margin: 0px 10px;
+}
+/*Tarifas*/
+.labelTarifa {
+    position: relative;
+    float: right;
+    margin-right: 20px;
+}
+.inputTarifa {
+    width: 80px;
+    margin: 0px;
+    margin-bottom: 5px;
+}
+
 
 
