@@ -3,14 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
-    <title>Perfil monitor</title>
+    <title>Detall sol·licitud</title>
     <meta charset="UTF-8" />
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
     <body layout:fragment="content">
-    <h1>Perfil monitor</h1><br>
-        <form action="#" th:action="@{/instructor/profile/{id}(id=${user.id})}" method="post">
+    <h1>Detall sol·licitud</h1><br>
+        <form action="#" th:action="@{/instructor/solicitud/{id}(id=${user.id})}" method="post">
             <table class="marginAuto">
                 <tr>
                     <td colspan="2"><label class="inputLabel inputGrande">Nom Complet</label></td>
@@ -36,13 +36,12 @@
                     <td><label class="input inputPequeño" type="text" th:text="${instructor.residence}"/></td>
                 </tr>
                 <tr>
-                    <td><label class="inputLabelGrande inputPequeño">Activitats assignades</label></td>
-                    <td><label class="inputLabelGrande inputPequeño">Certificats</label></td>
+                    <td><label class="inputLabelGrande inputPequeño" >Certificats</label></td>
                 </tr>
             </table>
             <br>
-            <input class="btn btn-success" type="submit" value="Assignar activitats" />
-            <input class="btn btn-danger" type="submit" value="Donar de baixa" />
+            <input class="btn btn-success" type="submit" value="Acceptar" />
+            <input class="btn btn-danger" type="submit" value="Rebutjar" />
         </form>
     </body>
 </html>

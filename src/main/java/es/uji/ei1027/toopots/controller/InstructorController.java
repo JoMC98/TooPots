@@ -108,4 +108,14 @@ public class InstructorController {
         model.addAttribute("instructor", instructorDao.getInstructor(id));
         return "instructor/profile";
     }
+
+    //Veure solicitud monitor
+    @RequestMapping("/solicitud/{id}")
+    public String seeInstructorRequest(Model model, @PathVariable int id) {
+        model.addAttribute("users", userDao.getInstructors());
+        model.addAttribute("instructors", instructorDao.getInstructors());
+        model.addAttribute("user", userDao.getUser(id));
+        model.addAttribute("instructor", instructorDao.getInstructor(id));
+        return "instructor/solicitud";
+    }
 }

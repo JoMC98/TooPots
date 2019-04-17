@@ -24,6 +24,9 @@
                 <a class="black" th:href="@{/instructor/profile/{id}(id=${session.user.id})}">Veure perfil</a>
             </li>
             <li class="enlaceMenu">
+                <a class="black" th:href="@{/instructor/solicitud/{id}(id=${session.user.id})}">Veure solicitud</a>
+            </li>
+            <li class="enlaceMenu">
                 <a class="black" th:href="@{/user/updatePasswd/{id}(id=${session.user.id})}">Modificar contrasenya</a>
             </li>
         </ul>
