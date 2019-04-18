@@ -160,8 +160,10 @@ footer {
     width: 250px;
     text-align: left;
 }
+
 .inputDoble {
     width: 540px;
+    text-align: left;
 }
 .inputTriple {
     width: 830px;
@@ -171,6 +173,7 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 .inputFoto {
     margin: 0px 40px 20px 40px;
     font-size: 16px;

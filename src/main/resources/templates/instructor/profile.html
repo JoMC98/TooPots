@@ -13,10 +13,19 @@
         <form action="#" th:action="@{/instructor/profile/{id}(id=${user.id})}" method="post">
             <table class="marginAuto">
                 <tr>
-                    <td colspan="2"><label class="inputLabel inputGrande">Nom Complet</label></td>
+                    <td><label class="inputLabel inputPequeño">Foto perfil</label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><label class="input inputPequeño" type="text" th:text="${user.name}"/></td>
+                    <td class="marginAuto">
+                        <img class="profileFoto" id="perfil" th:src="@{/images/willirex.jpg}">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td><label class="inputLabel inputPequeño">Nom Complet</label></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label class="input inputDoble" type="text" th:text="${user.name}"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Correu</label></td>
