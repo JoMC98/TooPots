@@ -211,4 +211,19 @@ footer {
 }
 
 
+/*ActividatType*/
+.form_control {
+    height: 40px;
+    margin: 0px 15px 20px 15px;
+    border-style: solid;
+    border: 0.5px solid black;
+    padding: 0px 10px;
+    font-size: 16px;
+    width: 250px;
+    text-align: left;
+}
 
+.table_bordered {
+    margin: auto;
+    border: 1px black solid;
+}

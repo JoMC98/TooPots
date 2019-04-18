@@ -1,36 +1,34 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
     <head>
         <title>Gestionar Tipus d'Activitats</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
-    <body>
-        <h1>Llista de Tipus d'Activitats</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Nivell</th>
-                    <th>Descripció</th>
-                    <th>Foto</th>
-                </tr>
-            </thead>
-            <tbody>
+    <body layout:fragment="content">
+        <br><h1>Llista de Tipus d'Activitats</h1><br>
+            <table class="table_bordered">
+
                 <tr th:each="activityType: ${activityTypes}">
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo" hidden/>
+                        </div>
+                    </td>
                     <td th:text="${activityType.name}"></td>
                     <td th:text="${activityType.level}"></td>
-                    <td th:text="${activityType.description}"></td>
-                    <td th:text="${activityType.photo}"></td>
-                    <td><a th:href="@{/activityType/update/{id}(id=${activityType.id})}">Edita</a>
+                    <td><a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning" role="button">Edita</a>
                     </td>
-                    <td><a th:href="@{/activityType/delete/{id}(id=${activityType.id})}">Esborra</a>
+                    <td><a th:href="@{/activityType/delete/{id}(id=${activityType.id})}" class="btn btn-danger" role="button">Esborra</a>
                     </td>
                 </tr>
-            </tbody>
-        </table>
-        <a href="add">Afegeix un tipus d'activitat</a><br>
-        <a href="/">Tornar</a>
+            </table>
+            <br>
+            <a href="/add"  class="btn btn-success" role="button">Afegir Activitat</a>
+            <a href="/"  class="btn btn-info" role="button">Tornar</a>
+        </form>
     </body>
 </html>
