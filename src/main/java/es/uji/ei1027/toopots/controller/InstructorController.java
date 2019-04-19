@@ -1,7 +1,9 @@
 package es.uji.ei1027.toopots.controller;
 
+import es.uji.ei1027.toopots.daos.ActivityDao;
 import es.uji.ei1027.toopots.daos.InstructorDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
+import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Instructor;
 import es.uji.ei1027.toopots.model.Users;
 import org.jasypt.util.password.BasicPasswordEncryptor;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpSession;
 public class InstructorController {
     private InstructorDao instructorDao;
     private UsersDao userDao;
+    private ActivityDao activityDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
@@ -33,6 +36,8 @@ public class InstructorController {
         this.userDao = userDao;
     }
 
+    @Autowired
+    public void setActivityDao(ActivityDao activityDao){this.activityDao=activityDao;}
     //Llistar tots els instructors
     @RequestMapping("/list")
     public String listInstructors(Model model) {
@@ -117,5 +122,44 @@ public class InstructorController {
         model.addAttribute("user", userDao.getUser(id));
         model.addAttribute("instructor", instructorDao.getInstructor(id));
         return "instructor/solicitud";
+    }
+    //Processa la informació del profile
+    @RequestMapping(value="/profile/{id}", method = RequestMethod.POST)
+    public String processProfileSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
+                                      @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors())
+            return "instructor/profile";
+
+        return "redirect:../asignarActivitat/{id}";
+    }
+
+    //Veure activitats disponibles en el desplegable
+
+    @RequestMapping(value="/asignarActivitat/{id}", method= RequestMethod.GET)
+    public String asignarActivitats(Model model, @PathVariable int id){
+        model.addAttribute("users", userDao.getInstructors());
+        model.addAttribute("instructors", instructorDao.getInstructors());
+        model.addAttribute("user", userDao.getUser(id));
+        model.addAttribute("instructor", instructorDao.getInstructor(id));
+        model.addAttribute("activitat", new Activity());
+        model.addAttribute("noms", activityDao.getActivities());
+        return "instructor/asignarActivitat";
+    }
+
+    //Processa la informació del assignar activitat
+    @RequestMapping(value="/asignarActivitat/{id}", method = RequestMethod.POST)
+    public String processAsignarSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
+                                      @ModelAttribute("instructor") Instructor instructor,
+                                       @ModelAttribute("activity") Activity activity,
+                                       BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors())
+            return "instructor/asignarActivitat";
+
+        userDao.updateUser(user);
+        instructorDao.updateInstructor(instructor);
+        activityDao.updateActivity(activity);
+        return "redirect:../profile";
     }
 }

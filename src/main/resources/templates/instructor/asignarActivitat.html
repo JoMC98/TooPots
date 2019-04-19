@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Perfil monitor</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body layout:fragment="content">
+<h1>Assignar activitat</h1><br>
+<form action="#" th:action="@{/instructor/profile/asignarActivitat}" method="post">
+    <table class="marginAuto">
+
+        <tr>
+            <td><label class="inputLabel inputPequeño"> Nom Complet</label></td>
+        </tr>
+
+        <tr>
+            <td colspan="2"><label class="input inputDoble" type="text" th:text="${user.name}"/></td>
+        </tr>
+
+
+        <tr>
+            <td><label class="inputLabelGrande inputPequeño">Certificats</label></td>
+            <td><label class="inputLabelGrande inputPequeño">Activitats</label></td>
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-check" align="left">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">Certificat de Socorrista</label>
+                </div>
+                <div class="form-check" align="left">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck2">
+                    <label class="form-check-label" for="defaultCheck1">Certificat de Monitor de temps lliure</label>
+                </div>
+                <div class="form-check" align="left">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck3">
+                    <label class="form-check-label" for="defaultCheck1">Certificat d'escalada</label>
+                </div>
+            </td>
+
+
+            <td>
+                <<select id="nomActivitats" th:field="*{nomActivitats}">
+                    <option th:each="activitat : ${noms}"
+                            th:value="${activitat}"
+                            th:text="${activitat}"></option>
+                </select>
+
+            </td>
+
+        </tr>
+
+    </table>
+    <br>
+
+    <input class="btn btn-success" type="submit" value="Assignar activitat" />
+</form>
+</body>
+</html>
+
+
