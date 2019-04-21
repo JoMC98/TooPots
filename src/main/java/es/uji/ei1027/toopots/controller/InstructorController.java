@@ -43,6 +43,7 @@ public class InstructorController {
     public String listInstructors(Model model) {
         model.addAttribute("users", userDao.getInstructors());
         model.addAttribute("instructors", instructorDao.getInstructors());
+        model.addAttribute("activities", activityDao.getActivities());
         return "instructor/list";
     }
 
@@ -127,7 +128,6 @@ public class InstructorController {
     @RequestMapping(value="/profile/{id}", method = RequestMethod.POST)
     public String processProfileSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
                                       @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
-
         if (bindingResult.hasErrors())
             return "instructor/profile";
 
@@ -160,6 +160,6 @@ public class InstructorController {
         userDao.updateUser(user);
         instructorDao.updateInstructor(instructor);
         activityDao.updateActivity(activity);
-        return "redirect:../profile";
+        return "redirect:instructor/profile";
     }
 }
