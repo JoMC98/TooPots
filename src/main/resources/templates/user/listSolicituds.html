@@ -9,17 +9,27 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
 <body layout:fragment="content">
-<h1>Llista de monitors</h1>
-
+<h1>Llista de sol·licituds</h1>
 
 <div th:each="user: ${users}" >
     <table class="input">
-        <td><img class="profileFoto" id="perfil" th:src="@{/images/willirex.jpg}"></td>
-        <td th:text="${user.name}"></td>
-        <td><a th:href="@{/instructor/profile/{id}(id=${user.id})}" class="btn btn-info">Veure perfil</a></td>
+
+
+        <tr>
+            <td class="tableBold" th:text="${user.name}"></td>
+            <td class="tableBold">Certificats</td>
+            <td>        </td>
+        </tr>
+
+        <tr>
+
+            <td><img class="profileFoto" id="perfil" th:src="@{/images/willirex.jpg}"></td>
+            <td>Llistat de certificats</td>
+            <td><a th:href="@{/instructor/profile/{id}(id=${user.id})}" class="btn btn-info">Veure perfil</a></td>
+
+        </tr>
+
         <!--<Llistar certificats"></td>-->
-
-
     </table>
 </div>
 <a href="/">Tornar</a>

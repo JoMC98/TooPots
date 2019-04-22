@@ -12,11 +12,22 @@
 <h1>Llista de monitors</h1>
 
 
-    <div th:each="user: ${users}" >
+    <div th:each="user: ${users}" > <!--Utilitzar instructors -->
         <table class="input">
-            <td><img class="profileFoto" id="perfil" th:src="@{/images/willirex.jpg}"></td>
-            <td th:text="${user.name}"></td>
-            <td><a th:href="@{/instructor/profile/{id}(id=${user.id})}" class="btn btn-info">Veure perfil</a></td>
+            <tr>
+                <td><img class="profileFoto" id="perfil" th:src="@{/images/willirex.jpg}"></td>
+                <td th:text="${user.name}"></td>
+                <td>Activitats assignades:</td>
+                <td><a th:href="@{/instructor/profile/{id}(id=${user.id})}" class="btn btn-info">Veure perfil</a></td>
+            </tr>
+            <tr>
+
+                <td>    </td>
+                <td>    </td>
+                <td>Llistat d'activitats</td>
+                <td>    </td>
+            </tr>
+
             <!--<Llistar activitats"></td>-->
 
 

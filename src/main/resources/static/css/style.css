@@ -230,3 +230,12 @@ footer {
     margin: auto;
     border: 1px black solid;
 }
+
+.tableList{
+
+       border: black 5px solid;
+}
+
+.tableBold{
+    font-weight: bold;
+}

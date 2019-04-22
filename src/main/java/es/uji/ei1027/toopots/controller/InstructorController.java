@@ -38,6 +38,8 @@ public class InstructorController {
 
     @Autowired
     public void setActivityDao(ActivityDao activityDao){this.activityDao=activityDao;}
+
+
     //Llistar tots els instructors
     @RequestMapping("/list")
     public String listInstructors(Model model) {

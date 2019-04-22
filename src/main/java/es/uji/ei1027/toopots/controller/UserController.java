@@ -50,4 +50,13 @@ public class UserController {
             return "user/updatePasswd";
         }
     }
+
+    //Llistar totes les sol·licituds
+
+    @RequestMapping("/listSolicituds")
+    public String listSolicituds(Model model) {
+        model.addAttribute("users", userDao.getInstructors()); //Aci tindrem que posar els requests .getRequest()
+        return "user/listSolicituds";
+    }
+
 }
