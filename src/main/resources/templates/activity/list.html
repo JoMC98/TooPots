@@ -2,55 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
-    <head>
-        <title>Gestionar Tipus d'Activitats</title>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet"
-              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
-    </head>
+<head>
+    <title>Gestionar Activitats</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
     <body layout:fragment="content">
-        <h1>Llista de Tipus d'Activitats</h1>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Ubicació</th>
-                    <th>Descripció</th>
-                    <th>Data</th>
-                    <th>Preu per persona</th>
-                    <th>Nombre màxim de persones</th>
-                    <th>Nombre mínim de persones</th>
-                    <th>Punt de trobada</th>
-                    <th>Hora de trobada</th>
-                    <th>Data de creació</th>
-                    <th>Estat</th>
-                    <th>Tipus d'Activitat</th>
-                    <th>Instructor</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="activity: ${activities}">
-                    <td th:text="${activity.name}"></td>
-                    <td th:text="${activity.place}"></td>
-                    <td th:text="${activity.description}"></td>
-                    <td th:text="${activity.dates}"></td>
-                    <td th:text="${activity.pricePerPerson}"></td>
-                    <td th:text="${activity.maxNumberPeople}"></td>
-                    <td th:text="${activity.minNumberPeople}"></td>
-                    <td th:text="${activity.meetingPoint}"></td>
-                    <td th:text="${{activity.meetingTime}}"></td>
-                    <td th:text="${{activity.creationDate}}"></td>
-                    <td th:text="${activity.state}"></td>
-                    <td th:text="${activity.activityType}"></td>
-                    <td th:text="${activity.idInstructor}"></td>
-                    <td><a th:href="@{/activity/update/{id}(id=${activity.id})}">Edita</a>
-                    </td>
-                    <td><a th:href="@{/activity/delete/{id}(id=${activity.id})}">Esborra</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <a href="add">Afegeix una activitat</a><br>
-        <a href="/">Tornar</a>
+        <h1>Llista d'activitats</h1>
+
+        <div th:each="activity: ${activities}" > <!--Utilitzar activitats -->
+            <table class="input">
+                <td>
+                    <tr><img class="activityFoto" id="perfil" th:src="@{/images/morella.jpg}"></tr>
+                </td>
+                <td>
+                    <tr><label class="tableBold inputPequeño">Nom activitat</label></tr>
+                    <tr><label class="input inputPequeño" type="text" th:text="${activity.name}"></label></tr>
+                    <tr><label class="input inputPequeño" type="text" th:text="${activity.meetingPoint}"></label></tr>
+                    <tr><label class="input inputPequeño" type="text" th:text="${activity.dates}"></label></tr>
+                    <tr><label class="input inputPequeño" type="text" th:text="${activity.state}"></label></tr>
+                </td>
+                <td>
+                    <tr><a th:href="@{/activity/add}" class="btn btn-success">Veure activitat</a></tr>
+                    <tr><a th:href="@{/reservation/list}" class="btn btn-primary">Veure reserves</a></tr>
+                    <tr><a th:href="@{/activity/delete}" class="btn btn-danger">Cancel·lar</a></tr>
+                    <tr><a th:href="@{/activity/add}" class="btn btn-warning">Tancar</a></tr>
+                </td>
+            </table>
+        </div>
+    <a href="/">Tornar</a>
     </body>
 </html>
