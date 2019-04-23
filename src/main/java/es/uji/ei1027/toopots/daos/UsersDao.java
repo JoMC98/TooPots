@@ -124,4 +124,16 @@ public class UsersDao implements UserDao {
         }
     }
 
+    /* Obté totes les sol·licituds  Torna una llista buida si no n'hi ha cap. */
+    /*
+    public List<Users> getRequest() {
+        try {
+            return jdbcTemplate.query("SELECT * from Users where rol='Request'", new UsersRowMapper());
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Users>();
+        }
+    }*/
+
+
 }

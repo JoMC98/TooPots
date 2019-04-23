@@ -153,15 +153,17 @@ footer {
     font-size: 16px;
 }
 .inputLabelGrande {
-    text-align: left;
+    text-align: center;
     font-size: 32px;
 }
 .inputPequeño {
     width: 250px;
     text-align: left;
 }
+
 .inputDoble {
     width: 540px;
+    text-align: left;
 }
 .inputTriple {
     width: 830px;
@@ -171,6 +173,7 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 .inputFoto {
     margin: 0px 40px 20px 40px;
     font-size: 16px;
@@ -211,4 +214,51 @@ footer {
 }
 
 
+/*ActividatType*/
+.form_control {
+    height: 40px;
+    margin: 0px 15px 20px 15px;
+    border-style: solid;
+    border: 0.5px solid black;
+    padding: 0px 10px;
+    font-size: 16px;
+    width: 400px;
+    text-align: left;
+}
 
+.inputIzq {
+    width: 400px;
+}
+
+.inputActivityType {
+    text-align: center;
+}
+.inputActivityFoto {
+    margin: 0px 40px 20px 40px;
+    font-size: 16px;
+    text-align: center;
+    width: 163px;
+}
+
+.activityTypeFoto {
+    width: 500px;
+    height: 300px;
+    margin: auto;
+    border: 1px black solid;
+}
+
+.table_bordered {
+    margin: auto;
+    border: 1px black solid;
+}
+
+/*Otros*/
+
+.tableList{
+
+       border: black 5px solid;
+}
+
+.tableBold{
+    font-weight: bold;
+}
