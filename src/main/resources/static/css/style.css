@@ -222,14 +222,37 @@ footer {
     border: 0.5px solid black;
     padding: 0px 10px;
     font-size: 16px;
-    width: 250px;
+    width: 400px;
     text-align: left;
+}
+
+.inputIzq {
+    width: 400px;
+}
+
+.inputActivityType {
+    text-align: center;
+}
+.inputActivityFoto {
+    margin: 0px 40px 20px 40px;
+    font-size: 16px;
+    text-align: center;
+    width: 163px;
+}
+
+.activityTypeFoto {
+    width: 500px;
+    height: 300px;
+    margin: auto;
+    border: 1px black solid;
 }
 
 .table_bordered {
     margin: auto;
     border: 1px black solid;
 }
+
+/*Otros*/
 
 .tableList{
 

@@ -3,54 +3,49 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Crear nou tipus activitat</title>
+        <title>Editar tipus activitat</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><h1>Crear Tipus Activitat</h1><br>
+        <br><h1>Editar Tipus Activitat</h1><br>
         <form action="#" th:action="@{/activityType/update/{id}(id=${activityType.id})}" method="post">
             <table class="marginAuto" th:object="${activityType}">
                 <tr>
-                    <td class="marginAuto"><label class="inputLabel inputPequeño">Foto</label></td>
+                    <label class="inputActivityType">Foto</label>
 
                 </tr>
                 <tr>
-                    <td class="marginAuto">
-                        <div class="activityFotoSpace activityFoto">
-                            <img class="activityFoto" id="photo1" hidden/>
-                        </div>
-                    </td>
-                    <td>
-                        <table>
-                            <tr>
-                                <td><label class="inputLabel inputPequeño">Nom</label></td>
-                                <td><label class="inputLabel inputPequeño">Nivell</label></td>
 
-                            </tr>
-                            <tr>
+                    <div class="activityTypeFoto">
+                        <img class="activityTypeFoto" id="photo1" hidden/>
+                    </div>
 
-                                <td><input class="input inputPequeño" type="text" th:field="*{name}"/></td>
-                                <td><select class = "form_control" type = "text"  th:field = "*{level}" >
-                                    <option value = "No seleccionat" ></option>
-                                    <option value = "Baix" > Baix </option>
-                                    <option value = "Mitja" > Mitja </option>
-                                    <option value = "Alt" > Alt </option>
-                                    <option value = "Extrem" > Extrem </option>
-                                </select>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
                 </tr>
 
-
                 <tr>
-                    <td class="marginAuto">
-                        <input type="file" accept="image/*" class="inputFoto" onChange="
+
+                    <input type="file" accept="image/*" class="inputActivityFoto" onChange="
                                         document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);
                                         document.getElementById('photo1').hidden=false;">
+                </tr>
+
+                <tr>
+                    <td><label class="inputLabel inputIzq">Nom</label></td>
+                    <td><label class="inputLabel inputIzq">Nivell</label></td>
+
+                </tr>
+                <tr>
+
+                    <td><input class="input inputIzq" type="text" th:field="*{name}"/></td>
+                    <td><select class = "form_control" type = "text"  th:field = "*{level}" >
+                        <option value = "No seleccionat" ></option>
+                        <option value = "Baix" > Baix </option>
+                        <option value = "Mitja" > Mitja </option>
+                        <option value = "Alt" > Alt </option>
+                        <option value = "Extrem" > Extrem </option>
+                    </select>
                     </td>
                 </tr>
 
