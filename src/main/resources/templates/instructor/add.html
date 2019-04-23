@@ -10,22 +10,22 @@
     </head>
     <body layout:fragment="content">
         <h1>Sol·licitar registre</h1><br>
-        <form action="#" th:action="@{/instructor/add}" method="post">
+        <form action="#" th:action="@{/instructor/add}" method="post" enctype="multipart/form-data">
             <table class="marginAuto">
-                <!--<tr>-->
-                    <!--<td colspan="2"><label class="inputLabel">Foto de perfil</label></td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td colspan="2" class="marginAuto">-->
-                        <!--<img id="profileFoto" hidden/>-->
-                    <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                    <!--<td colspan="2"  class="marginAuto">-->
-                        <!--<input type="file" onchange="document.getElementById('profileFoto').src = window.URL.createObjectURL(this.files[0]); document.getElementById('profileFoto').hidden=false"-->
-                               <!--accept="image/*" class="inputFoto">-->
-                    <!--</td>-->
-                <!--</tr>-->
+                <tr>
+                    <td colspan="2"><label class="inputLabel">Foto de perfil</label></td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="marginAuto">
+                        <img id="profileFoto" hidden/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"  class="marginAuto">
+                        <input type="file" onchange="document.getElementById('profileFoto').src = window.URL.createObjectURL(this.files[0]); document.getElementById('profileFoto').hidden=false"
+                               accept="image/*" class="inputFoto" id="foto" name="foto">
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2"><label class="inputLabel inputDoble">Nom Complet</label></td>
                 </tr>

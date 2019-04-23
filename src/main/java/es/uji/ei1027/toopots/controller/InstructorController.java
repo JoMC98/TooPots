@@ -4,17 +4,21 @@ import es.uji.ei1027.toopots.daos.InstructorDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Instructor;
 import es.uji.ei1027.toopots.model.Users;
+import org.apache.commons.io.FilenameUtils;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/instructor")
@@ -22,6 +26,10 @@ public class InstructorController {
     private InstructorDao instructorDao;
     private UsersDao userDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
+
+    @Value("${upload.file.directory}")
+    private String uploadDirectory;
+
 
     @Autowired
     public void setInstructorDao(InstructorDao instructorDao) {
@@ -51,10 +59,17 @@ public class InstructorController {
 
     //Processa la informació del add
     @RequestMapping(value="/add", method= RequestMethod.POST)
-    public String processAddSubmit(HttpSession session, @ModelAttribute("user") Users user,
-                                   @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
+    public String processAddSubmit(HttpSession session, @RequestParam("foto") MultipartFile foto,
+                                   @ModelAttribute("user") Users user, @ModelAttribute("instructor") Instructor instructor,
+                                   BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "instructor/add";
+
+        if (foto.isEmpty()) {
+            // Enviar mensaje de error porque no hay fichero seleccionado
+            return "instructor/add";
+        }
+
 
         user.setRol("Instructor");
         user.setPasswd(passwordEncryptor.encryptPassword(user.getPasswd()));
@@ -62,11 +77,33 @@ public class InstructorController {
         userDao.addUser(user);
         Users newUser = userDao.getUser(user.getUsername());
 
+
+
         session.setAttribute("user", newUser);
 
         //TODO FICAR FOTO BE
-        instructor.setPhoto("");
+
+
+        try {
+            // Obtener el fichero y guardarlo
+            byte[] bytes = foto.getBytes();
+
+            System.out.println(foto.getOriginalFilename());
+//            String extension = .split(".")[1];
+            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+            String direccion = "images/instructorProfiles/" + newUser.getId() + "." + extension;
+
+            Path path = Paths.get(uploadDirectory + direccion);
+            instructor.setPhoto(direccion);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         instructorDao.addInstructor(instructor, newUser.getId());
+
         return "redirect:../";
     }
 
