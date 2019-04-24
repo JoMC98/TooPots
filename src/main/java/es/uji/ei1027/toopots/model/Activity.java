@@ -28,11 +28,15 @@ public class Activity {
     private int activityType;
     private int idInstructor;
 
+    //Para usar con las tarifas
     private ActivityRates tarifaMenores;
     private ActivityRates tarifaEstudiantes;
     private ActivityRates tarifaMayores;
     private ActivityRates tarifaGrupos;
     private static String[] rateNames = {"Menors de 16 anys", "Estudiants", "Majors de 60 anys", "Grups de 10 persones o més"};
+
+    //Para usar en listado de actividades del monitor
+    private float ocupation;
 
     //Constructor
     public Activity() {
@@ -124,6 +128,10 @@ public class Activity {
         return tarifaGrupos;
     }
 
+    public float getOcupation() {
+        return ocupation;
+    }
+
     //Setters
 
     public void setId(int id) {
@@ -197,6 +205,8 @@ public class Activity {
     public void setTarifaGrupos(ActivityRates tarifaGrupos) {
         this.tarifaGrupos = tarifaGrupos;
     }
+
+    public void setOcupation(float ocupation) {this.ocupation = ocupation;}
 
     //To String
     @Override

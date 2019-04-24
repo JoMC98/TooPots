@@ -1,5 +1,8 @@
 package es.uji.ei1027.toopots.daos;
 
+import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.model.ActivityCertification;
+import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Certification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -50,6 +53,20 @@ public class CertificationDao {
             return null;
         }
     }
+
+    /* Obté els certificats del instructor. Torna null si no existeix. */
+    public List<Certification> getCertifications(int idInstructor) {
+        try {
+            return jdbcTemplate.query("SELECT * from Certification WHERE idInstructor=?",
+                    new CertificationRowMapper(), idInstructor);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+
+
 
     /* Obté tots els certificats. Torna una llista buida si no n'hi ha cap. */
     public List<Certification> getCertifications() {

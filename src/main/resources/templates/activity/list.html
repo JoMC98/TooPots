@@ -9,28 +9,45 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
     <body layout:fragment="content">
-        <h1>Llista d'activitats</h1>
-
-        <div th:each="activity: ${activities}" > <!--Utilitzar activitats -->
-            <table class="input">
-                <td>
-                    <tr><img class="activityFoto" id="perfil" th:src="@{/images/morella.jpg}"></tr>
+        <br><h1>Llista d'activitats</h1><br>
+        <table class="table_bordered" th:each="activity: ${activities}">
+            <tr>
+                <td rowspan="4" class="tdListFoto">
+                    <div class="activityFoto">
+                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
+                    </div>
                 </td>
-                <td>
-                    <tr><label class="tableBold inputPequeño">Nom activitat</label></tr>
-                    <tr><label class="input inputPequeño" type="text" th:text="${activity.name}"></label></tr>
-                    <tr><label class="input inputPequeño" type="text" th:text="${activity.meetingPoint}"></label></tr>
-                    <tr><label class="input inputPequeño" type="text" th:text="${activity.dates}"></label></tr>
-                    <tr><label class="input inputPequeño" type="text" th:text="${activity.state}"></label></tr>
+                <td class="tdListTexto"><b th:text="${activity.name}"></b></td>
+                <td class="tdListBotones">
+                    <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Veure activitat</a>
                 </td>
-                <td>
-                    <tr><a th:href="@{/activity/add}" class="btn btn-success">Veure activitat</a></tr>
-                    <tr><a th:href="@{/reservation/list}" class="btn btn-primary">Veure reserves</a></tr>
-                    <tr><a th:href="@{/activity/delete}" class="btn btn-danger">Cancel·lar</a></tr>
-                    <tr><a th:href="@{/activity/add}" class="btn btn-warning">Tancar</a></tr>
+            </tr>
+            <tr>
+                <td class="tdListTexto">
+                    <label th:text="${activity.place}"></label>
                 </td>
-            </table>
-        </div>
-    <a href="/">Tornar</a>
+                <td class="tdListBotones">
+                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Esborra</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdListTexto">
+                    <label th:text="${activity.dates}"></label>
+                </td>
+                <td class="tdListBotones">
+                    <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-warning listBoton" role="button">Esborra</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdListTexto">
+                    <label th:text="${activity.ocupation}"></label>
+                </td>
+                <td class="tdListBotones">
+                    <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Esborra</a>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <a href="add" class="btn btn-success" role="button">Afegir Activitat</a>
     </body>
 </html>

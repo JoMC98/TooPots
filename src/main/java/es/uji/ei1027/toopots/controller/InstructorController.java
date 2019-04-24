@@ -1,9 +1,8 @@
 package es.uji.ei1027.toopots.controller;
 
-import es.uji.ei1027.toopots.daos.ActivityDao;
-import es.uji.ei1027.toopots.daos.InstructorDao;
-import es.uji.ei1027.toopots.daos.UsersDao;
+import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.model.Certification;
 import es.uji.ei1027.toopots.model.Instructor;
 import es.uji.ei1027.toopots.model.Users;
 import org.apache.commons.io.FilenameUtils;
@@ -21,6 +20,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/instructor")
@@ -28,11 +29,12 @@ public class InstructorController {
     private InstructorDao instructorDao;
     private UsersDao userDao;
     private ActivityDao activityDao;
+    private CertificationDao certificationDao;
+    private ActivityCertificationDao activityCertificationDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Value("${upload.file.directory}")
     private String uploadDirectory;
-
 
     @Autowired
     public void setInstructorDao(InstructorDao instructorDao) {
@@ -47,14 +49,42 @@ public class InstructorController {
     @Autowired
     public void setActivityDao(ActivityDao activityDao){this.activityDao=activityDao;}
 
+    @Autowired
+    public void setCertificationDao(CertificationDao certificationDao){this.certificationDao=certificationDao;}
+
+    @Autowired
+    public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
+
 
     //Llistar tots els instructors
     @RequestMapping("/list")
     public String listInstructors(Model model) {
-        model.addAttribute("users", userDao.getInstructors());
-        model.addAttribute("instructors", instructorDao.getInstructors());
-        model.addAttribute("activities", activityDao.getActivities());
+        List<Users> users = userDao.getInstructors();
+        List<Instructor> instructors = new ArrayList<Instructor>();
+        for (Users us: users) {
+            Instructor ins = instructorDao.getInstructor(us.getId());
+            ins.setName(us.getName());
+            ins.setActivities(activityCertificationDao.getAuthorizations(us.getId()));
+            instructors.add(ins);
+        }
+        model.addAttribute("instructors", instructors);
         return "instructor/list";
+    }
+
+    //Llistar totes les sol·licituds
+
+    @RequestMapping("/listRequests")
+    public String listRequests(Model model) {
+        List<Users> users = userDao.getRequests();
+        List<Instructor> instructors = new ArrayList<Instructor>();
+        for (Users us: users) {
+            Instructor ins = instructorDao.getInstructor(us.getId());
+            ins.setName(us.getName());
+            ins.setCertifications(certificationDao.getCertifications(us.getId()));
+            instructors.add(ins);
+        }
+        model.addAttribute("instructors", instructors);
+        return "instructor/listRequests";
     }
 
     //Afegir un nou instructor
@@ -85,8 +115,6 @@ public class InstructorController {
         userDao.addUser(user);
         Users newUser = userDao.getUser(user.getUsername());
 
-
-
         session.setAttribute("user", newUser);
 
         //TODO FICAR FOTO BE
@@ -96,13 +124,11 @@ public class InstructorController {
             // Obtener el fichero y guardarlo
             byte[] bytes = foto.getBytes();
 
-            System.out.println(foto.getOriginalFilename());
-//            String extension = .split(".")[1];
             String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
             String direccion = "images/instructorProfiles/" + newUser.getId() + "." + extension;
 
             Path path = Paths.get(uploadDirectory + direccion);
-            instructor.setPhoto(direccion);
+            instructor.setPhoto("/" + direccion);
 
             Files.write(path, bytes);
         } catch (IOException e) {
@@ -147,22 +173,43 @@ public class InstructorController {
     //Veure perfil monitor
     @RequestMapping("/profile/{id}")
     public String seeInstructor(Model model, @PathVariable int id) {
-        model.addAttribute("users", userDao.getInstructors());
-        model.addAttribute("instructors", instructorDao.getInstructors());
+        Instructor ins = instructorDao.getInstructor(id);
+        ins.setCertifications(certificationDao.getCertifications(id));
+        ins.setActivities(activityCertificationDao.getAuthorizations(id));
         model.addAttribute("user", userDao.getUser(id));
-        model.addAttribute("instructor", instructorDao.getInstructor(id));
+        model.addAttribute("instructor", ins);
         return "instructor/profile";
     }
 
     //Veure solicitud monitor
-    @RequestMapping("/solicitud/{id}")
+    @RequestMapping("/request/{id}")
     public String seeInstructorRequest(Model model, @PathVariable int id) {
-        model.addAttribute("users", userDao.getInstructors());
-        model.addAttribute("instructors", instructorDao.getInstructors());
+        Instructor ins = instructorDao.getInstructor(id);
+        ins.setCertifications(certificationDao.getCertifications(id));
         model.addAttribute("user", userDao.getUser(id));
-        model.addAttribute("instructor", instructorDao.getInstructor(id));
-        return "instructor/solicitud";
+        model.addAttribute("instructor", ins);
+        return "instructor/request";
     }
+
+    //Acceptar solicitud monitor
+    @RequestMapping("/accept/{id}")
+    public String acceptInstructorRequest(Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        userDao.updateRole(id, "Instructor");
+        return "instructor/listRequests";
+    }
+
+    //Rebutjar solicitud monitor
+    @RequestMapping("/reject/{id}")
+    public String rejectInstructorRequest(Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+//       TODO ROL REJECTED
+//        userDao.updateRole(id, "Rejected");
+        userDao.updateRole(id, "Instructor");
+        return "instructor/ListRequests";
+    }
+
+
     //Processa la informació del profile
     @RequestMapping(value="/profile/{id}", method = RequestMethod.POST)
     public String processProfileSubmit(@PathVariable int id, @ModelAttribute("user") Users user,

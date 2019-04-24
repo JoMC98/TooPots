@@ -119,4 +119,14 @@ public class ReservationDao {
         }
     }
 
+    /* Obté totes les reserves d'una activitat. Torna una llista buida si no n'hi ha cap. */
+    public List<Reservation> getReserves(int idActivity) {
+        try {
+            return jdbcTemplate.query("SELECT * from Reservation where idActivity=?", new ReservationRowMapper(), idActivity);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Reservation>();
+        }
+    }
+
 }

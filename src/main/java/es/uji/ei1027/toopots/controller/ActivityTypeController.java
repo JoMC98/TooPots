@@ -1,20 +1,29 @@
 package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
+import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/activityType")
 public class ActivityTypeController {
     private ActivityTypeDao activityTypeDao;
+
+    @Value("${upload.file.directory}")
+    private String uploadDirectory;
 
     @Autowired
     public void setActivityTypeDao(ActivityTypeDao activityTypeDao) {
@@ -37,9 +46,30 @@ public class ActivityTypeController {
 
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+    public String processAddSubmit(@RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "activityType/add";
+
+        if (foto.isEmpty()) {
+            // Enviar mensaje de error porque no hay fichero seleccionado
+            return "instructor/add";
+        }
+
+        try {
+            // Obtener el fichero y guardarlo
+            byte[] bytes = foto.getBytes();
+
+            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+            String direccion = "images/activityTypes/" + activityType.getName() + "_" + activityType.getLevel() + "." + extension;
+
+            Path path = Paths.get(uploadDirectory + direccion);
+            activityType.setPhoto("/" + direccion);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         activityTypeDao.addActivityType(activityType);
         return "redirect:list";
     }
@@ -53,9 +83,25 @@ public class ActivityTypeController {
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+    public String processUpdateSubmit(@RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "activityType/update";
+
+        try {
+            // Obtener el fichero y guardarlo
+            byte[] bytes = foto.getBytes();
+
+            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+            String direccion = "images/activityTypes/" + activityType.getName() + "_" + activityType.getLevel() + "." + extension;
+
+            Path path = Paths.get(uploadDirectory + direccion);
+            activityType.setPhoto("/" + direccion);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         activityTypeDao.updateActivityType(activityType);
         return "redirect:../list";
     }
@@ -63,6 +109,12 @@ public class ActivityTypeController {
     //Esborra un tipus de activitat
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {
+        Path path = Paths.get(uploadDirectory + activityTypeDao.getActivityType(id).getPhoto());
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         activityTypeDao.deleteActivityType(id);
         return "redirect:../list";
     }

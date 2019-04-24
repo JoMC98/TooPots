@@ -67,6 +67,10 @@ public class UsersDao implements UserDao {
                 user.getUsername(), user.getNif(), user.getName(), user.getMail(), user.getId());
     }
 
+    public void updateRole(int idUser, String role) {
+        jdbcTemplate.update("UPDATE Users SET role=? where idUser=?", role, idUser);
+    }
+
     /* Actualitza la contrasenya */
     public void updatePassword(Users user) {
         jdbcTemplate.update("UPDATE Users SET passwd=? where idUser=?",
@@ -107,7 +111,7 @@ public class UsersDao implements UserDao {
     /* Obté totes les sol·licituds de monitor. Torna una llista buida si no n'hi ha cap. */
     public List<Users> getRequests() {
         try {
-            return jdbcTemplate.query("SELECT * from Users where rol='Request'", new UsersRowMapper());
+            return jdbcTemplate.query("SELECT * from Users where rol='Instructor'", new UsersRowMapper());
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Users>();

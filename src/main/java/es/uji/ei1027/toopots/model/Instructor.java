@@ -3,6 +3,7 @@ package es.uji.ei1027.toopots.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class Instructor {
 
@@ -13,6 +14,12 @@ public class Instructor {
     private String residence;
     private int accountNumber;
     private String state;
+
+    //Para poder mostrarlo en la lista de solicitudes y instructores
+    private String name;
+    private List<Certification> certifications;
+    private List<ActivityType> activities;
+
 
     //Constructor
 
@@ -42,6 +49,18 @@ public class Instructor {
         return state;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public List<Certification> getCertifications() {
+        return certifications;
+    }
+
+    public List<ActivityType> getActivities() {
+        return activities;
+    }
+
     //Setters
 
 
@@ -65,6 +84,17 @@ public class Instructor {
         this.state = state;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCertifications(List<Certification> certifications) {
+        this.certifications = certifications;
+    }
+
+    public void setActivities(List<ActivityType> activities) {
+        this.activities = activities;
+    }
 
     //toString
 

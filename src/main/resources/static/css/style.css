@@ -160,7 +160,6 @@ footer {
     width: 250px;
     text-align: left;
 }
-
 .inputDoble {
     width: 540px;
     text-align: left;
@@ -173,7 +172,6 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-
 .inputFoto {
     margin: 0px 40px 20px 40px;
     font-size: 16px;
@@ -186,10 +184,13 @@ footer {
     text-align: center;
     width: 128px;
 }
+.inputText {
+    padding-top: 5px;
+}
 /*Foto instructor*/
-#profileFoto {
-    width: 100px;
-    height: 100px;
+.profileFoto {
+    width: 150px;
+    height: 150px;
     margin: 10px 0px;
 }
 /*Fotos actividades*/
@@ -201,6 +202,7 @@ footer {
     border: 1px black solid;
     margin: 0px 10px;
 }
+
 /*Tarifas*/
 .labelTarifa {
     position: relative;
@@ -213,52 +215,35 @@ footer {
     margin-bottom: 5px;
 }
 
-
-/*ActividatType*/
-.form_control {
-    height: 40px;
-    margin: 0px 15px 20px 15px;
-    border-style: solid;
-    border: 0.5px solid black;
-    padding: 0px 10px;
-    font-size: 16px;
-    width: 400px;
-    text-align: left;
-}
-
-.inputIzq {
-    width: 400px;
-}
-
-.inputActivityType {
-    text-align: center;
-}
-.inputActivityFoto {
-    margin: 0px 40px 20px 40px;
-    font-size: 16px;
-    text-align: center;
-    width: 163px;
-}
-
-.activityTypeFoto {
-    width: 500px;
-    height: 300px;
-    margin: auto;
-    border: 1px black solid;
-}
-
+/*Listas*/
 .table_bordered {
     margin: auto;
     border: 1px black solid;
+    margin-bottom: 20px;
 }
-
-/*Otros*/
-
-.tableList{
-
-       border: black 5px solid;
+.tdListFoto {
+    padding: 20px;
 }
+.tdListTexto {
+    padding: 20px;
+    width: 200px;
+}
+.tdListBotones {
+    padding: 0px 20px;
+}
+.listBoton {
+    width: 120px;
+}
+.listCertificados {
+    border: 1px black solid;
+    width: 300px;
+    margin-top: 10px;
+}
+.tdListCertificadosSolicitud {
+    padding: 10px 20px;
+    width: 250px;
+}
+.tdGrupos {
 
-.tableBold{
-    font-weight: bold;
+    padding: 0px 10px;
 }

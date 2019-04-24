@@ -3,40 +3,44 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Crear nou tipus activitat</title>
+        <title>Nou tipus d'activitat</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><h1>Crear Tipus Activitat</h1><br>
-        <form action="#" th:action="@{/activityType/add}" method="post">
+        <br><h1>Crear Tipus d'Activitat</h1><br>
+        <form action="#" th:action="@{/activityType/add}" method="post" enctype="multipart/form-data">
+            <table class="marginAuto">
+                <tr>
+                    <td><label class="inputLabel">Foto</label></td>
+                </tr>
+                <tr>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo1" hidden/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo1').hidden=false;" id="foto" name="foto">
+                    </td>
+                </tr>
+            </table>
+            <br>
             <table class="marginAuto" th:object="${activityType}">
                 <tr>
-                    <label class="inputActivityType">Foto</label>
+                    <td><label class="inputLabel inputPequeño">Nom</label></td>
+                    <td><label class="inputLabel inputPequeño">Nivell</label></td>
 
                 </tr>
                 <tr>
 
-                        <div class="activityTypeFoto">
-                            <img class="profileFoto" id="perfil" th:src="@{/images/willirex.jpg}">
-                        </div>
-
-                </tr>
-
-                <tr>
-                        <input type="file" accept="image/*" class="inputActivityFoto">
-                </tr>
-
-                <tr>
-                    <td><label class="inputLabel inputIzq">Nom</label></td>
-                    <td><label class="inputLabel inputIzq">Nivell</label></td>
-
-                </tr>
-                <tr>
-
-                    <td><input class="input inputIzq" type="text" th:field="*{name}"/></td>
-                    <td><select class = "form_control" type = "text"  th:field = "*{level}" >
+                    <td><input class="input inputPequeño" type="text" th:field="*{name}"/></td>
+                    <td><select class = "input inputPequeño" type = "text"  th:field = "*{level}" >
                         <option value = "No seleccionat" ></option>
                         <option value = "Baix" > Baix </option>
                         <option value = "Mitja" > Mitja </option>
@@ -45,16 +49,14 @@
                     </select>
                     </td>
                 </tr>
-
                 <tr>
-                    <td colspan="3"><label class="inputLabel inputTriple">Descripció</label></td>
+                    <td colspan="2"><label class="inputLabel inputDoble">Descripció (no obligatori)</label></td>
                 </tr>
                 <tr>
-                    <td colspan="3">
-                        <textarea class="input inputTriple inputAlto" rows="2" cols="50" th:field="*{description}"></textarea>
+                    <td colspan="2">
+                        <textarea class="input inputDoble inputAlto" rows="2" cols="50" th:field="*{description}"></textarea>
                     </td>
                 </tr>
-
             </table>
             <br>
             <input class="btn btn-success" type="submit" value="Crear actividad" />

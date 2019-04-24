@@ -2,10 +2,9 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityDao;
 import es.uji.ei1027.toopots.daos.ActivityRatesDao;
+import es.uji.ei1027.toopots.daos.ReservationDao;
+import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.model.Activity;
-import es.uji.ei1027.toopots.model.Activity;
-import es.uji.ei1027.toopots.model.ActivityRates;
-import es.uji.ei1027.toopots.model.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +23,7 @@ import java.util.List;
 public class ActivityController {
     private ActivityDao activityDao;
     private ActivityRatesDao activityRatesDao;
+    private ReservationDao reservationDao;
 
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
@@ -35,10 +35,26 @@ public class ActivityController {
         this.activityRatesDao=activityRatesDao;
     }
 
+    @Autowired
+    public void setReservationDao(ReservationDao reservationDao) {
+        this.reservationDao=reservationDao;
+    }
+
     //Llistar totes les activitats
     @RequestMapping("/list")
     public String listActivities(Model model) {
-        model.addAttribute("activities", activityDao.getActivities());
+        List<Activity> activities = activityDao.getActivities();
+        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+        for (Activity ac: activities) {
+            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            int total = 0;
+            for (Reservation res: reservations) {
+                total += res.getNumPeople();
+            }
+            ac.setOcupation((total/ac.getMaxNumberPeople())*100);
+            activitiesWithOcupation.add(ac);
+        }
+        model.addAttribute("activities", activitiesWithOcupation);
         return "activity/list";
     }
 
@@ -64,8 +80,6 @@ public class ActivityController {
 
         Activity newActivity = activityDao.getActivity(activity.getDates(), activity.getIdInstructor());
         int id = newActivity.getId();
-
-
 
         if (activity.getTarifaMenores().getPrice() > 0.0) {
             System.out.println("menor");

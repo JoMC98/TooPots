@@ -10,54 +10,35 @@
     </head>
     <body layout:fragment="content">
         <br><h1>Editar Tipus Activitat</h1><br>
-        <form action="#" th:action="@{/activityType/update/{id}(id=${activityType.id})}" method="post">
+        <form action="#" th:action="@{/activityType/update/{id}(id=${activityType.id})}" method="post" enctype="multipart/form-data">
             <table class="marginAuto" th:object="${activityType}">
                 <tr>
-                    <label class="inputActivityType">Foto</label>
-
+                    <td><label class="inputLabel">Foto</label></td>
                 </tr>
                 <tr>
-
-                    <div class="activityTypeFoto">
-                        <img class="activityTypeFoto" id="photo1" hidden/>
-                    </div>
-
-                </tr>
-
-                <tr>
-
-                    <input type="file" accept="image/*" class="inputActivityFoto" onChange="
-                                        document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);
-                                        document.getElementById('photo1').hidden=false;">
-                </tr>
-
-                <tr>
-                    <td><label class="inputLabel inputIzq">Nom</label></td>
-                    <td><label class="inputLabel inputIzq">Nivell</label></td>
-
-                </tr>
-                <tr>
-
-                    <td><input class="input inputIzq" type="text" th:field="*{name}"/></td>
-                    <td><select class = "form_control" type = "text"  th:field = "*{level}" >
-                        <option value = "No seleccionat" ></option>
-                        <option value = "Baix" > Baix </option>
-                        <option value = "Mitja" > Mitja </option>
-                        <option value = "Alt" > Alt </option>
-                        <option value = "Extrem" > Extrem </option>
-                    </select>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img th:src="@{*{photo}}" class="activityFoto" id="photo1"/>
+                        </div>
                     </td>
                 </tr>
-
                 <tr>
-                    <td colspan="3"><label class="inputLabel inputTriple">Descripció</label></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <textarea class="input inputTriple inputAlto" rows="2" cols="50" th:field="*{description}"></textarea>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" id="foto" name="foto"
+                               onChange="document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);">
                     </td>
                 </tr>
-
+            </table>
+            <br>
+            <table class="marginAuto" th:object="${activityType}">
+                <tr>
+                    <td colspan="2"><label class="inputLabel inputDoble">Descripció (no obligatori)</label></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea class="input inputDoble inputAlto" rows="2" cols="50" th:field="*{description}"></textarea>
+                    </td>
+                </tr>
             </table>
             <br>
             <input class="btn btn-success" type="submit" value="Editar activitat" />

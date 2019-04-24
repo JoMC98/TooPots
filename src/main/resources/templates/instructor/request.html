@@ -3,13 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
-    <title>Perfil monitor</title>
+    <title>Detall sol·licitud</title>
     <meta charset="UTF-8" />
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
     <body layout:fragment="content">
-        <br><h1>Perfil monitor</h1><br>
+        <br><h1>Detall sol·licitud</h1><br>
         <table class="marginAuto">
             <tr>
                 <td colspan="2" class="marginAuto">
@@ -38,10 +38,8 @@
                 <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.residence}"></label></td>
                 <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.accountNumber}"></label></td>
             </tr>
-        </table>
-        <table class="marginAuto">
             <tr>
-                <td class="tdGrupos">
+                <td colspan="2">
                     <br><b>Certificats</b><br><br>
                     <table class="table_bordered">
                         <tr th:each="certification: ${instructor.certifications}">
@@ -50,28 +48,13 @@
                         </tr>
                     </table>
                 </td>
-                <td class="tdGrupos">
-                    <br><b>Activitats assignades</b><br><br>
-                    <table class="table_bordered">
-                        <tr>
-                            <td class="tdListCertificadosSolicitud"><b>Activitat</b></td>
-                            <td class="tdListCertificadosSolicitud"><b>Nivell</b></td>
-                        </tr>
-                        <tr th:each="activity: ${instructor.activities}">
-                            <td class="tdListCertificadosSolicitud" th:text="${activity.name}"></td>
-                            <td class="tdListCertificadosSolicitud" th:text="${activity.level}"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <br><a th:href="@{/instructor/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a><br><br>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <br><a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
+                <td>
+                    <a th:href="@{/instructor/accept/{id}(id=${user.id})}" class="btn btn-success">Acceptar</a>
+                </td>
+                <td>
+                    <a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Rebutjar</a>
                 </td>
             </tr>
         </table>
