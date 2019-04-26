@@ -1,5 +1,6 @@
 package es.uji.ei1027.toopots.model;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -36,7 +37,8 @@ public class Activity {
     private static String[] rateNames = {"Menors de 16 anys", "Estudiants", "Majors de 60 anys", "Grups de 10 persones o més"};
 
     //Para usar en listado de actividades del monitor
-    private float ocupation;
+    private int ocupation;
+    private String photoPrincipal;
 
     //Constructor
     public Activity() {
@@ -128,8 +130,12 @@ public class Activity {
         return tarifaGrupos;
     }
 
-    public float getOcupation() {
+    public int getOcupation() {
         return ocupation;
+    }
+
+    public String getPhotoPrincipal() {
+        return photoPrincipal;
     }
 
     //Setters
@@ -206,7 +212,11 @@ public class Activity {
         this.tarifaGrupos = tarifaGrupos;
     }
 
-    public void setOcupation(float ocupation) {this.ocupation = ocupation;}
+    public void setOcupation(int ocupation) {this.ocupation = ocupation;}
+
+    public void setPhotoPrincipal(String photoPrincipal) {
+        this.photoPrincipal = photoPrincipal;
+    }
 
     //To String
     @Override

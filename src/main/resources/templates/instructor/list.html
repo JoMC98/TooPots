@@ -13,30 +13,37 @@
         <div>
             <table class="table_bordered" th:each="instructor: ${instructors}">
                 <tr>
-                    <td rowspan="2" class="tdListFoto"><img class="profileFoto" th:src="@{*{instructor.photo}}"></td>
-                    <td rowspan="2" class="tdListTexto"><b th:text="${instructor.name}"></b></td>
-                    <td rowspan="2" class="tdListTexto">
-                        <table class="listCertificados">
+                    <td class="tdListIzquierda tdListArriba tdListAbajo"><img class="profileFoto" th:src="@{*{instructor.photo}}"></td>
+                    <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto"><b th:text="${instructor.name}"></b></td>
+                    <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto">
+                        <table class="tdListTableActivity">
                             <tr>
-                                <td class="tdListCertificado"><b>Activitat</b></td>
-                                <td class="tdListCertificado"><b>Nivell</b></td>
-                            </tr>
-                            <tr th:each="activityType: ${instructor.activities}">
-                                <td class="tdListCertificado">
-                                    <label th:text="${activityType.name}"></label>
+                                <td class="">
+                                    <b>Activitat</b>
                                 </td>
-                                <td class="tdListCertificado">
-                                    <label th:text="${activityType.level}"></label>
+                                <td class="tdListActivityLevel">
+                                    <b>Nivell</b>
                                 </td>
                             </tr>
                         </table>
+                        <div class="listCertificados">
+                            <div th:each="activityType: ${instructor.activities}">
+                                <table class="tdListTableActivity">
+                                    <tr>
+                                        <td>
+                                            <label th:text="${activityType.name}"></label>
+                                        </td>
+                                        <td class="tdListActivityLevel">
+                                            <label th:text="${activityType.level}"></label>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <hr/>
+                            </div>
+                        </div>
                     </td>
-                    <td class="tdListBotones">
-                        <a th:href="@{/instructor/profile/{id}(id=${instructor.id})}" class="btn btn-info listBoton">Veure perfil</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tdListBotones">
+                    <td class="tdListArriba tdListAbajo tdListIzquierda tdListBotones">
+                        <a th:href="@{/instructor/profile/{id}(id=${instructor.id})}" class="btn btn-info listBoton">Perfil</a><br><br>
                         <a th:href="@{/instructor/delete/{id}(id=${instructor.id})}" class="btn btn-danger listBoton">Donar de baixa</a>
                     </td>
                 </tr>

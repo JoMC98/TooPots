@@ -10,15 +10,19 @@
         <ul class="navbar-nav">
             <li class="enlaceMenu">
                 <a class="black" th:href="@{/}">Inici</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
-                <a class="black" href="#">Sol·licituds pendents</a>
+                <a class="black" th:href="@{/instructor/listRequests}">Sol·licituds pendents</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
-                <a class="black" href="#">Llista de monitors</a>
+                <a class="black" th:href="@{/instructor/list}">Llista de monitors</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" th:href="@{/activityType/list}">Tipus d'activitats</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" href="#">Estadístiques</a>

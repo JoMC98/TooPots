@@ -12,22 +12,22 @@
         <br><h1>Llista de Tipus d'Activitats</h1><br>
         <table class="table_bordered" th:each="activityType: ${activityTypes}">
             <tr>
-                <td rowspan="2" class="tdListFoto">
+                <td rowspan="2" class="tdListIzquierda tdListArriba tdListAbajo">
                     <div class="activityFoto">
                         <img th:src="@{*{activityType.photo}}" class="activityFoto"/>
                     </div>
                 </td>
-                <td class="tdListTexto"><b th:text="${activityType.name}"></b></td>
-                <td class="tdListBotones">
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
+                <td class="tdListCentroAbajo tdListArriba tdListBotones">
                     <a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Edita</a>
                 </td>
             </tr>
             <tr>
-                <td class="tdListTexto">
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
                     <b>Nivell: </b>
                     <label th:text="${activityType.level}"></label>
                 </td>
-                <td class="tdListBotones">
+                <td class="tdListCentroArriba tdListAbajo tdListBotones">
                     <a th:href="@{/activityType/delete/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Esborra</a>
                 </td>
             </tr>

@@ -38,23 +38,34 @@
                 <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.residence}"></label></td>
                 <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.accountNumber}"></label></td>
             </tr>
+        </table>
+        <table class="marginAuto">
             <tr>
                 <td colspan="2">
-                    <br><b>Certificats</b><br><br>
-                    <table class="table_bordered">
-                        <tr th:each="certification: ${instructor.certifications}">
-                            <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
-                            <td class="tdListCertificadosSolicitud"><a th:href="@{*{certification.doc}}" target="_blank">PDF</a></td>
-                        </tr>
-                    </table>
+                    <br><b>Certificats</b><br>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="tdGrupos">
+                    <div class="requestCertificados">
+                        <div th:each="certification: ${instructor.certifications}">
+                            <table class="tdRequestTableActivity">
+                                <tr>
+                                    <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
+                                    <td class="tdListCertificadosSolicitud tdRequestActivityLevel"><a th:href="@{*{certification.doc}}" target="_blank">PDF</a></td>
+                                </tr>
+                            </table>
+                            <hr />
+                        </div>
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <a th:href="@{/instructor/accept/{id}(id=${user.id})}" class="btn btn-success">Acceptar</a>
+                    <br><br><a th:href="@{/instructor/accept/{id}(id=${user.id})}" class="btn btn-success">Acceptar</a>
                 </td>
                 <td>
-                    <a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Rebutjar</a>
+                    <br><br><a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Rebutjar</a>
                 </td>
             </tr>
         </table>

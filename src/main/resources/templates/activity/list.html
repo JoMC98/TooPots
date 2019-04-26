@@ -12,38 +12,39 @@
         <br><h1>Llista d'activitats</h1><br>
         <table class="table_bordered" th:each="activity: ${activities}">
             <tr>
-                <td rowspan="4" class="tdListFoto">
+                <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
                     <div class="activityFoto">
                         <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
                     </div>
                 </td>
-                <td class="tdListTexto"><b th:text="${activity.name}"></b></td>
-                <td class="tdListBotones">
-                    <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Veure activitat</a>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
+                <td class="tdListCentroAbajo tdListArriba tdListBotones">
+                    <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Veure</a>
                 </td>
             </tr>
             <tr>
-                <td class="tdListTexto">
+                <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${activity.place}"></label>
                 </td>
-                <td class="tdListBotones">
-                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Esborra</a>
+                <td class="tdListCentroArribaAbajo tdListBotones">
+                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
                 </td>
             </tr>
             <tr>
-                <td class="tdListTexto">
+                <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${activity.dates}"></label>
                 </td>
-                <td class="tdListBotones">
-                    <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-warning listBoton" role="button">Esborra</a>
+                <td class="tdListCentroArribaAbajo tdListBotones">
+                    <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-warning listBoton" role="button">Tancar</a>
                 </td>
             </tr>
             <tr>
-                <td class="tdListTexto">
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
                     <label th:text="${activity.ocupation}"></label>
+                    <label> %</label>
                 </td>
-                <td class="tdListBotones">
-                    <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Esborra</a>
+                <td class="tdListCentroArriba tdListAbajo tdListBotones">
+                    <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Esborrar</a>
                 </td>
             </tr>
         </table>

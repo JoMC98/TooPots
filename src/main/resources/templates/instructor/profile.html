@@ -41,37 +41,46 @@
         </table>
         <table class="marginAuto">
             <tr>
-                <td class="tdGrupos">
-                    <br><b>Certificats</b><br><br>
-                    <table class="table_bordered">
-                        <tr th:each="certification: ${instructor.certifications}">
-                            <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
-                            <td class="tdListCertificadosSolicitud"><a th:href="@{*{certification.doc}}" target="_blank">PDF</a></td>
-                        </tr>
-                    </table>
+                <td>
+                    <br><b>Certificats</b><br>
                 </td>
-                <td class="tdGrupos">
-                    <br><b>Activitats assignades</b><br><br>
-                    <table class="table_bordered">
-                        <tr>
-                            <td class="tdListCertificadosSolicitud"><b>Activitat</b></td>
-                            <td class="tdListCertificadosSolicitud"><b>Nivell</b></td>
-                        </tr>
-                        <tr th:each="activity: ${instructor.activities}">
-                            <td class="tdListCertificadosSolicitud" th:text="${activity.name}"></td>
-                            <td class="tdListCertificadosSolicitud" th:text="${activity.level}"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <br><a th:href="@{/instructor/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a><br><br>
-                            </td>
-                        </tr>
-                    </table>
+                <td>
+                    <br><b>Activitats assignades</b><br>
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
-                    <br><a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
+                <td class="tdGrupos">
+                    <div class="profileCertificados">
+                        <div th:each="certification: ${instructor.certifications}">
+                            <label th:text="${certification.certificate}"></label>
+                            <hr />
+                        </div>
+                    </div>
+                </td>
+                <td class="tdGrupos">
+                    <div class="profileCertificados">
+                        <div th:each="activityType: ${instructor.activities}">
+                            <table class="tdProfileTableActivity">
+                                <tr>
+                                    <td>
+                                        <label th:text="${activityType.name}"></label>
+                                    </td>
+                                    <td class="tdProfileActivityLevel">
+                                        <label th:text="${activityType.level}"></label>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br><br><a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
+                </td>
+                <td>
+                    <br><br><a th:href="@{/instructor/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a>
                 </td>
             </tr>
         </table>

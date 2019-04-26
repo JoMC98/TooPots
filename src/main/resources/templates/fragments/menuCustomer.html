@@ -10,18 +10,23 @@
         <ul class="navbar-nav">
             <li class="enlaceMenu">
                 <a class="black" th:href="@{/}">Inici</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" href="#">Oferta activitats</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" href="#">Tipus d'activitats ofertades</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" href="#">Llista de reserves</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" th:href="@{/customer/update/{id}(id=${session.user.id})}">Modificar perfil</a>
+                <hr/>
             </li>
             <li class="enlaceMenu">
                 <a class="black" th:href="@{/user/updatePasswd/{id}(id=${session.user.id})}">Modificar contrasenya</a>

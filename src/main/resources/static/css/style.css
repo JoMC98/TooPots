@@ -12,7 +12,7 @@
     width: 100%;
 }
 .tdLados {
-    width: 250px;
+    width: 400px;
 }
 
 
@@ -221,29 +221,84 @@ footer {
     border: 1px black solid;
     margin-bottom: 20px;
 }
-.tdListFoto {
-    padding: 20px;
+.tdListArriba {
+    padding-top: 20px;
 }
-.tdListTexto {
-    padding: 20px;
-    width: 200px;
+.tdListAbajo {
+    padding-bottom: 20px;
+}
+.tdListIzquierda {
+    padding-left: 20px;
 }
 .tdListBotones {
-    padding: 0px 20px;
+    padding-right: 20px;
+}
+.tdListTexto {
+    width: 200px;
+}
+.tdListCentroArribaAbajo {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.tdListCentroArriba {
+    padding-top: 10px;
+}
+.tdListCentroAbajo {
+    padding-bottom: 10px;
+}
+.tdListCentroIzquierda {
+    padding-left: 10px;
+}
+.tdListCentroDerecha {
+    padding-right: 10px;
+}
+.tdListCentroDerechaIzquierda {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .listBoton {
-    width: 120px;
+    width: 150px;
 }
 .listCertificados {
-    border: 1px black solid;
     width: 300px;
-    margin-top: 10px;
+    margin-top: 20px;
+    overflow:scroll;
+    height:150px;
 }
-.tdListCertificadosSolicitud {
-    padding: 10px 20px;
-    width: 250px;
+.tdListActivityLevel {
+    width: 100px;
 }
-.tdGrupos {
+.tdListTableActivity {
+    width: 270px;
+}
 
-    padding: 0px 10px;
+/*Profile*/
+.tdGrupos {
+    padding: 0px 30px;
 }
+.profileCertificados {
+    width: 350px;
+    height: 200px;
+    margin-top: 20px;
+    overflow:scroll;
+}
+.tdProfileTableActivity {
+    width: 320px;
+}
+.tdProfileActivityLevel {
+    width: 90px;
+}
+/*Request*/
+.requestCertificados {
+    width: 500px;
+    height: 200px;
+    margin-top: 20px;
+    overflow:scroll;
+}
+.tdRequestTableActivity {
+    width: 470px;
+}
+.tdRequestActivityLevel {
+    width: 70px;
+}
+
