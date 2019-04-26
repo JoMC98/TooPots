@@ -29,6 +29,8 @@ public class Activity {
     private int activityType;
     private int idInstructor;
 
+    private String cancelationReason;
+
     //Para usar con las tarifas
     private ActivityRates tarifaMenores;
     private ActivityRates tarifaEstudiantes;
@@ -114,6 +116,10 @@ public class Activity {
         return idInstructor;
     }
 
+    public String getCancelationReason() {
+        return cancelationReason;
+    }
+
     public ActivityRates getTarifaMenores() {
         return tarifaMenores;
     }
@@ -194,6 +200,10 @@ public class Activity {
 
     public void setIdInstructor(int idInstructor) {
         this.idInstructor = idInstructor;
+    }
+
+    public void setCancelationReason(String cancelationReason) {
+        this.cancelationReason = cancelationReason;
     }
 
     public void setTarifaMenores(ActivityRates tarifaMenores) {

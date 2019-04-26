@@ -3,6 +3,7 @@ package es.uji.ei1027.toopots.controller;
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
+import es.uji.ei1027.toopots.model.Users;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,14 +13,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
 @RequestMapping("/activityType")
 public class ActivityTypeController {
+    private final static int NOT_LOGGED = 1;
+    private final static int USER_AUTHORIZED = 2;
+    private final static int USER_NOT_AUTHORIZED = 3;
+
     private ActivityTypeDao activityTypeDao;
 
     @Value("${upload.file.directory}")
@@ -32,16 +39,35 @@ public class ActivityTypeController {
 
     //Llistar tots els tipus de activitat
     @RequestMapping("/list")
-    public String listActivityTypes(Model model) {
-        model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
-        return "activityType/list";
+    public String listActivityTypes(HttpSession session, Model model) {
+        int acceso = controlarAccesoAdmin(session);
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activityType/list");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
+            return "activityType/list";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Afegir un nou tipus de activitat
     @RequestMapping("/add")
-    public String addActivityType(Model model) {
-        model.addAttribute("activityType", new ActivityType());
-        return "activityType/add";
+    public String addActivityType(HttpSession session, Model model) {
+        int acceso = controlarAccesoAdmin(session);
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activityType/add");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            model.addAttribute("activityType", new ActivityType());
+            return "activityType/add";
+        } else {
+            return "redirect:/";
+        }
+
     }
 
     //Processa la informació del add
@@ -76,9 +102,18 @@ public class ActivityTypeController {
 
     //Actualitzar un tipus de activitat
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
-    public String editActivityType(Model model, @PathVariable int id) {
-        model.addAttribute("activityType", activityTypeDao.getActivityType(id));
-        return "activityType/update";
+    public String editActivityType(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAccesoAdmin(session);
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/activityType/update");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            model.addAttribute("activityType", activityTypeDao.getActivityType(id));
+            return "activityType/update";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Processa la informació del update
@@ -108,14 +143,36 @@ public class ActivityTypeController {
 
     //Esborra un tipus de activitat
     @RequestMapping(value="/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        Path path = Paths.get(uploadDirectory + activityTypeDao.getActivityType(id).getPhoto());
-        try {
-            Files.delete(path);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public String processDelete(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAccesoAdmin(session);
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/activityType/delete");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Path path = Paths.get(uploadDirectory + activityTypeDao.getActivityType(id).getPhoto());
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            activityTypeDao.deleteActivityType(id);
+            return "redirect:../list";
+        } else {
+            return "redirect:/";
         }
-        activityTypeDao.deleteActivityType(id);
-        return "redirect:../list";
+
+    }
+
+    private int controlarAccesoAdmin(HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return NOT_LOGGED;
+        }
+        Users user = (Users) session.getAttribute("user");
+        if (user.getRol().equals("Admin")) {
+            return USER_AUTHORIZED;
+        } else {
+            return USER_NOT_AUTHORIZED;
+        }
     }
 }

@@ -31,10 +31,10 @@
             <table id="tableHeader">
                 <tr>
                     <td class="tdLados">
-                        <img id="logo" th:src="@{/images/logo.png}">
+                        <a th:href="@{/}"><img id="logo" th:src="@{/images/logo.png}"></a>
                     </td>
                     <td>
-                        <h1 id="toopots">TooPots</h1>
+                        <a th:href="@{/}" id="toopots">TooPots</a>
                     </td>
                     <td class="tdLados">
                         <div th:replace="fragments/logininfo"></div>

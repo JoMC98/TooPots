@@ -161,7 +161,7 @@ public class ActivityController {
             ActivityPhotos aph = new ActivityPhotos();
             aph.setIdActivity(activity.getId());
             aph.setPhotoNumber(idFoto);
-            aph.setPhoto(direccion);
+            aph.setPhoto("/" + direccion);
             activityPhotosDao.addActivityPhotos(aph);
 
             Files.write(path, bytes);

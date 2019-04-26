@@ -13,9 +13,6 @@ public class Reservation {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date bookingDate;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date activityDate;
-
     //Por edad
     private int numUnder16;
     private int numStudents;
@@ -40,10 +37,6 @@ public class Reservation {
 
     public Date getBookingDate() {
         return bookingDate;
-    }
-
-    public Date getActivityDate() {
-        return activityDate;
     }
 
     public int getNumUnder16() {
@@ -97,10 +90,6 @@ public class Reservation {
         this.bookingDate = bookingDate;
     }
 
-    public void setActivityDate(Date activityDate) {
-        this.activityDate = activityDate;
-    }
-
     public void setNumUnder16(int numUnder16) {
         this.numUnder16 = numUnder16;
     }
@@ -143,7 +132,6 @@ public class Reservation {
         return "Reservation{" +
                 "id=" + id +
                 ", bookingDate=" + bookingDate +
-                ", activityDate=" + activityDate +
                 ", numUnder16=" + numUnder16 +
                 ", numStudents=" + numStudents +
                 ", numAdults=" + numAdults +

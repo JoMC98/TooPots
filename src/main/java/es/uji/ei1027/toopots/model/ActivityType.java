@@ -67,4 +67,11 @@ public class ActivityType {
                 ", photo='" + photo + '\'' +
                 '}';
     }
+
+
+    @Override
+    public boolean equals(Object other) {
+        ActivityType act = (ActivityType) other;
+        return id == act.getId();
+    }
 }

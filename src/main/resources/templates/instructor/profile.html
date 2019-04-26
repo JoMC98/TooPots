@@ -50,9 +50,16 @@
             </tr>
             <tr>
                 <td class="tdGrupos">
-                    <div class="profileCertificados">
+                    <div class="requestCertificados">
                         <div th:each="certification: ${instructor.certifications}">
-                            <label th:text="${certification.certificate}"></label>
+                            <table class="tdRequestTableActivity">
+                                <tr>
+                                    <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
+                                    <td class="tdListCertificadosSolicitud tdRequestActivityLevel">
+                                        <a th:href="@{*{certification.doc}}" target="_blank"><img width="32" height="32" th:src="@{/images/logoPDF.png}" /></a>
+                                    </td>
+                                </tr>
+                            </table>
                             <hr />
                         </div>
                     </div>

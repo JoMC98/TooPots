@@ -44,14 +44,21 @@ public class LoginController {
         }
 
         // Autenticats correctament.
-        // Guardem les dades de l'usuari autenticat a la sessió
-        session.setAttribute("user", user);
-        String nextUrl = (String) session.getAttribute("nextUrl");
-        if (nextUrl == null)
-            // Torna a la pàgina principal
-            return "redirect:/";
-        else
-            return "redirect:" + nextUrl;
+        if (user.getRol().equals("Request") || (user.getRol().equals("Rejected"))) {
+            return "redirect:/login";
+        } else {
+            // Guardem les dades de l'usuari autenticat a la sessió
+            session.setAttribute("user", user);
+            String nextUrl = (String) session.getAttribute("nextUrl");
+            if (nextUrl == null)
+                if(user.getRol().equals("Admin"))
+                    return "redirect:/admin/home";
+                else
+                    // Torna a la pàgina principal
+                    return "redirect:/";
+            else
+                return "redirect:" + nextUrl;
+        }
     }
 
     @RequestMapping("/logout")

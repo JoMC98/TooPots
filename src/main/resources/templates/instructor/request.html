@@ -52,7 +52,9 @@
                             <table class="tdRequestTableActivity">
                                 <tr>
                                     <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
-                                    <td class="tdListCertificadosSolicitud tdRequestActivityLevel"><a th:href="@{*{certification.doc}}" target="_blank">PDF</a></td>
+                                    <td class="tdListCertificadosSolicitud tdRequestActivityLevel">
+                                        <a th:href="@{*{certification.doc}}" target="_blank"><img width="32" height="32" th:src="@{/images/logoPDF.png}" /></a>
+                                    </td>
                                 </tr>
                             </table>
                             <hr />

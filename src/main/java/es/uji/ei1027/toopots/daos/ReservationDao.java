@@ -31,8 +31,8 @@ public class ReservationDao {
     /* Afegeix la reserva a la base de dades */
     public void addReservation(Reservation reservation) {
         float totalPrice = calcularPrecio(reservation);
-        jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                reservation.getActivityDate(), reservation.getNumUnder16(), reservation.getNumStudents(),
+        jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                reservation.getNumUnder16(), reservation.getNumStudents(),
                 reservation.getNumAdults(), reservation.getNumOver60(), totalPrice, reservation.getTransactionNumber(),
                 reservation.getIdActivity(), reservation.getIdCustomer(), "Pendent");
     }
@@ -91,10 +91,10 @@ public class ReservationDao {
     /* Actualitza els atributs de la reserva
        (excepte el id, que és la clau primària) */
     public void updateReservation(Reservation reservation) {
-        jdbcTemplate.update("UPDATE Reservation SET activityDate=?, numUnder16=?, numStudents=?, numAdults=?, numOver60=?, " +
+        jdbcTemplate.update("UPDATE Reservation SET numUnder16=?, numStudents=?, numAdults=?, numOver60=?, " +
                         "totalPrice=?, transactionNumber=?, idActivity=?, idCustomer=?, state=? where idReservation=?",
-                reservation.getActivityDate(), reservation.getNumUnder16(), reservation.getNumStudents(),
-                reservation.getNumAdults(), reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
+                reservation.getNumUnder16(), reservation.getNumStudents(),reservation.getNumAdults(),
+                reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
                 reservation.getIdActivity(), reservation.getIdCustomer(), reservation.getState(), reservation.getId());
     }
 

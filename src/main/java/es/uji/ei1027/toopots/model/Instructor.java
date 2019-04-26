@@ -13,7 +13,6 @@ public class Instructor {
     private String photo;
     private String residence;
     private int accountNumber;
-    private String state;
 
     //Para poder mostrarlo en la lista de solicitudes y instructores
     private String name;
@@ -43,10 +42,6 @@ public class Instructor {
 
     public int getAccountNumber() {
         return accountNumber;
-    }
-
-    public String getState() {
-        return state;
     }
 
     public String getName() {
@@ -80,10 +75,6 @@ public class Instructor {
         this.accountNumber = accountNumber;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -105,7 +96,6 @@ public class Instructor {
                 ", photo='" + photo + '\'' +
                 ", residence='" + residence + '\'' +
                 ", accountNumber=" + accountNumber +
-                ", state='" + state + '\'' +
                 '}';
     }
 }

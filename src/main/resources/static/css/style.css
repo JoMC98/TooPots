@@ -30,12 +30,14 @@ footer {
 }
 
 /*Titulo TooPots*/
-#toopots {
+#toopots, #toopots:hover {
+    color: black;
     text-align: center;
     font-size: 40px;
     font-weight: bold;
     padding-top: 25px;
     padding-bottom: 25px;
+    text-decoration: none;
 }
 
 /*Info usuario conectado*/
@@ -178,12 +180,6 @@ footer {
     text-align: center;
     width: 163px;
 }
-.inputFotoMultiple {
-    margin: 0px 40px 20px 40px;
-    font-size: 16px;
-    text-align: center;
-    width: 128px;
-}
 .inputText {
     padding-top: 5px;
 }
@@ -191,7 +187,10 @@ footer {
 .profileFoto {
     width: 150px;
     height: 150px;
-    margin: 10px 0px;
+}
+.profileFotoSpace {
+    border: 1px black solid;
+    margin: 0px 0px 5px 43px;
 }
 /*Fotos actividades*/
 .activityFoto {
@@ -200,7 +199,7 @@ footer {
 }
 .activityFotoSpace {
     border: 1px black solid;
-    margin: 0px 10px;
+    margin: 0px 14px 5px 10px;
 }
 
 /*Tarifas*/
@@ -302,3 +301,42 @@ footer {
     width: 70px;
 }
 
+/*Assignar activitat*/
+.tdAsignacio {
+    width: 400px;
+    font-size: 25px;
+}
+.selectAsignacio {
+    width: 380px;
+    height: 40px;
+    background-color: #EEEEEE;
+}
+
+/*Homepage Admina*/
+.bienvenidaGrande {
+    font-weight: bold;
+    font-size: 60px;
+}
+.bienvenidaPequeña {
+    font-weight: bold;
+    font-size: 50px;
+    color: red;
+    text-decoration: none;
+}
+.bienvenidaPequeña:hover {
+    color: red;
+    text-decoration: none;
+}
+
+/*Nuevo Instructor Certificados*/
+.areaInfoCertificate {
+    background-color: #EEEEEE;
+    resize: none;
+    margin: 5px 10px;
+}
+.inputPdf {
+    margin: 0px 5px 20px 10px;
+    font-size: 16px;
+    text-align: center;
+    width: 163px;
+}

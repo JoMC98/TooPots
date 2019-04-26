@@ -25,6 +25,7 @@ public class ActivityRowMapper implements RowMapper<Activity> {
         activity.setState(rs.getString("state"));
         activity.setActivityType(rs.getInt("activityType"));
         activity.setIdInstructor(rs.getInt("idInstructor"));
+        activity.setCancelationReason(rs.getString("cancelationReason"));
         return activity;
     }
 }

@@ -24,8 +24,8 @@ public class InstructorDao {
 
     /* Afegeix el Instructor a la base de dades */
     public void addInstructor(Instructor instructor, int id) {
-        jdbcTemplate.update("INSERT INTO Instructor VALUES(?, ?, ?, ?, ?)",
-                id, instructor.getPhoto(), instructor.getResidence(), instructor.getAccountNumber(),"Pendent");
+        jdbcTemplate.update("INSERT INTO Instructor VALUES(?, ?, ?, ?)",
+                id, instructor.getPhoto(), instructor.getResidence(), instructor.getAccountNumber());
     }
 
     /* Esborra el Instructor de la base de dades */
