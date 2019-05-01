@@ -1,6 +1,6 @@
 package es.uji.ei1027.toopots.model;
 
-public class ActivityType {
+public class ActivityType implements Comparable<ActivityType> {
 
     //Atributos
     private int id;
@@ -68,10 +68,18 @@ public class ActivityType {
                 '}';
     }
 
-
     @Override
     public boolean equals(Object other) {
         ActivityType act = (ActivityType) other;
         return id == act.getId();
     }
+
+    public int compareTo(ActivityType altre) {
+        if (this.getName().equals(altre.getName())) {
+            return this.getLevel().compareTo(altre.getLevel());
+        } else {
+            return this.getName().compareTo(altre.getName());
+        }
+    }
+
 }

@@ -1,14 +1,13 @@
 package es.uji.ei1027.toopots.controller;
 
-import es.uji.ei1027.toopots.daos.ActivityDao;
-import es.uji.ei1027.toopots.daos.ActivityPhotosDao;
-import es.uji.ei1027.toopots.daos.ActivityRatesDao;
-import es.uji.ei1027.toopots.daos.ReservationDao;
+import es.uji.ei1027.toopots.daos.*;
+import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.model.Activity;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,10 +25,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/activity")
 public class ActivityController {
+    private final static int NOT_LOGGED = 1;
+    private final static int USER_AUTHORIZED = 2;
+    private final static int USER_NOT_AUTHORIZED = 3;
+
     private ActivityDao activityDao;
     private ActivityRatesDao activityRatesDao;
     private ActivityPhotosDao activityPhotosDao;
     private ReservationDao reservationDao;
+    private ActivityCertificationDao activityCertificationDao;
 
     @Value("${upload.file.directory}")
     private String uploadDirectory;
@@ -53,6 +57,10 @@ public class ActivityController {
     public void setReservationDao(ReservationDao reservationDao) {
         this.reservationDao=reservationDao;
     }
+
+    @Autowired
+    public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
+
 
     //Llistar totes les activitats
     @RequestMapping("/list")
@@ -81,9 +89,21 @@ public class ActivityController {
 
     //Afegir una nova activitat
     @RequestMapping("/add")
-    public String addActivity(Model model) {
-        model.addAttribute("activity", new Activity());
-        return "activity/add";
+    public String addActivity(HttpSession session, Model model) {
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/activity/add");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+            model.addAttribute("activity", new Activity());
+            model.addAttribute("asignadas", asignadas);
+            return "activity/add";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Processa la informació del add
@@ -102,7 +122,16 @@ public class ActivityController {
         Users user = (Users) session.getAttribute("user");
         activity.setIdInstructor(user.getId());
 
-        activityDao.addActivity(activity);
+        try {
+            activityDao.addActivity(activity);
+        } catch (DuplicateKeyException e) {
+            throw new TooPotsException(
+                    "Ja tens una activitat per al dia " + activity.getDates().getDayOfMonth() + " del "
+                            + activity.getDates().getMonthValue() + " de " + activity.getDates().getYear(),
+                    "Introdueix altra data",
+                    "ClauPrimariaDuplicada");
+        }
+
 
         Activity newActivity = activityDao.getActivity(activity.getDates(), activity.getIdInstructor());
         int id = newActivity.getId();
@@ -191,5 +220,18 @@ public class ActivityController {
     public String processDelete(@PathVariable int id) {
         activityDao.deleteActivity(id);
         return "redirect:../list";
+    }
+
+
+    private int controlarAcceso(HttpSession session, String rol) {
+        if (session.getAttribute("user") == null) {
+            return NOT_LOGGED;
+        }
+        Users user = (Users) session.getAttribute("user");
+        if (user.getRol().equals(rol)) {
+            return USER_AUTHORIZED;
+        } else {
+            return USER_NOT_AUTHORIZED;
+        }
     }
 }

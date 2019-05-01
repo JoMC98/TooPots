@@ -16,15 +16,15 @@
                     <td colspan="2"><label class="inputLabel inputDoble">Nom Complet</label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="input inputDoble" type="text" th:field="${user.name}"/></td>
+                    <td colspan="2"><input class="input inputDoble" type="text" th:field="${user.name}" maxlength="40"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">NIF</label></td>
                     <td><label class="inputLabel inputPequeño">Correo</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="text" th:field="${user.nif}"/></td>
-                    <td><input class="input inputPequeño" type="email" th:field="${user.mail}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:field="${user.nif}" maxlength="12"/></td>
+                    <td><input class="input inputPequeño" type="email" th:field="${user.mail}" maxlength="40"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Sexe</label></td>
@@ -44,7 +44,7 @@
                     <td colspan="2"><label class="inputLabel inputPequeño">Nom d'usuari</label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="input inputPequeño" type="text" th:field="${user.username}"/></td>
+                    <td colspan="2"><input class="input inputPequeño" type="text" th:field="${user.username}" maxlength="30"/></td>
                 </tr>
             </table>
             <br>

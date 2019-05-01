@@ -10,28 +10,33 @@
     </head>
     <body layout:fragment="content">
         <br><h1>Llista de Tipus d'Activitats</h1><br>
-        <table class="table_bordered" th:each="activityType: ${activityTypes}">
-            <tr>
-                <td rowspan="2" class="tdListIzquierda tdListArriba tdListAbajo">
-                    <div class="activityFoto">
-                        <img th:src="@{*{activityType.photo}}" class="activityFoto"/>
-                    </div>
-                </td>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
-                <td class="tdListCentroAbajo tdListArriba tdListBotones">
-                    <a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Edita</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
-                    <b>Nivell: </b>
-                    <label th:text="${activityType.level}"></label>
-                </td>
-                <td class="tdListCentroArriba tdListAbajo tdListBotones">
-                    <a th:href="@{/activityType/delete/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Esborra</a>
-                </td>
-            </tr>
-        </table>
+        <div th:if="${#lists.isEmpty(activityTypes)}">
+            No ha sigut creat cap tipus d'activitat
+        </div>
+        <div th:unless="${#lists.isEmpty(activityTypes)}">
+            <table class="table_bordered" th:each="activityType: ${#lists.sort(activityTypes)}">
+                <tr>
+                    <td rowspan="2" class="tdListIzquierda tdListArriba tdListAbajo">
+                        <div class="activityFoto">
+                            <img th:src="@{*{activityType.photo}}" class="activityFoto"/>
+                        </div>
+                    </td>
+                    <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
+                    <td class="tdListCentroAbajo tdListArriba tdListBotones">
+                        <a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Edita</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                        <b>Nivell: </b>
+                        <label th:text="${activityType.level}"></label>
+                    </td>
+                    <td class="tdListCentroArriba tdListAbajo tdListBotones">
+                        <a th:href="@{/activityType/delete/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Esborra</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <br>
         <a href="add" class="btn btn-success" role="button">Afegir Tipus d'Activitat</a>
     </body>

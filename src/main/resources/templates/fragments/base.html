@@ -46,7 +46,6 @@
         <table id="contentTable">
             <tr>
                 <td class="menu" th:object="${session}">
-                    <!--<div th:replace="fragments/menuCustomer">-->
                     <div th:if="*{user == null}">
                         <div th:replace="fragments/menuNormal"></div>
                     </div>

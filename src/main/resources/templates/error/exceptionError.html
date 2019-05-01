@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Missatge d'excepció</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body layout:fragment="content">
+        <div class="container">
+            <div class="alert" th:classappend= "${#strings.equals(name,'ClauPrimariaDuplicada')}? 'alert-danger' : 'alert-info'">
+                <h2 th:text="${messagePrincipal}"></h2><br>
+                <h3 th:text="${messageSecundari}"></h3><br>
+                <p>Pulsa el botó per anar a l'inici o el botó del navegador per anar cap enrere</p>
+            </div>
+            <div th:align="center" >
+                <a href="/" class="btn btn-primary" th:align="left">Inici</a>
+            </div>
+        </div>
+    </body>
+</html>

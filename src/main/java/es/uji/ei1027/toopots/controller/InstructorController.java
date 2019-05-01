@@ -1,11 +1,13 @@
 package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.*;
+import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -297,7 +299,13 @@ public class InstructorController {
         user.setRol("Request");
         user.setPasswd(passwordEncryptor.encryptPassword(user.getPasswd()));
 
-        userDao.addUser(user);
+        try {
+            userDao.addUser(user);
+        } catch (DuplicateKeyException e) {
+            throw new TooPotsException(
+                    "El nom d'usuari ja esta en ús", "Prova amb un altre",
+                    "ClauPrimariaDuplicada");
+        }
         Users newUser = userDao.getUser(user.getUsername());
 
         session.setAttribute("user", newUser);

@@ -340,3 +340,14 @@ footer {
     text-align: center;
     width: 163px;
 }
+
+/*Excepciones y alertas*/
+.alertaLogin {
+    width: 700px;
+    margin: auto;
+    margin-bottom: 40px;
+}
+.alertaLoginText {
+    padding: 20px 0px 0px 0px;
+    margin: 0px;
+}

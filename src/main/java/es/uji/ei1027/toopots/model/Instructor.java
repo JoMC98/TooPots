@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Instructor {
+public class Instructor implements Comparable<Instructor>  {
 
     //Atributos
 
@@ -97,5 +97,9 @@ public class Instructor {
                 ", residence='" + residence + '\'' +
                 ", accountNumber=" + accountNumber +
                 '}';
+    }
+
+    public int compareTo(Instructor altre) {
+        return this.getName().compareTo(altre.getName());
     }
 }

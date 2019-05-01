@@ -10,8 +10,11 @@
     </head>
     <body layout:fragment="content">
         <br><h1>Llista de sol·licituds</h1><br>
-        <div>
-            <table class="table_bordered" th:each="instructor: ${instructors}">
+        <div th:if="${#lists.isEmpty(instructors)}">
+            No hi ha cap sol·licitud
+        </div>
+        <div th:unless="${#lists.isEmpty(instructors)}">
+            <table class="table_bordered" th:each="instructor: ${#lists.sort(instructors)}">
                 <tr>
                     <td class="tdListIzquierda tdListArriba tdListAbajo"><img class="profileFoto" th:src="@{*{instructor.photo}}"></td>
                     <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto"><b th:text="${instructor.name}"></b></td>

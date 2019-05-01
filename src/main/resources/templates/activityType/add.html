@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
 
-                    <td><input class="input inputPequeño" type="text" th:field="*{name}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:field="*{name}" maxlength="40"/></td>
                     <td><select class = "input inputPequeño" type = "text"  th:field = "*{level}" >
                         <option value = "No seleccionat" ></option>
                         <option value = "Baix" > Baix </option>
@@ -50,16 +50,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><label class="inputLabel inputDoble">Descripció (no obligatori)</label></td>
+                    <td colspan="2"><label class="inputLabel inputDoble">Descripció *</label></td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <textarea class="input inputDoble inputAlto" rows="2" cols="50" th:field="*{description}"></textarea>
+                        <textarea class="input inputDoble inputAlto" rows="2" cols="50" th:field="*{description}" maxlength="100"></textarea>
                     </td>
                 </tr>
             </table>
             <br>
             <input class="btn btn-success" type="submit" value="Crear actividad" />
+            <br><br><label class="inputLabel">* Camps no obligatoris</label>
         </form>
     </body>
 </html>

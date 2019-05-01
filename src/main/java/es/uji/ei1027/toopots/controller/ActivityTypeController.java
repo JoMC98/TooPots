@@ -1,12 +1,14 @@
 package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
+import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Users;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -78,7 +80,7 @@ public class ActivityTypeController {
 
         if (foto.isEmpty()) {
             // Enviar mensaje de error porque no hay fichero seleccionado
-            return "instructor/add";
+            return "activityType/add";
         }
 
         try {
@@ -96,7 +98,14 @@ public class ActivityTypeController {
             e.printStackTrace();
         }
 
-        activityTypeDao.addActivityType(activityType);
+        try {
+            activityTypeDao.addActivityType(activityType);
+        } catch (DuplicateKeyException e) {
+            throw new TooPotsException(
+                    "Ja existeix el tipus d'activitat", activityType.getName() + " amb nivell " + activityType.getLevel(),
+                    "ClauPrimariaDuplicada");
+        }
+
         return "redirect:list";
     }
 
