@@ -5,6 +5,7 @@ import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,6 +76,10 @@ public class ActivityTypeController {
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
     public String processAddSubmit(@RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+
+        ActivityTypeValidator activityTypeValidator = new ActivityTypeValidator();
+        activityTypeValidator.validate(activityType, bindingResult);
+
         if (bindingResult.hasErrors())
             return "activityType/add";
 

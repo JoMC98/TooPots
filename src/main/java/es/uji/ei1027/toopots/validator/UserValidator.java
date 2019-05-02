@@ -19,15 +19,5 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "obligatori",
                     "Cal introduir un valor");
 
-        if (user.getName().trim().equals(""))
-            errors.rejectValue("name", "obligatori",
-                    "Cal introduir un valor");
-
-        if (user.getMail().trim().equals(""))
-            errors.rejectValue("mail", "obligatori",
-                    "Cal introduir un valor");
-        if (user.getNif().trim().equals(""))
-            errors.rejectValue("mail", "obligatori",
-                    "Cal introduir un valor");
     }
 }

@@ -352,6 +352,15 @@ footer {
     margin: 0px;
 }
 
+.needCorrectionText{
+    color: #f02929;
+}
 .needCorrection{
-background-color: #F08080;
+    background-color: #ff9387;
+    height: 40px;
+    margin: 0px 15px 20px 15px;
+    border-style: solid;
+    border: 0.5px solid black;
+    padding: 0px 10px;
+    font-size: 16px;
 }
