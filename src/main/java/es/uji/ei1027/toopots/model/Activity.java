@@ -36,11 +36,15 @@ public class Activity {
     private ActivityRates tarifaEstudiantes;
     private ActivityRates tarifaMayores;
     private ActivityRates tarifaGrupos;
-    private static String[] rateNames = {"Menors de 16 anys", "Estudiants", "Majors de 60 anys", "Grups de 10 persones o més"};
+    private static String[] rateNames = {"Menors de 16 anys", "Estudiants", "Majors de 60 anys", "Grups de 10 persones o mes"};
 
     //Para usar en listado de actividades del monitor
     private int ocupation;
     private String photoPrincipal;
+
+    //Para usar en oferta de actividades
+    private String activityTypeName;
+    private String activityTypeLevel;
 
     //Constructor
     public Activity() {
@@ -144,7 +148,15 @@ public class Activity {
         return photoPrincipal;
     }
 
-    //Setters
+    public String getActivityTypeName() {
+        return activityTypeName;
+    }
+
+    public String getActivityTypeLevel() {
+        return activityTypeLevel;
+    }
+
+//Setters
 
     public void setId(int id) {
         this.id = id;
@@ -226,6 +238,14 @@ public class Activity {
 
     public void setPhotoPrincipal(String photoPrincipal) {
         this.photoPrincipal = photoPrincipal;
+    }
+
+    public void setActivityTypeName(String activityTypeName) {
+        this.activityTypeName = activityTypeName;
+    }
+
+    public void setActivityTypeLevel(String activityTypeLevel) {
+        this.activityTypeLevel = activityTypeLevel;
     }
 
     //To String

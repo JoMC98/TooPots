@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -35,6 +38,8 @@ public class InstructorController {
     private ActivityTypeDao activityTypeDao;
     private CertificationDao certificationDao;
     private ActivityCertificationDao activityCertificationDao;
+    private ReservationDao reservationDao;
+    private ActivityPhotosDao activityPhotosDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Value("${upload.file.directory}")
@@ -62,6 +67,15 @@ public class InstructorController {
     @Autowired
     public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
+    @Autowired
+    public void setActivityPhotosDao(ActivityPhotosDao activityPhotosDao) {
+        this.activityPhotosDao=activityPhotosDao;
+    }
+
+    @Autowired
+    public void setReservationDao(ReservationDao reservationDao) {
+        this.reservationDao=reservationDao;
+    }
 
     /*PART QUE UTILITZA EL ADMINISTRADOR*/
 
@@ -368,16 +382,17 @@ public class InstructorController {
     }
 
     //Actualitzar un instructor
-    @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
-    public String editInstructor(Model model, @PathVariable int id) {
-        model.addAttribute("user", userDao.getUser(id));
-        model.addAttribute("instructor", instructorDao.getInstructor(id));
+    @RequestMapping(value="/update", method = RequestMethod.GET)
+    public String editInstructor(Model model, HttpSession session) {
+        Users user = (Users) session.getAttribute("user");
+        model.addAttribute("user", userDao.getUser(user.getId()));
+        model.addAttribute("instructor", instructorDao.getInstructor(user.getId()));
         return "instructor/update";
     }
 
     //Processa la informació del update
-    @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
+    @RequestMapping(value="/update", method = RequestMethod.POST)
+    public String processUpdateSubmit(@ModelAttribute("user") Users user,
                                       @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
@@ -386,6 +401,34 @@ public class InstructorController {
         userDao.updateUser(user);
         instructorDao.updateInstructor(instructor);
         return "redirect:../list";
+    }
+
+    //Llistar totes les activitats del monitor
+    @RequestMapping("/listActivities")
+    public String listActivities(Model model, HttpSession session) {
+        Users user = (Users) session.getAttribute("user");
+
+        List<Activity> activities = activityDao.getActivities(user.getId());
+
+        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+        for (Activity ac: activities) {
+            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
+            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            float total = 0;
+            for (Reservation res: reservations) {
+                total += res.getNumPeople();
+            }
+
+            total = (total/ac.getMaxNumberPeople())*100;
+            total = (float) Math.floor(total);
+            int ocupation = (int) total;
+            ac.setOcupation(ocupation);
+
+            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+            activitiesWithOcupation.add(ac);
+        }
+        model.addAttribute("activities", activitiesWithOcupation);
+        return "instructor/listActivities";
     }
 
     private int controlarAcceso(HttpSession session, String rol) {

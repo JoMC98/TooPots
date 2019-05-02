@@ -31,5 +31,6 @@ public class ActivityTypeValidator implements Validator {
                     "Has d'elegir un nivell");
 
 
+
     }
 }

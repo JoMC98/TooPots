@@ -38,21 +38,17 @@
 
                 </tr>
                 <tr>
-                    <td><input type="text" th:field="*{name}" maxlength="40" th:class="${#fields.hasErrors('name')} ? needCorrection : input"/></td>
+                    <td><input type="text" class="input inputPequeño" th:errorclass="needCorrection" th:field="*{name}" maxlength="40"/></td>
 
-                    <td><select class = "input inputPequeño" type = "text"  th:field = "*{level}"  >
-                        <option value = "No seleccionat" ></option>
-                        <option value = "Baix" > Baix </option>
-                        <option value = "Mitja" > Mitja </option>
-                        <option value = "Alt" > Alt </option>
-                        <option value = "Extrem" > Extrem </option>
-                    </select>
+                    <td>
+                        <select class = "input inputPequeño"  th:errorclass="needCorrection" type = "text"  th:field = "*{level}"  >
+                            <option value = "No seleccionat" ></option>
+                            <option value = "Baix" > Baix </option>
+                            <option value = "Mitja" > Mitja </option>
+                            <option value = "Alt" > Alt </option>
+                            <option value = "Extrem" > Extrem </option>
+                        </select>
                     </td>
-
-                </tr>
-                <tr>
-                    <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class ="needCorrectionText"></td>
-                    <td th:if="${#fields.hasErrors('level')}" th:errors="*{level}" class ="needCorrectionText"></td>
                 </tr>
                 <tr>
                     <td colspan="2"><label class="inputLabel inputDoble">Descripció *</label></td>

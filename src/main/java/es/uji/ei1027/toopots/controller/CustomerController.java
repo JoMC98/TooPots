@@ -71,16 +71,17 @@ public class CustomerController {
     }
 
     //Actualitzar un client
-    @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
-    public String editCustomer(Model model, @PathVariable int id) {
-        model.addAttribute("user", userDao.getUser(id));
-        model.addAttribute("customer", customerDao.getCustomer(id));
+    @RequestMapping(value="/update", method = RequestMethod.GET)
+    public String editCustomer(Model model, HttpSession session) {
+        Users user = (Users) session.getAttribute("user");
+        model.addAttribute("user", userDao.getUser(user.getId()));
+        model.addAttribute("customer", customerDao.getCustomer(user.getId()));
         return "customer/update";
     }
 
     //Processa la informació del update
-    @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("user") Users user,
+    @RequestMapping(value="/update", method = RequestMethod.POST)
+    public String processUpdateSubmit(@ModelAttribute("user") Users user,
                                       @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "customer/update";

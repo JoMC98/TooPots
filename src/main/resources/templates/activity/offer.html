@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <title>Gestionar Activitats</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body layout:fragment="content">
+        <!--<br><h1>Llista d'activitats</h1><br>-->
+        <div class="filtroArea">
+            <form action="#" th:object="${filtroYorden}" th:action="@{/activity/filtrarYordenar}" method="post">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            Filtrar
+                        </td>
+                        <td>
+                            Ordenar
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="filtroSelect" th:field="*{filtroCriteri}" class="filtro">
+                                <option value="name">Per nom</option>
+                                <option value="place">Per lloc</option>
+                                <option value="dates">Per data</option>
+                                <option value="type">Per tipus</option>
+                                <option value="level">Per nivell</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" id="filtroInput" th:field="*{filtroPatro}" class="filtro"/>
+                        </td>
+                        <td>
+                            <select id="ordenSelect" th:field="*{ordenCriteri}" class="filtro">
+                                <option value="name">Per nom</option>
+                                <option value="place">Per lloc</option>
+                                <option value="dates">Per data</option>
+                                <option value="type">Per tipus</option>
+                                <option value="level">Per nivell</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="btn btn-secondary botonFiltro" type="submit" value="Filtrar i ordenar"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        <table class="table_bordered" th:each="activity: ${#lists.sort(activities, comparator)}">
+            <tr>
+                <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
+                    <div class="activityFoto">
+                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
+                    </div>
+                </td>
+                <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tdListCentroArriba tdListTexto">
+                    <label th:text="${activity.place}"></label>
+                </td>
+                <td class="tdListCentroArriba tdListTexto">
+                    <label th:text="${activity.dates}"></label>
+                </td>
+                <td class="tdListCentroAbajo tdListAbajo tdListBotones">
+                    <!--<a th:href="@{/reservation/add/{id}(id=${activity.id}))}" class="btn btn-success listBoton" >Reservar</a>-->
+                    <a th:href="@{/}" class="btn btn-success listBoton" >Reservar</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdListCentroArriba tdListTexto">
+                    <label th:text="${activity.activityTypeName}"></label>
+                </td>
+                <td class="tdListCentroArriba tdListTexto">
+                    <label>Nivell </label>
+                    <label th:text="${activity.activityTypeLevel}"></label>
+                </td>
+                <td class="tdListCentroArriba tdListArriba tdListBotones">
+                    <!--<a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>-->
+                    <a th:href="@{/}" class="btn btn-info listBoton" role="button">+ info</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                    <b>Ocupació: </b>
+                    <label th:text="${activity.ocupation}"></label>
+                    <label> %</label>
+                </td>
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                    <b>Preu base: </b>
+                    <label th:text="${activity.pricePerPerson}"></label>
+                    <label> €</label>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </body>
+</html>

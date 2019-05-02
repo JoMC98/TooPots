@@ -1,6 +1,7 @@
 package es.uji.ei1027.toopots.daos;
 
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.model.ActivityType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,6 +76,36 @@ public class ActivityDao {
     public List<Activity> getActivities() {
         try {
             return jdbcTemplate.query("SELECT * from Activity", new ActivityRowMapper());
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
+
+    /* Obté totes les activitats d'un monitor. Torna una llista buida si no n'hi ha cap. */
+    public List<Activity> getActivities(int id) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where idInstructor = ?", new ActivityRowMapper(), id);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
+
+    /* Obté totes les activitats amb ixe tipus d'activitat */
+    public List<Activity> getActivitiesByActivityType(int idActivityType) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where activityType=?", new ActivityRowMapper(), idActivityType);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
+
+    /* Obté totes les activitats amb de ixa ubicacio */
+    public List<Activity> getActivitiesByPlace(String place) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where place=?", new ActivityRowMapper(), place);
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();

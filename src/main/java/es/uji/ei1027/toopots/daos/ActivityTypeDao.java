@@ -67,4 +67,26 @@ public class ActivityTypeDao {
             return new ArrayList<ActivityType>();
         }
     }
+
+    /* Obté tots els activityTypes amb eixe nom */
+    public List<ActivityType> getActivityTypesByName(String name) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity_Type where nameType=?", new ActivityTypeRowMapper(), name);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<ActivityType>();
+        }
+    }
+
+    /* Obté tots els activityTypes amb eixe level */
+    public List<ActivityType> getActivityTypesByLevel(String level) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity_Type where activityLevel=?", new ActivityTypeRowMapper(), level);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<ActivityType>();
+        }
+    }
+
+
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 @RequestMapping("/user")
@@ -25,14 +27,15 @@ public class UserController {
     }
 
     //Actualitzar contrasenya
-    @RequestMapping(value="/updatePasswd/{id}", method = RequestMethod.GET)
-    public String editPasswd(Model model, @PathVariable int id) {
-        model.addAttribute("newUser", userDao.getUser(id));
+    @RequestMapping(value="/updatePasswd", method = RequestMethod.GET)
+    public String editPasswd(Model model, HttpSession session) {
+        Users user = (Users) session.getAttribute("user");
+        model.addAttribute("newUser", userDao.getUser(user.getId()));
         return "user/updatePasswd";
     }
 
     //Processa la informació de la actualització de contrasenya
-    @RequestMapping(value="/updatePasswd/{id}", method = RequestMethod.POST)
+    @RequestMapping(value="/updatePasswd", method = RequestMethod.POST)
     public String processUpdatePasswdSubmit(@PathVariable int id, @ModelAttribute("newUser") Users newUser, BindingResult bindingResult) {
 
         Users user = userDao.getUser(id);

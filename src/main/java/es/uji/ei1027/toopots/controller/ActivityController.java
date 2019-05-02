@@ -1,5 +1,6 @@
 package es.uji.ei1027.toopots.controller;
 
+import es.uji.ei1027.toopots.comparator.*;
 import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
@@ -19,8 +20,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 @Controller
 @RequestMapping("/activity")
@@ -30,6 +35,7 @@ public class ActivityController {
     private final static int USER_NOT_AUTHORIZED = 3;
 
     private ActivityDao activityDao;
+    private ActivityTypeDao activityTypeDao;
     private ActivityRatesDao activityRatesDao;
     private ActivityPhotosDao activityPhotosDao;
     private ReservationDao reservationDao;
@@ -41,6 +47,11 @@ public class ActivityController {
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
         this.activityDao=activityDao;
+    }
+
+    @Autowired
+    public void setActivityTypeDao(ActivityTypeDao activityTypeDao) {
+        this.activityTypeDao=activityTypeDao;
     }
 
     @Autowired
@@ -62,14 +73,18 @@ public class ActivityController {
     public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
 
-    //Llistar totes les activitats
-    @RequestMapping("/list")
+    //Llistar totes les activitats del monitor
+    @RequestMapping("/offer")
     public String listActivities(Model model) {
         List<Activity> activities = activityDao.getActivities();
+
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
             ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
             List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            ActivityType activityType = activityTypeDao.getActivityType(ac.getActivityType());
+            ac.setActivityTypeName(activityType.getName());
+            ac.setActivityTypeLevel(activityType.getLevel());
             float total = 0;
             for (Reservation res: reservations) {
                 total += res.getNumPeople();
@@ -78,13 +93,92 @@ public class ActivityController {
             total = (total/ac.getMaxNumberPeople())*100;
             total = (float) Math.floor(total);
             int ocupation = (int) total;
-
             ac.setOcupation(ocupation);
-            ac.setPhotoPrincipal("/" + photoPrincipal.getPhoto());
+
+            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
             activitiesWithOcupation.add(ac);
         }
         model.addAttribute("activities", activitiesWithOcupation);
-        return "activity/list";
+        model.addAttribute("filtroYorden", new FiltradoYOrden());
+        model.addAttribute("comparator", new NameComparator());
+        return "activity/offer";
+    }
+
+    //Filtrar activitats
+    @RequestMapping("/filtrarYordenar")
+    public String filtro(Model model, @ModelAttribute("filtroYorden") FiltradoYOrden filtro, BindingResult bindingResult) {
+        List<Activity> activities = new ArrayList<Activity>();
+        switch (filtro.getFiltroCriteri()) {
+            case "name":
+                //TODO filtro per nom
+                break;
+            case "place":
+                activities = activityDao.getActivitiesByPlace(filtro.getFiltroPatro());
+                break;
+            case "dates":
+                //TODO filtro per fecha
+                break;
+            case "type":
+                List<ActivityType> activityTypes = activityTypeDao.getActivityTypesByName(filtro.getFiltroPatro());
+                for (ActivityType activityType: activityTypes) {
+                    List<Activity> listActivities = activityDao.getActivitiesByActivityType(activityType.getId());
+                    for (Activity activity: listActivities) {
+                        activities.add(activity);
+                    }
+                }
+                break;
+            case "level":
+                activityTypes = activityTypeDao.getActivityTypesByLevel(filtro.getFiltroPatro());
+                for (ActivityType activityType: activityTypes) {
+                    List<Activity> listActivities = activityDao.getActivitiesByActivityType(activityType.getId());
+                    for (Activity activity: listActivities) {
+                        activities.add(activity);
+                    }
+                }
+                break;
+        }
+
+        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+        for (Activity ac: activities) {
+            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
+            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            ActivityType activityType = activityTypeDao.getActivityType(ac.getActivityType());
+            ac.setActivityTypeName(activityType.getName());
+            ac.setActivityTypeLevel(activityType.getLevel());
+            float total = 0;
+            for (Reservation res: reservations) {
+                total += res.getNumPeople();
+            }
+
+            total = (total/ac.getMaxNumberPeople())*100;
+            total = (float) Math.floor(total);
+            int ocupation = (int) total;
+            ac.setOcupation(ocupation);
+
+            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+            activitiesWithOcupation.add(ac);
+        }
+
+        switch (filtro.getOrdenCriteri()) {
+            case "name":
+                model.addAttribute("comparator", new NameComparator());
+                break;
+            case "place":
+                model.addAttribute("comparator", new PlaceComparator());
+                break;
+            case "dates":
+                model.addAttribute("comparator", new DateComparator());
+                break;
+            case "type":
+                model.addAttribute("comparator", new TypeComparator());
+                break;
+            case "level":
+                model.addAttribute("comparator", new LevelComparator());
+                break;
+        }
+
+        model.addAttribute("activities", activitiesWithOcupation);
+        return "activity/offer";
     }
 
     //Afegir una nova activitat
@@ -149,32 +243,28 @@ public class ActivityController {
         }
 
         if (activity.getTarifaMenores().getPrice() > 0.0) {
-            System.out.println("menor");
             ActivityRates tarifa = activity.getTarifaMenores();
             tarifa.setIdActivity(id);
             activityRatesDao.addActivityRates(tarifa);
         }
 
         if (activity.getTarifaEstudiantes().getPrice() > 0.0) {
-            System.out.println("est");
             ActivityRates tarifa = activity.getTarifaEstudiantes();
             tarifa.setIdActivity(id);
             activityRatesDao.addActivityRates(tarifa);
         }
         if (activity.getTarifaMayores().getPrice() > 0.0) {
-            System.out.println("may");
             ActivityRates tarifa = activity.getTarifaMayores();
             tarifa.setIdActivity(id);
             activityRatesDao.addActivityRates(tarifa);
         }
         if (activity.getTarifaGrupos().getPrice() > 0.0) {
-            System.out.println("gru");
             ActivityRates tarifa = activity.getTarifaGrupos();
             tarifa.setIdActivity(id);
             activityRatesDao.addActivityRates(tarifa);
         }
 
-        return "redirect:list";
+        return "redirect:offer";
     }
 
     private void saveFoto(MultipartFile foto, Activity activity, int idFoto) {

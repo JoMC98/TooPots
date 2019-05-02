@@ -218,7 +218,7 @@ footer {
 .table_bordered {
     margin: auto;
     border: 1px black solid;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 .tdListArriba {
     padding-top: 20px;
@@ -352,6 +352,7 @@ footer {
     margin: 0px;
 }
 
+/*Validator*/
 .needCorrectionText{
     color: #f02929;
 }
@@ -363,4 +364,35 @@ footer {
     border: 0.5px solid black;
     padding: 0px 10px;
     font-size: 16px;
+}
+
+/*Filtro*/
+.filtroArea {
+    margin: 40px auto 60px auto;
+    width: 975px;
+}
+
+.filtro {
+    height: 45px;
+    background-color: #EEEEEE;
+    color: black;
+    border-radius: 0px;
+    border: 1px black solid;
+    padding: 0px 10px;
+}
+#filtroSelect {
+    width: 130px;
+    margin-right: 10px;
+}
+#filtroInput {
+    width: 370px;
+    margin-left: 10px;
+}
+#ordenSelect {
+    width: 130px;
+    margin-right: 60px;
+    margin-left: 60px;
+}
+.botonFiltro {
+    width: 150px;
 }
