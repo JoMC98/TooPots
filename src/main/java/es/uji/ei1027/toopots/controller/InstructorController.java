@@ -268,12 +268,13 @@ public class InstructorController {
     //Processa la informació del assignar activitat
     @RequestMapping(value="/asignarActivitat/{id}", method = RequestMethod.POST)
     public String processAsignarSubmit(Model model, @PathVariable int id, @ModelAttribute("user") Users user,
-                                       @ModelAttribute("authorization") ActivityCertification authorization, BindingResult bindingResult) {
+                                       @ModelAttribute("authorization") ActivityCertification authorization,BindingResult bindingResult) {
 
-        //ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
-        //activityCertificationValidator.validate(authorization,bindingResult);
+        ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
+        activityCertificationValidator.validate(authorization,bindingResult);
 
         if (bindingResult.hasErrors()) {
+
             return "instructor/asignarActivitat";
         }
         activityCertificationDao.addActivityCertification(authorization);

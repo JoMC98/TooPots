@@ -2,12 +2,10 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.exceptions.LoginException;
-import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.Users;
-import es.uji.ei1027.toopots.validator.UserValidator;
+import es.uji.ei1027.toopots.validator.LoginValidator;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,8 +29,8 @@ public class LoginController {
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String checkLogin(@ModelAttribute("user") Users user,
                              BindingResult bindingResult, HttpSession session) {
-        UserValidator userValidator = new UserValidator();
-        userValidator.validate(user, bindingResult);
+        LoginValidator loginValidator = new LoginValidator();
+        loginValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "login";

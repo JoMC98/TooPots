@@ -16,7 +16,7 @@
                     <td colspan="2"><label class="inputLabel inputDoble">Nom Complet</label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="input inputDoble" type="text" th:field="${user.name}" maxlength="40"/></td>
+                    <td colspan="2"><input class="input inputDoble" th:errorclass="needCorrection" type="text" th:field="${user.name}" maxlength="40"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">NIF</label></td>
@@ -38,8 +38,8 @@
                             <option value="Femeni">Femeni</option>
                         </select>
                     </td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="${customer.birthDate}"/></td>
-                    <!--<td><input class="input inputPequeño" type="date" th:field="${#temporals.format(customer.birthDate,'dd/MMMM/yyyy')}"/></td>-->
+                    <!--<td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="${customer.birthDate}"/></td>-->
+                    <td><input class="input inputPequeño" type="date" th:field="${customer.birthDate}"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Nom d'usuari</label></td>
