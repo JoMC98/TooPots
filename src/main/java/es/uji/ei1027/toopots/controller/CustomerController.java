@@ -92,15 +92,23 @@ public class CustomerController {
 
     //Processa la informació del update
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("user") Users user,
-                                      @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
+    public String processUpdateSubmit(@ModelAttribute("user") Users user, BindingResult bindingResultUser, @ModelAttribute("customer") Customer customer,
+                                      BindingResult bindingResultCustomer) {
         CustomerValidator customerValidator = new CustomerValidator();
-        customerValidator.validate(customer,bindingResult);
-        if (bindingResult.hasErrors())
+        customerValidator.validate(customer,bindingResultCustomer);
+
+        UserValidator userValidator = new UserValidator();
+        userValidator.validate(user,bindingResultUser);
+
+        if (bindingResultCustomer.hasErrors() || bindingResultUser.hasErrors()) {
+            System.out.println(bindingResultCustomer.toString());
+            System.out.println(bindingResultUser.toString());
             return "customer/update";
+        }
+
         userDao.updateUser(user);
         customerDao.updateCustomer(customer);
-        return "redirect:../list";
+        return "redirect:/";
     }
 
     //Esborra un client
