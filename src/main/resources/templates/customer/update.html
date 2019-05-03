@@ -32,12 +32,12 @@
                 </tr>
                 <tr>
                     <td>
-                        <select class="input inputPequeño" th:field="${customer.sex}">
+                        <select class="input inputPequeño" th:errorclass="needCorrection" th:field="${customer.sex}">
                             <option value="Masculi">Masculi</option>
                             <option value="Femeni">Femeni</option>
                         </select>
                     </td>
-                    <td><input class="input inputPequeño" type="text" th:field="${customer.birthDate}"/></td>
+                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="${customer.birthDate}"/></td>
                     <!--<td><input class="input inputPequeño" type="date" th:field="${#temporals.format(customer.birthDate,'dd/MMMM/yyyy')}" size="25"/></td>-->
                 </tr>
                 <tr>

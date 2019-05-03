@@ -23,8 +23,8 @@
                     <td><label class="inputLabel inputPequeño">Correo</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="text" th:field="${user.nif}" maxlength="12"/></td>
-                    <td><input class="input inputPequeño" type="email" th:field="${user.mail}" maxlength="40"/></td>
+                    <td><input class="input inputPequeño"  th:errorclass="needCorrection" type="text" th:field="${user.nif}" maxlength="12"/></td>
+                    <td><input class="input inputPequeño"  th:errorclass="needCorrection" type="email" th:field="${user.mail}" maxlength="40"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Sexe</label></td>
@@ -32,13 +32,13 @@
                 </tr>
                 <tr>
                     <td>
-                        <select class="input inputPequeño" th:field="${customer.sex}">
+                        <select class="input inputPequeño"  th:errorclass="needCorrection" th:field="${customer.sex}">
                             <option value=""></option>
                             <option value="Masculi">Masculi</option>
                             <option value="Femeni">Femeni</option>
                         </select>
                     </td>
-                    <td><input class="input inputPequeño" type="text" th:field="${customer.birthDate}"/></td>
+                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="${customer.birthDate}"/></td>
                     <!--<td><input class="input inputPequeño" type="date" th:field="${#temporals.format(customer.birthDate,'dd/MMMM/yyyy')}"/></td>-->
                 </tr>
                 <tr>
@@ -46,8 +46,8 @@
                     <td><label class="inputLabel inputPequeño">Contrasenya</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="text" th:field="${user.username}" maxlength="30"/></td>
-                    <td><input class="input inputPequeño" type="password" th:field="${user.passwd}" maxlength="50"/></td>
+                    <td><input class="input inputPequeño"  th:errorclass="needCorrection" type="text" th:field="${user.username}" maxlength="30"/></td>
+                    <td><input class="input inputPequeño"  th:errorclass="needCorrection" type="password" th:field="${user.passwd}" maxlength="50"/></td>
                 </tr>
             </table>
             <br>

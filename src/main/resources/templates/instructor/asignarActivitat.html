@@ -19,13 +19,13 @@
                 </tr>
                 <tr>
                     <td class="tdAsignacio">
-                        <select class="selectAsignacio" th:field="${authorization.idCertification}">
+                        <select class="selectAsignacio"  th:field="${authorization.idCertification}">
                             <option value="0"></option>
                             <option th:each="certificate : ${certifications}" th:value="*{certificate.id}" th:text="*{certificate.certificate}"></option>
                         </select>
                     </td>
                     <td class="tdAsignacio">
-                        <select class="selectAsignacio" th:field="${authorization.activityType}">
+                        <select class="selectAsignacio"  th:field="${authorization.activityType}">
                             <option value="0"></option>
                             <option th:each="activity : ${activities}" th:value="*{activity.id} " th:text="|*{activity.name} Nivell *{activity.level}|"></option>
                         </select>

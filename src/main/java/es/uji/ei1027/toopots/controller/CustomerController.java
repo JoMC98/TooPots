@@ -5,6 +5,8 @@ import es.uji.ei1027.toopots.daos.CustomerDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Customer;
 import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.validator.AddCustomerValidator;
+import es.uji.ei1027.toopots.validator.CustomerValidator;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,6 +56,13 @@ public class CustomerController {
     @RequestMapping(value="/add", method=RequestMethod.POST)
     public String processAddSubmit(HttpSession session, @ModelAttribute("user") Users user, @ModelAttribute("customer") Customer customer,
                                    BindingResult bindingResult) {
+
+        CustomerValidator customerValidator = new CustomerValidator();
+        customerValidator.validate(customer,bindingResult);
+
+       // AddCustomerValidator addCustomerValidator = new AddCustomerValidator();
+       // addCustomerValidator.validate(user,bindingResult);
+
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.toString());
             return "customer/add";
@@ -83,6 +92,8 @@ public class CustomerController {
     @RequestMapping(value="/update", method = RequestMethod.POST)
     public String processUpdateSubmit(@ModelAttribute("user") Users user,
                                       @ModelAttribute("customer") Customer customer, BindingResult bindingResult) {
+        CustomerValidator customerValidator = new CustomerValidator();
+        customerValidator.validate(customer,bindingResult);
         if (bindingResult.hasErrors())
             return "customer/update";
         userDao.updateUser(user);

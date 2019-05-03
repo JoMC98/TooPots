@@ -19,7 +19,7 @@ public class CustomerValidator implements Validator {
 
         Customer customer = (Customer) obj;
 
-        if (customer.getBirthDate().equals(""))
+        if (customer.getBirthDate() == null)
             errors.rejectValue("birthDate", "obligatori",
                     "Cal introduir una data: DD/MM/AAAA");
 

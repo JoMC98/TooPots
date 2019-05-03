@@ -3,6 +3,7 @@ package es.uji.ei1027.toopots.controller;
 import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
+import es.uji.ei1027.toopots.validator.ActivityCertificationValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -268,6 +269,9 @@ public class InstructorController {
     @RequestMapping(value="/asignarActivitat/{id}", method = RequestMethod.POST)
     public String processAsignarSubmit(Model model, @PathVariable int id, @ModelAttribute("user") Users user,
                                        @ModelAttribute("authorization") ActivityCertification authorization, BindingResult bindingResult) {
+
+        //ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
+        //activityCertificationValidator.validate(authorization,bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "instructor/asignarActivitat";
