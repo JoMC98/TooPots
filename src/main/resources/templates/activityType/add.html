@@ -11,27 +11,46 @@
     <body layout:fragment="content">
         <br><h1>Crear Tipus d'Activitat</h1><br>
         <form action="#" th:action="@{/activityType/add}" method="post" enctype="multipart/form-data">
-            <table class="marginAuto">
+            <!--<table class="marginAuto">-->
+                <!--<tr>-->
+                    <!--<td><label class="inputLabel">Foto</label></td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td class="marginAuto">-->
+                        <!--<div class="activityFotoSpace activityFoto">-->
+                            <!--<img class="activityFoto" id="photo1" hidden/>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                    <!--<td class="marginAuto">-->
+                        <!--<input type="file" accept="image/*" class="inputFoto" onChange="-->
+                                        <!--document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);-->
+                                        <!--document.getElementById('photo1').hidden=false;" >-->
+                    <!--</td>-->
+                <!--</tr>-->
+            <!--</table>-->
+
+            <!--<div class="custom-file">-->
+
+            <!--</div>-->
+            <br>
+            <table class="marginAuto" th:object="${activityType}">
                 <tr>
-                    <td><label class="inputLabel">Foto</label></td>
+                    <td colspan="2">
+                        <label class="inputLabel">Foto</label>
+                    </td>
                 </tr>
                 <tr>
-                    <td class="marginAuto">
-                        <div class="activityFotoSpace activityFoto">
-                            <img class="activityFoto" id="photo1" hidden/>
+                    <td colspan="2">
+                        <div class="fileArea">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="foto" name="foto">
+                                <label class="inputAdjunto custom-file-label" for="foto" data-browse="Elegir">Tria una foto</label>
+                            </div>
                         </div>
                     </td>
                 </tr>
-                <tr>
-                    <td class="marginAuto">
-                        <input type="file" accept="image/*" class="inputFoto" onChange="
-                                        document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);
-                                        document.getElementById('photo1').hidden=false;" id="foto" name="foto">
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <table class="marginAuto" th:object="${activityType}">
                 <tr>
                     <td><label class="inputLabel inputPequeño">Nom</label></td>
                     <td><label class="inputLabel inputPequeño">Nivell</label></td>

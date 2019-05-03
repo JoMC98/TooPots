@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 public class Users {
     private int id;
@@ -16,6 +17,10 @@ public class Users {
     private String mail;
 
     private LocalDate registerDate;
+
+    //Para poder asignar actividades
+    private List<Certification> certifications;
+    private List<ActivityType> activities;
 
     //Constructor
     public Users() {

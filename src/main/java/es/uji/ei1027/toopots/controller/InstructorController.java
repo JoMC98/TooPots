@@ -252,9 +252,13 @@ public class InstructorController {
                 List<ActivityType> todas = activityTypeDao.getActivityTypes();
                 List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(id);
                 todas.removeAll(asignadas);
-                model.addAttribute("user", userDao.getUser(id));
-                model.addAttribute("certifications", certifications);
-                model.addAttribute("activities", todas);
+
+                Instructor instructor = instructorDao.getInstructor(id);
+                instructor.setName(user.getName());
+                instructor.setCertifications(certifications);
+                instructor.setActivities(todas);
+
+                model.addAttribute("instructor", instructor);
                 model.addAttribute("authorization", new ActivityCertification());
                 return "instructor/asignarActivitat";
             } else {
@@ -267,14 +271,25 @@ public class InstructorController {
 
     //Processa la informació del assignar activitat
     @RequestMapping(value="/asignarActivitat/{id}", method = RequestMethod.POST)
-    public String processAsignarSubmit(Model model, @PathVariable int id, @ModelAttribute("user") Users user,
-                                       @ModelAttribute("authorization") ActivityCertification authorization,BindingResult bindingResult) {
+    public String processAsignarSubmit(Model model, @PathVariable int id, @ModelAttribute("instructor") Instructor instructor,
+                                       @ModelAttribute("authorization") ActivityCertification authorization,
+                                       BindingResult bindingResult) {
 
         ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
         activityCertificationValidator.validate(authorization,bindingResult);
 
         if (bindingResult.hasErrors()) {
+            List<Certification> certifications = certificationDao.getCertifications(id);
+            List<ActivityType> todas = activityTypeDao.getActivityTypes();
+            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(id);
+            todas.removeAll(asignadas);
 
+            Users user = userDao.getUser(id);
+            instructor.setName(user.getName());
+            instructor.setCertifications(certifications);
+            instructor.setActivities(todas);
+
+            model.addAttribute("instructor", instructor);
             return "instructor/asignarActivitat";
         }
         activityCertificationDao.addActivityCertification(authorization);
