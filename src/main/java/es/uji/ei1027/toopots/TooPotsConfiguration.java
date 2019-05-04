@@ -25,16 +25,16 @@ public class TooPotsConfiguration {
 }
 
     @Bean
-    public Formatter<LocalDate> localDateFormatterES() {
+    public Formatter<LocalDate> localDateFormatter() {
         return new Formatter<LocalDate>() {
             @Override
             public LocalDate parse(String text, Locale locale) throws ParseException {
-                return LocalDate.parse(text, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                return LocalDate.parse(text, DateTimeFormatter.ISO_LOCAL_DATE);
             }
 
             @Override
             public String print(LocalDate object, Locale locale) {
-                return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(object);
+                return DateTimeFormatter.ofPattern("dd-MM-yyyy").format(object);
             }
         };
     }

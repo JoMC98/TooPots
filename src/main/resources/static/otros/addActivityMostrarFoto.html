@@ -11,15 +11,63 @@
     <body layout:fragment="content">
         <br><h1>Crear activitat</h1><br>
         <form action="#" th:action="@{/activity/add}" method="post" enctype="multipart/form-data">
-            <table class="marginAuto" th:object="${activity}">
+            <table class="marginAuto">
                 <tr>
-                    <td colspan="3"><label class="inputLabel">Fotos (mínim 1 i màxim 4)</label></td>
+                    <td colspan="4"><label class="inputLabel">Fotos (mínim 1 i màxim 4)</label></td>
                 </tr>
                 <tr>
-                    <td colspan="3">
-                        <input class="inputAdjunto" type="file" accept="image/*" name="foto" multiple>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto">
+                            <img class="activityFoto" id="photo1" hidden/>
+                        </div>
+                    </td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto" id="space2" hidden>
+                            <img class="activityFoto" id="photo2" hidden/>
+                        </div>
+                    </td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto" id="space3" hidden>
+                            <img class="activityFoto" id="photo3" hidden/>
+                        </div>
+                    </td>
+                    <td class="marginAuto">
+                        <div class="activityFotoSpace activityFoto" id="space4" hidden>
+                            <img class="activityFoto" id="photo4" hidden/>
+                        </div>
                     </td>
                 </tr>
+                <tr>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo1').hidden=false;
+                                        document.getElementById('space2').hidden=false;
+                                        document.getElementById('but2').hidden=false;" name="foto1">
+                    </td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo2').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo2').hidden=false;
+                                        document.getElementById('space3').hidden=false;
+                                        document.getElementById('but3').hidden=false;" id="but2" name="foto2" hidden>
+                    </td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo3').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo3').hidden=false;
+                                        document.getElementById('space4').hidden=false;
+                                        document.getElementById('but4').hidden=false;" id="but3" name="foto3" hidden>
+                    </td>
+                    <td class="marginAuto">
+                        <input type="file" accept="image/*" class="inputFoto" onChange="
+                                        document.getElementById('photo4').src = window.URL.createObjectURL(this.files[0]);
+                                        document.getElementById('photo4').hidden=false;" id="but4" name="foto4" hidden>
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <table class="marginAuto" th:object="${activity}">
                 <tr>
                     <td><label class="inputLabel inputPequeño">Nom</label></td>
                     <td><label class="inputLabel inputPequeño">Data</label></td>
@@ -27,8 +75,11 @@
                 </tr>
                 <tr>
                     <td><input class="input inputPequeño" type="text" th:field="*{name}" maxlength="40"/></td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="date" th:field="*{dates}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:field="*{dates}" /></td>
+                    <!--TODO PONER FECHA EN FORMATO HORA y no texto-->
+                    <!--<td><input class="input inputPequeño" type="date" th:field="${#temporals.format(dates,'dd/MMMM/yyyy')}"/></td>-->
                     <td><input class="input inputPequeño" type="text" th:field="*{place}" maxlength="30"/></td>
+
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Tipus d'Activitat</label></td>
@@ -53,7 +104,8 @@
                 <tr>
                     <td><input class="input inputPequeño" type="text" th:field="*{pricePerPerson}"/></td>
                     <td><input class="input inputPequeño" type="text" th:field="*{meetingPoint}" maxlength="30"/></td>
-                    <td><input class="input inputPequeño" type="time" th:field="*{meetingTime}"/></td>
+                    <!--TODO PONER HORA EN FORMATO HORA y no texto-->
+                    <td><input class="input inputPequeño" type="text" th:field="*{meetingTime}"/></td>
                 </tr>
                 <tr>
                     <td colspan="3"><label class="inputLabel inputTriple">Descripció</label></td>

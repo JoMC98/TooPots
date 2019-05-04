@@ -1,0 +1,31 @@
+
+/*Adjunto bonito sin nombre*/
+.inputAdjunto {
+    width: 250px !important;
+    height: 40px !important;
+    background-color: #EEEEEE !important;
+    border-style: solid !important;
+    border: 0.5px solid black !important;
+    text-align: left !important;
+    font-size: 16px !important;
+    margin: auto !important;
+}
+.fileArea {
+    margin-bottom: 20px;
+}
+
+/*Mostrar foto javascript*/
+.profileFotoSpace {
+    border: 1px black solid;
+    margin: 0px 0px 5px 43px;
+}
+.activityFotoSpace {
+    border: 1px black solid;
+    margin: 0px 14px 5px 10px;
+}
+.inputFoto {
+    margin: 0px 40px 20px 40px;
+    font-size: 16px;
+    text-align: center;
+    width: 163px;
+}

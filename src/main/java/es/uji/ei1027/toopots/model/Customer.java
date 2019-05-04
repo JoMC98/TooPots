@@ -1,9 +1,8 @@
 package es.uji.ei1027.toopots.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
+
 
 public class Customer {
 

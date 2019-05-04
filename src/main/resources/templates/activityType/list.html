@@ -9,7 +9,15 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><h1>Llista de Tipus d'Activitats</h1><br>
+        <br>
+        <table class="marginAuto tableBotonAddLista">
+            <tr>
+                <td class="tdBotonAddLista"></td>
+                <td><h1>Tipus d'Activitats</h1></td>
+                <td class="tdBotonAddLista"><a href="add" class="btn btn-success" role="button">Crear Nou Tipus</a></td>
+            </tr>
+        </table>
+        <br>
         <div th:if="${#lists.isEmpty(activityTypes)}">
             No ha sigut creat cap tipus d'activitat
         </div>
@@ -38,6 +46,5 @@
             </table>
         </div>
         <br>
-        <a href="add" class="btn btn-success" role="button">Afegir Tipus d'Activitat</a>
     </body>
 </html>

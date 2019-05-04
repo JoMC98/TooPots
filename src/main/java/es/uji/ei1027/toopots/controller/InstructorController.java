@@ -313,10 +313,9 @@ public class InstructorController {
     @RequestMapping(value="/add", method= RequestMethod.POST)
     public String processAddSubmit(HttpSession session, @RequestParam("foto") MultipartFile foto,
                                    @ModelAttribute("user") Users user, @ModelAttribute("instructor") Instructor instructor,
-                                   @ModelAttribute("certificationNames") CertificationNames names, @RequestParam("cert1") MultipartFile cert1,
-                                   @RequestParam("cert2") MultipartFile cert2, @RequestParam("cert3") MultipartFile cert3,
-                                   @RequestParam("cert4") MultipartFile cert4, @RequestParam("cert5") MultipartFile cert5,
-                                   BindingResult bindingResult) {
+                                   @ModelAttribute("certificationNames") CertificationNames certificationNames,
+                                   @RequestParam("cert") MultipartFile[] cert, BindingResult bindingResult) {
+
         if (bindingResult.hasErrors())
             return "instructor/add";
 
@@ -325,7 +324,7 @@ public class InstructorController {
             return "instructor/add";
         }
 
-        if (cert1.isEmpty()) {
+        if (cert[0].getSize() == 0) {
             // Enviar mensaje de error porque no hay fichero seleccionado
             return "instructor/add";
         }
@@ -341,8 +340,6 @@ public class InstructorController {
                     "ClauPrimariaDuplicada");
         }
         Users newUser = userDao.getUser(user.getUsername());
-
-        session.setAttribute("user", newUser);
 
         try {
             // Obtener el fichero y guardarlo
@@ -361,18 +358,16 @@ public class InstructorController {
 
         instructorDao.addInstructor(instructor, newUser.getId());
 
-        saveCertificate(cert1, newUser.getId(), names.getCertificate1(), 1);
-        if (!cert2.isEmpty()) {
-            saveCertificate(cert2, newUser.getId(), names.getCertificate2(), 2);
-        }
-        if (!cert3.isEmpty()) {
-            saveCertificate(cert3, newUser.getId(), names.getCertificate3(), 3);
-        }
-        if (!cert4.isEmpty()) {
-            saveCertificate(cert4, newUser.getId(), names.getCertificate4(), 4);
-        }
-        if (!cert5.isEmpty()) {
-            saveCertificate(cert5, newUser.getId(), names.getCertificate5(), 5);
+        List<String> names = new ArrayList<String>();
+        names.add(certificationNames.getCertificate1());
+        names.add(certificationNames.getCertificate2());
+        names.add(certificationNames.getCertificate3());
+        names.add(certificationNames.getCertificate4());
+        names.add(certificationNames.getCertificate5());
+
+        for (int i=0; i<cert.length; i++) {
+            MultipartFile file = cert[i];
+            saveCertificate(file, newUser.getId(), names.get(i), i+1);
         }
 
         return "redirect:../";
@@ -391,7 +386,6 @@ public class InstructorController {
             certification.setCertificate(name);
             certification.setDoc("/" + direccion);
             certification.setIdInstructor(id);
-            System.out.println(name);
 
             certificationDao.addCertification(certification);
 

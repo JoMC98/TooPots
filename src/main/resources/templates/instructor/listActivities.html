@@ -9,7 +9,15 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
     <body layout:fragment="content">
-        <br><h1>Llista d'activitats</h1><br>
+        <br>
+        <table class="marginAuto tableBotonAddLista">
+            <tr>
+                <td class="tdBotonAddLista"></td>
+                <td><h1>Llista d'activitats</h1></td>
+                <td class="tdBotonAddLista"><a href="add" class="btn btn-success" role="button">Crear Activitat</a></td>
+            </tr>
+        </table>
+        <br>
         <table class="table_bordered" th:each="activity: ${activities}">
             <tr>
                 <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
@@ -32,7 +40,7 @@
             </tr>
             <tr>
                 <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${activity.dates}"></label>
+                    <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                 </td>
                 <td class="tdListCentroArribaAbajo tdListBotones">
                     <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-warning listBoton" role="button">Tancar</a>
@@ -49,6 +57,5 @@
             </tr>
         </table>
         <br>
-        <a href="add" class="btn btn-success" role="button">Afegir Activitat</a>
     </body>
 </html>

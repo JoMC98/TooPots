@@ -13,24 +13,15 @@
         <form action="#" th:action="@{/instructor/add}" method="post" enctype="multipart/form-data">
             <table class="marginAuto">
                 <tr>
-                    <td><label class="inputLabel">Foto de perfil</label></td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="profileFotoSpace profileFoto">
-                            <img class="profileFoto" id="photo" hidden/>
-                        </div>
+                    <td colspan="2">
+                        <label class="inputLabel">Foto de perfil</label>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <input type="file" onchange="document.getElementById('photo').src = window.URL.createObjectURL(this.files[0]);
-                                                    document.getElementById('photo').hidden=false"
-                                                    accept="image/*" class="inputFoto" id="foto" name="foto">
+                    <td colspan="2">
+                        <input class="inputAdjunto" type="file" accept="image/*" name="foto">
                     </td>
                 </tr>
-            </table>
-            <table class="marginAuto">
                 <tr>
                     <td colspan="2"><label class="inputLabel inputDoble">Nom Complet</label></td>
                 </tr>
@@ -69,68 +60,24 @@
                 </tr>
                 <tr>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate1}" class="areaInfoCertificate" rows="4" cols="20" id="pdf1" placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate1}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate2}" class="areaInfoCertificate" rows="4" cols="20" id="pdf2" hidden placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate2}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate3}" class="areaInfoCertificate" rows="4" cols="20" id="pdf3" hidden placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate3}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate4}" class="areaInfoCertificate" rows="4" cols="20" id="pdf4" hidden placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate4}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate5}" class="areaInfoCertificate" rows="4" cols="20" id="pdf5" hidden placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate5}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                 </tr>
                 <tr>
-                    <td class="marginAuto">
-                        <i class="icon-check-empty" id="uncheck1"></i>
-                        <i class="icon-check" id="check1" hidden></i>
-                        <input type="file" accept="application/pdf" class="inputPdf" onChange="
-                                        document.getElementById('pdf2').hidden=false;
-                                        document.getElementById('but2').hidden=false;
-                                        document.getElementById('uncheck1').hidden=true;
-                                        document.getElementById('check1').hidden=false;
-                                        document.getElementById('uncheck2').hidden=false;" name="cert1">
-                    </td>
-                    <td class="marginAuto">
-                        <i class="icon-check-empty" id="uncheck2" hidden></i>
-                        <i class="icon-check" id="check2" hidden></i>
-                        <input type="file" accept="application/pdf" class="inputPdf" onChange="
-                                        document.getElementById('pdf3').hidden=false;
-                                        document.getElementById('but3').hidden=false;
-                                        document.getElementById('uncheck2').hidden=true;
-                                        document.getElementById('check2').hidden=false;
-                                        document.getElementById('uncheck3').hidden=false;" id="but2" name="cert2" hidden>
-                    </td>
-                    <td class="marginAuto">
-                        <i class="icon-check-empty" id="uncheck3" hidden></i>
-                        <i class="icon-check" id="check3" hidden></i>
-                        <input type="file" accept="application/pdf" class="inputPdf" onChange="
-                                        document.getElementById('pdf4').hidden=false;
-                                        document.getElementById('but4').hidden=false;
-                                        document.getElementById('uncheck3').hidden=true;
-                                        document.getElementById('check3').hidden=false;
-                                        document.getElementById('uncheck4').hidden=false;" id="but3" name="cert3" hidden>
-                    </td>
-                    <td class="marginAuto">
-                        <i class="icon-check-empty" id="uncheck4" hidden></i>
-                        <i class="icon-check" id="check4" hidden></i>
-                        <input type="file" accept="application/pdf" class="inputPdf" onChange="
-                                        document.getElementById('pdf5').hidden=false;
-                                        document.getElementById('but5').hidden=false;
-                                        document.getElementById('uncheck4').hidden=true;
-                                        document.getElementById('check4').hidden=false;
-                                        document.getElementById('uncheck5').hidden=false;"id="but4" name="cert4" hidden>
-                    </td>
-                    <td class="marginAuto">
-                        <i class="icon-check-empty" id="uncheck5" hidden></i>
-                        <i class="icon-check" id="check5" hidden></i>
-                        <input type="file" accept="application/pdf" class="inputPdf" onChange="
-                                        document.getElementById('uncheck5').hidden=true;
-                                        document.getElementById('check5').hidden=false;" id="but5" name="cert5" hidden>
+                    <td colspan="5">
+                        <input class="inputAdjunto" type="file" accept="application/pdf" name="cert" multiple>
                     </td>
                 </tr>
             </table>

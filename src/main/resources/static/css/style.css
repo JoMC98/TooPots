@@ -119,6 +119,14 @@ footer {
     padding: 0px 10px;
     background-color: #E1E5AC;
 }
+.loginInput:focus {
+    background-color: #C4C796;
+}
+.loginInput:-webkit-autofill,
+.loginInput:-webkit-autofill:hover,
+.loginInput:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #E1E5AC inset !important;
+}
 .otherLogin, .otherLogin:hover {
     padding: 0px 50px;
     font-size: 15px;
@@ -150,6 +158,14 @@ footer {
     padding: 0px 10px;
     font-size: 16px;
 }
+.input:focus {
+    background-color: #DDDDDD;
+}
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #EEEEEE inset !important;
+}
 .inputLabel {
     text-align: left;
     font-size: 16px;
@@ -174,12 +190,6 @@ footer {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-.inputFoto {
-    margin: 0px 40px 20px 40px;
-    font-size: 16px;
-    text-align: center;
-    width: 163px;
-}
 .inputText {
     padding-top: 5px;
 }
@@ -188,18 +198,11 @@ footer {
     width: 150px;
     height: 150px;
 }
-.profileFotoSpace {
-    border: 1px black solid;
-    margin: 0px 0px 5px 43px;
-}
+
 /*Fotos actividades*/
 .activityFoto {
     width: 250px;
     height: 150px;
-}
-.activityFotoSpace {
-    border: 1px black solid;
-    margin: 0px 14px 5px 10px;
 }
 
 /*Tarifas*/
@@ -269,6 +272,13 @@ footer {
 }
 .tdListTableActivity {
     width: 270px;
+}
+.tdBotonAddLista {
+    width: 300px;
+    padding-left: 50px;
+}
+.tableBotonAddLista {
+    width: 100%;
 }
 
 /*Profile*/
@@ -356,6 +366,14 @@ footer {
 .needCorrection{
     background-color: #ff9387;
 }
+.needCorrection:focus {
+    background-color: #D67A70;
+}
+.needCorrection:-webkit-autofill,
+.needCorrection:-webkit-autofill:hover,
+.needCorrection:-webkit-autofill:active  {
+    -webkit-box-shadow: 0 0 0 30px #ff9387 inset !important;
+}
 
 /*Filtro*/
 .filtroArea {
@@ -390,15 +408,7 @@ footer {
 
 /*Adjuntos*/
 .inputAdjunto {
-    width: 250px !important;
-    height: 40px !important;
-    background-color: #EEEEEE !important;
-    border-style: solid !important;
-    border: 0.5px solid black !important;
-    text-align: left !important;
-    font-size: 16px !important;
-}
-
-.fileArea {
-    margin: 0px auto 20px auto;
+    width: 250px;
+    font-size: 16px;
+    margin: auto auto 20px auto;
 }

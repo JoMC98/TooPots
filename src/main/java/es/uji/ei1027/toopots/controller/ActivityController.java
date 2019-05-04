@@ -203,12 +203,11 @@ public class ActivityController {
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
     public String processAddSubmit(HttpSession session, @ModelAttribute("activity") Activity activity, BindingResult bindingResult,
-                                   @RequestParam("foto1") MultipartFile foto1, @RequestParam("foto2") MultipartFile foto2,
-                                   @RequestParam("foto3") MultipartFile foto3, @RequestParam("foto4") MultipartFile foto4) {
+                                   @RequestParam("foto") MultipartFile[] foto) {
         if (bindingResult.hasErrors())
             return "activity/add";
 
-        if (foto1.isEmpty()) {
+        if (foto[0].getSize() == 0) {
             // Enviar mensaje de error porque no hay fichero seleccionado
             return "activity/add";
         }
@@ -230,16 +229,9 @@ public class ActivityController {
         Activity newActivity = activityDao.getActivity(activity.getDates(), activity.getIdInstructor());
         int id = newActivity.getId();
 
-        saveFoto(foto1, newActivity, 1);
-
-        if (!foto2.isEmpty()) {
-            saveFoto(foto2, newActivity, 2);
-        }
-        if (!foto3.isEmpty()) {
-            saveFoto(foto3, newActivity, 3);
-        }
-        if (!foto4.isEmpty()) {
-            saveFoto(foto4, newActivity, 4);
+        for (int i=0; i<foto.length; i++) {
+            MultipartFile file = foto[i];
+            saveFoto(file, newActivity, i+1);
         }
 
         if (activity.getTarifaMenores().getPrice() > 0.0) {
@@ -264,7 +256,7 @@ public class ActivityController {
             activityRatesDao.addActivityRates(tarifa);
         }
 
-        return "redirect:offer";
+        return "redirect:/instructor/listActivities";
     }
 
     private void saveFoto(MultipartFile foto, Activity activity, int idFoto) {

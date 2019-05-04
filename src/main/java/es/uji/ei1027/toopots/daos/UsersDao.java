@@ -1,23 +1,14 @@
 package es.uji.ei1027.toopots.daos;
 
-import es.uji.ei1027.toopots.exceptions.LoginException;
-import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.rowMapper.UsersRowMapper;
 import org.jasypt.util.password.BasicPasswordEncryptor;
-import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

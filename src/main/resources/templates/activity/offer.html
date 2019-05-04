@@ -65,7 +65,7 @@
                     <label th:text="${activity.place}"></label>
                 </td>
                 <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${activity.dates}"></label>
+                    <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                 </td>
                 <td class="tdListCentroAbajo tdListAbajo tdListBotones">
                     <!--<a th:href="@{/reservation/add/{id}(id=${activity.id}))}" class="btn btn-success listBoton" >Reservar</a>-->
