@@ -1,6 +1,7 @@
 package es.uji.ei1027.toopots.daos;
 
 import es.uji.ei1027.toopots.model.ActivityPhotos;
+import es.uji.ei1027.toopots.rowMapper.ActivityPhotosRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

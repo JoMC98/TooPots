@@ -2,6 +2,7 @@ package es.uji.ei1027.toopots.daos;
 
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Reservation;
+import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

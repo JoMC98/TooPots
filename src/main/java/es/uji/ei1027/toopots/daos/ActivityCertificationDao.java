@@ -1,9 +1,9 @@
 package es.uji.ei1027.toopots.daos;
 
-import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityCertification;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Certification;
+import es.uji.ei1027.toopots.rowMapper.ActivityCertificationRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

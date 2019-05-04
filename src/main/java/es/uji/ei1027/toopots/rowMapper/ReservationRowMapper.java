@@ -1,4 +1,4 @@
-package es.uji.ei1027.toopots.daos;
+package es.uji.ei1027.toopots.rowMapper;
 
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Reservation;

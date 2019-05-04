@@ -1,4 +1,4 @@
-package es.uji.ei1027.toopots.daos;
+package es.uji.ei1027.toopots.rowMapper;
 
 import es.uji.ei1027.toopots.model.Customer;
 import org.springframework.jdbc.core.RowMapper;
