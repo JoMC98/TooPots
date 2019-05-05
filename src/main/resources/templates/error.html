@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <meta charset="UTF-8" />
+        <title>TooPots</title>
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body layout:fragment="content">
+        <div th:if="${status == 404}">
+            <h1>No existeix la pàgina a la que vols accedir</h1><br>
+            <img src="/images/error/notfound.gif" alt="Not Found"><br><br>
+        </div>
+        <div th:unless="${status == 404}">
+            <br><h1>S'ha produit un error</h1><br>
+            <h4 th:text="${message}"></h4><br>
+            <img src="/images/error/error.gif" alt="Error"><br><br>
+        </div>
+        <a href="/" class="btn btn-success" role="button">Ir a la página principal</a>
+    </body>
+</html>

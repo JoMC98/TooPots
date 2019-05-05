@@ -2,7 +2,6 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
-import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Users;
 import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
@@ -13,7 +12,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +20,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 @Controller
 @RequestMapping("/activityType")
@@ -67,6 +64,7 @@ public class ActivityTypeController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             model.addAttribute("activityType", new ActivityType());
+            model.addAttribute("errorFoto", false);
             return "activityType/add";
         } else {
             return "redirect:/";
@@ -76,18 +74,18 @@ public class ActivityTypeController {
 
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(@RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+    public String processAddSubmit(Model model, @RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+
+        if (foto.isEmpty()) {
+            model.addAttribute("errorFoto", true);
+        }
 
         ActivityTypeValidator activityTypeValidator = new ActivityTypeValidator();
         activityTypeValidator.validate(activityType, bindingResult);
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors() || foto.isEmpty())
             return "activityType/add";
 
-        if (foto.isEmpty()) {
-            // Enviar mensaje de error porque no hay fichero seleccionado
-            return "activityType/add";
-        }
 
         try {
             // Obtener el fichero y guardarlo

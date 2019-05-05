@@ -14,8 +14,6 @@ public class InstructorValidator  implements Validator {
 
     @Override
     public void validate(Object obj, Errors errors) {
-
-        System.out.println(obj);
         Instructor instructor = (Instructor) obj;
 
         if (instructor.getName().trim().equals(""))

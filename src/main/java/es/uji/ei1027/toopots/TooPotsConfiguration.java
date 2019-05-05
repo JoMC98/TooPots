@@ -34,7 +34,7 @@ public class TooPotsConfiguration {
 
             @Override
             public String print(LocalDate object, Locale locale) {
-                return DateTimeFormatter.ofPattern("dd-MM-yyyy").format(object);
+                return DateTimeFormatter.ISO_LOCAL_DATE.format(object);
             }
         };
     }

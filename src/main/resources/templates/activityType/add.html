@@ -19,7 +19,8 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input class="inputAdjunto" type="file" accept="image/*" name="foto">
+                        <input th:if="${errorFoto}" class="inputAdjunto needCorrection" name="foto" type="file" accept="image/*">
+                        <input th:unless="${errorFoto}" class="inputAdjunto" name="foto" type="file" accept="image/*">
                     </td>
                 </tr>
                 <tr>

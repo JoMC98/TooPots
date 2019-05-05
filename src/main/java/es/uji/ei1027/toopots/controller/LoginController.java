@@ -33,6 +33,7 @@ public class LoginController {
         loginValidator.validate(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.toString());
             return "login";
         }
 

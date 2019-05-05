@@ -25,9 +25,8 @@
                                 Nom d'usuari
                             </td>
                             <td>
-                                <input class="loginInput" type="text" th:field="*{username}"/>
+                                <input class="loginInput" th:errorclass="needCorrection"  type="text" th:field="*{username}"/>
                             </td>
-                            <td class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></td>
                         </tr>
                         <tr>
                             <td><br></td>
@@ -37,9 +36,8 @@
                                 Contrasenya
                             </td>
                             <td>
-                                <input class="loginInput" type="password" th:field="*{passwd}"/>
+                                <input class="loginInput" th:errorclass="needCorrection" type="password" th:field="*{passwd}"/>
                             </td>
-                            <td class="error" th:if="${#fields.hasErrors('passwd')}" th:errors="*{passwd}"></td>
                         </tr>
                     </table>
                     <br><br>

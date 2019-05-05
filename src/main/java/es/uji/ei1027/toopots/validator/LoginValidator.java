@@ -16,7 +16,7 @@ public class LoginValidator implements Validator {
             errors.rejectValue("username", "obligatori",
                     "Cal introduir un valor");
         if (user.getPasswd().trim().equals(""))
-            errors.rejectValue("password", "obligatori",
+            errors.rejectValue("passwd", "obligatori",
                     "Cal introduir un valor");
 
     }

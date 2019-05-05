@@ -19,7 +19,8 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <input class="inputAdjunto" type="file" accept="image/*" name="foto">
+                        <input th:if="${errorFoto}" class="inputAdjunto needCorrection" name="foto" type="file" accept="image/*">
+                        <input th:unless="${errorFoto}" class="inputAdjunto" type="file" accept="image/*" name="foto">
                     </td>
                 </tr>
                 <tr>
@@ -61,24 +62,25 @@
                 </tr>
                 <tr>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate1}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate1}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate2}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate2}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate3}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate3}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate4}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate4}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                     <td class="marginAuto">
-                        <textarea th:field="*{certificate5}" class="areaInfoCertificate" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                        <textarea th:field="*{certificate5}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="5">
-                        <input class="inputAdjunto" type="file" accept="application/pdf" name="cert" multiple>
+                        <input th:if="${errorCert}" class="inputAdjunto needCorrection" type="file" accept="application/pdf" name="cert" multiple>
+                        <input th:unless="${errorCert}" class="inputAdjunto" type="file" accept="application/pdf" name="cert" multiple>
                     </td>
                 </tr>
             </table>

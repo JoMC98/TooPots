@@ -4,6 +4,7 @@ import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.validator.ActivityCertificationValidator;
+import es.uji.ei1027.toopots.validator.CertificationNamesValidator;
 import es.uji.ei1027.toopots.validator.InstructorValidator;
 import es.uji.ei1027.toopots.validator.UserValidator;
 import org.apache.commons.io.FilenameUtils;
@@ -308,16 +309,19 @@ public class InstructorController {
         model.addAttribute("user", new Users());
         model.addAttribute("instructor", new Instructor());
         model.addAttribute("certificationNames", new CertificationNames());
+        model.addAttribute("errorFoto", false);
+        model.addAttribute("errorCert", false);
         return "instructor/add";
     }
 
     //Processa la informació del add
     @RequestMapping(value="/add", method= RequestMethod.POST)
-    public String processAddSubmit(HttpSession session, @RequestParam("foto") MultipartFile foto,
+    public String processAddSubmit(Model model, HttpSession session, @RequestParam("foto") MultipartFile foto,
                                    @ModelAttribute("user") Users user, BindingResult bindingResultUser,
                                    @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResultInstructor,
                                    @ModelAttribute("certificationNames") CertificationNames certificationNames,
-                                   @RequestParam("cert") MultipartFile[] cert, BindingResult bindingResult) {
+                                   BindingResult bindingResultNames, @RequestParam("cert") MultipartFile[] cert,
+                                   BindingResult bindingResult) {
 
         InstructorValidator instructorValidator = new InstructorValidator();
         instructorValidator.validate(instructor, bindingResultInstructor);
@@ -325,23 +329,23 @@ public class InstructorController {
         UserValidator userValidator = new UserValidator();
         userValidator.validate(user,bindingResultUser);
 
-        if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors()) {
-            System.out.println(bindingResultInstructor.toString());
-            System.out.println(bindingResultUser.toString());
-
-            return "instructor/add";
-        }
-
-        if (bindingResult.hasErrors())
-            return "instructor/add";
+        CertificationNamesValidator certificationNamesValidator = new CertificationNamesValidator();
+        certificationNamesValidator.setNumbFiles(cert.length);
+        certificationNamesValidator.validate(certificationNames, bindingResultNames);
 
         if (foto.isEmpty()) {
-            // Enviar mensaje de error porque no hay fichero seleccionado
-            return "instructor/add";
+            model.addAttribute("errorFoto", true);
         }
 
         if (cert[0].getSize() == 0) {
-            // Enviar mensaje de error porque no hay fichero seleccionado
+            model.addAttribute("errorCert", true);
+        }
+
+        if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors() || bindingResultNames.hasErrors() ||
+                foto.isEmpty() || cert[0].getSize() == 0) {
+            System.out.println(bindingResultInstructor.toString());
+            System.out.println(bindingResultUser.toString());
+
             return "instructor/add";
         }
 

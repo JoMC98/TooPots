@@ -5,6 +5,8 @@ import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
+import es.uji.ei1027.toopots.validator.ActivityValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,6 +40,7 @@ public class ActivityController {
     private ActivityTypeDao activityTypeDao;
     private ActivityRatesDao activityRatesDao;
     private ActivityPhotosDao activityPhotosDao;
+    private InstructorDao instructorDao;
     private ReservationDao reservationDao;
     private ActivityCertificationDao activityCertificationDao;
 
@@ -47,6 +50,11 @@ public class ActivityController {
     @Autowired
     public void setActivityDao(ActivityDao activityDao) {
         this.activityDao=activityDao;
+    }
+
+    @Autowired
+    public void setInstructorDao(InstructorDao instructorDao) {
+        this.instructorDao=instructorDao;
     }
 
     @Autowired
@@ -192,8 +200,11 @@ public class ActivityController {
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
             List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+            Instructor instructor = instructorDao.getInstructor(user.getId());
+            instructor.setActivities(asignadas);
             model.addAttribute("activity", new Activity());
-            model.addAttribute("asignadas", asignadas);
+            model.addAttribute("instructor", instructor);
+            model.addAttribute("errorFoto", false);
             return "activity/add";
         } else {
             return "redirect:/";
@@ -202,15 +213,27 @@ public class ActivityController {
 
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(HttpSession session, @ModelAttribute("activity") Activity activity, BindingResult bindingResult,
-                                   @RequestParam("foto") MultipartFile[] foto) {
-        if (bindingResult.hasErrors())
-            return "activity/add";
-
+    public String processAddSubmit(Model model, HttpSession session, @ModelAttribute("activity") Activity activity,
+                                   BindingResult bindingResult, @RequestParam("foto") MultipartFile[] foto) {
         if (foto[0].getSize() == 0) {
-            // Enviar mensaje de error porque no hay fichero seleccionado
+            model.addAttribute("errorFoto", true);
+        }
+
+        ActivityValidator activityValidator = new ActivityValidator();
+        activityValidator.validate(activity, bindingResult);
+
+        if (bindingResult.hasErrors() || foto[0].getSize() == 0) {
+            Users user = (Users) session.getAttribute("user");
+            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+            Instructor instructor = instructorDao.getInstructor(user.getId());
+            instructor.setActivities(asignadas);
+            model.addAttribute("activity", new Activity());
+            model.addAttribute("instructor", instructor);
             return "activity/add";
         }
+
+
+
 
         Users user = (Users) session.getAttribute("user");
         activity.setIdInstructor(user.getId());
