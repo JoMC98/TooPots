@@ -85,7 +85,7 @@ public class ActivityController {
     @RequestMapping("/offer")
     public String listActivities(Model model) {
         List<Activity> activities = activityDao.getActivities();
-
+        System.out.println("get");
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
             ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
@@ -113,18 +113,19 @@ public class ActivityController {
     }
 
     //Filtrar activitats
-    @RequestMapping("/filtrarYordenar")
+    @RequestMapping(value="/offer", method=RequestMethod.POST)
     public String filtro(Model model, @ModelAttribute("filtroYorden") FiltradoYOrden filtro, BindingResult bindingResult) {
+        System.out.println("post");
         List<Activity> activities = new ArrayList<Activity>();
         switch (filtro.getFiltroCriteri()) {
+            case "all":
+                activities = activityDao.getActivities();
+                break;
             case "name":
-                //TODO filtro per nom
+                activities = activityDao.getActivitiesByName(filtro.getFiltroPatro());
                 break;
             case "place":
                 activities = activityDao.getActivitiesByPlace(filtro.getFiltroPatro());
-                break;
-            case "dates":
-                //TODO filtro per fecha
                 break;
             case "type":
                 List<ActivityType> activityTypes = activityTypeDao.getActivityTypesByName(filtro.getFiltroPatro());
@@ -186,6 +187,7 @@ public class ActivityController {
         }
 
         model.addAttribute("activities", activitiesWithOcupation);
+        model.addAttribute("filtroYorden", new FiltradoYOrden());
         return "activity/offer";
     }
 

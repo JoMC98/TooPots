@@ -100,7 +100,17 @@ public class ActivityDao {
     /* Obté totes les activitats amb de ixa ubicacio */
     public List<Activity> getActivitiesByPlace(String place) {
         try {
-            return jdbcTemplate.query("SELECT * from Activity where place=?", new ActivityRowMapper(), place);
+            return jdbcTemplate.query("SELECT * from Activity where UPPER(place) LIKE UPPER(?)", new ActivityRowMapper(), "%" + place + "%");
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
+
+    /* Obté totes les activitats amb aquesta paraula en el nom */
+    public List<Activity> getActivitiesByName(String name) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where UPPER(name) LIKE UPPER(?)", new ActivityRowMapper(), "%" + name + "%");
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();

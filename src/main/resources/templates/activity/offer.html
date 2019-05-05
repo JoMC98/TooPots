@@ -3,13 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Gestionar Activitats</title>
+        <title>Oferta Activitats</title>
         <meta charset="UTF-8" />
     </head>
     <body layout:fragment="content">
         <!--<br><h1>Llista d'activitats</h1><br>-->
         <div class="filtroArea">
-            <form action="#" th:object="${filtroYorden}" th:action="@{/activity/filtrarYordenar}" method="post">
+            <form action="#" th:object="${filtroYorden}" th:action="@{/activity/offer}" method="post">
                 <table>
                     <tr>
                         <td colspan="2">
@@ -23,9 +23,9 @@
                     <tr>
                         <td>
                             <select id="filtroSelect" th:field="*{filtroCriteri}" class="filtro">
+                                <option value="all">Todas</option>
                                 <option value="name">Per nom</option>
                                 <option value="place">Per lloc</option>
-                                <option value="dates">Per data</option>
                                 <option value="type">Per tipus</option>
                                 <option value="level">Per nivell</option>
                             </select>
