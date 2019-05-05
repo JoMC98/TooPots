@@ -4,6 +4,8 @@ import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.validator.ActivityCertificationValidator;
+import es.uji.ei1027.toopots.validator.InstructorValidator;
+import es.uji.ei1027.toopots.validator.UserValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -312,9 +314,23 @@ public class InstructorController {
     //Processa la informació del add
     @RequestMapping(value="/add", method= RequestMethod.POST)
     public String processAddSubmit(HttpSession session, @RequestParam("foto") MultipartFile foto,
-                                   @ModelAttribute("user") Users user, @ModelAttribute("instructor") Instructor instructor,
+                                   @ModelAttribute("user") Users user, BindingResult bindingResultUser,
+                                   @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResultInstructor,
                                    @ModelAttribute("certificationNames") CertificationNames certificationNames,
                                    @RequestParam("cert") MultipartFile[] cert, BindingResult bindingResult) {
+
+        InstructorValidator instructorValidator = new InstructorValidator();
+        instructorValidator.validate(instructor, bindingResultInstructor);
+
+        UserValidator userValidator = new UserValidator();
+        userValidator.validate(user,bindingResultUser);
+
+        if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors()) {
+            System.out.println(bindingResultInstructor.toString());
+            System.out.println(bindingResultUser.toString());
+
+            return "instructor/add";
+        }
 
         if (bindingResult.hasErrors())
             return "instructor/add";

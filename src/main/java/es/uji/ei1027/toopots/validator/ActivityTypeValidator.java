@@ -21,10 +21,6 @@ public class ActivityTypeValidator implements Validator {
             errors.rejectValue("name", "obligatori",
                     "Cal introduir un valor");
 
-        if (activityType.getLevel().trim().equals(""))
-            errors.rejectValue("level", "obligatori",
-                    "Cal introduir un nivell");
-
         List<String> valors = Arrays.asList("Baix", "Mitja", "Alt", "Extrem");
         if (!valors.contains(activityType.getLevel()))
             errors.rejectValue("level", "valor incorrecte",
