@@ -229,7 +229,6 @@ public class ActivityController {
             List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
             Instructor instructor = instructorDao.getInstructor(user.getId());
             instructor.setActivities(asignadas);
-            model.addAttribute("activity", new Activity());
             model.addAttribute("instructor", instructor);
             return "activity/add";
         }

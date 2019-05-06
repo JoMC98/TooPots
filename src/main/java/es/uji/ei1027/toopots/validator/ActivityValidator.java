@@ -53,6 +53,10 @@ public class ActivityValidator implements Validator {
             errors.rejectValue("description", "obligatori",
                     "Cal introduir un valor");
 
+        if (activity.getActivityType() == 0)
+            errors.rejectValue("activityType", "obligatori",
+                    "Cal introduir un valor");
+
 
     }
 }
