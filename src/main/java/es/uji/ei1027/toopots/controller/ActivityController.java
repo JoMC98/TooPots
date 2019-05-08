@@ -233,9 +233,6 @@ public class ActivityController {
             return "activity/add";
         }
 
-
-
-
         Users user = (Users) session.getAttribute("user");
         activity.setIdInstructor(user.getId());
 
@@ -326,6 +323,12 @@ public class ActivityController {
     public String processDelete(@PathVariable int id) {
         activityDao.deleteActivity(id);
         return "redirect:../list";
+    }
+
+    //Reservar una activitat
+    @RequestMapping("/book")
+    public String bookActivity(Model model) {
+        return "activity/book";
     }
 
 

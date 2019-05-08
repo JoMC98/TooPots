@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <title>Reservar activitat</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body layout:fragment="content">
+        <div class="divInicioTarifas">
+            <table class="marginAuto">
+                <tr>
+                    <td rowspan="2" class="tdActivityFotoReserva">
+                        <img src="/images/activityTypes/Alpinisme_Baix.jpg" class="activityFotoReserva">
+                    </td>
+                    <td class="tdTarifasReserva">
+                        <h1>Senderisme en la muntanya</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdTarifasReserva">
+                        <div class="divTarifas">
+                            <table class="tablaTarifas">
+                                <tr>
+                                    <td><b>Tarifa</b></td>
+                                    <td><b>Precio por persona</b></td>
+                                </tr>
+                                <tr>
+                                    <td class="tarifaName">Adultos</td>
+                                    <td>20 €</td>
+                                </tr>
+                                <tr>
+                                    <td class="tarifaName">Menors de 16 anys</td>
+                                    <td>20 €</td>
+                                </tr>
+                                <tr>
+                                    <td class="tarifaName">Estudiants</td>
+                                    <td>20 €</td>
+                                </tr>
+                                <tr>
+                                    <td class="tarifaName">Majors de 60 anys</td>
+                                    <td>20 €</td>
+                                </tr>
+                                <tr>
+                                    <td class="tarifaName">Grups de 10 persones o mes</td>
+                                    <td>20 €</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br><br>
+        <table class="marginAuto">
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <label>Nombre d'adults</label>
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Nombre de menors de 16 anys</label>
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Nombre d'estudiants</label>
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Nombre de majors de 60 anys</label>
+                            </td>
+                            <td>
+                                <input type="text" />
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+
+    </body>
+</html>

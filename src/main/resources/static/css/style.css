@@ -412,3 +412,36 @@ footer {
     font-size: 16px;
     margin: auto auto 20px auto;
 }
+
+/*Reserva*/
+.tablaTarifas{
+    margin: 20px;
+}
+.divTarifas{
+    border: 1px black solid;
+}
+.tarifaName {
+    text-align: left;
+}
+.activityFotoReserva {
+    width: 350px;
+    height: 210px;
+}
+.tdActivityFotoReserva {
+    vertical-align: top !important;
+    padding-right: 30px;
+}
+.tdTarifasReserva {
+    padding-right: 200px;
+}
+.divInicioTarifas {
+    background-color: #A6A6A6;
+    padding: 20px 0px;
+    width: 100%;
+    vertical-align: top;
+}
+
+/*Content alineado arriba*/
+.bodyVerticalTop {
+    vertical-align: top;
+}
