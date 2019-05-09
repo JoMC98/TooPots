@@ -1,8 +1,11 @@
 package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.UsersDao;
+import es.uji.ei1027.toopots.exceptions.LoginException;
 import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.validator.LoginValidator;
 import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +42,15 @@ public class UserController {
     public String processUpdatePasswdSubmit(@PathVariable int id, @ModelAttribute("newUser") Users newUser, BindingResult bindingResult) {
 
         Users user = userDao.getUser(id);
+
+        LoginValidator loginValidator = new LoginValidator();
+        loginValidator.validate(newUser, bindingResult);
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.toString());
+            return "updatePasswd";
+        }
+
+
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
