@@ -107,7 +107,7 @@ footer {
     font-weight: bold;
 }
 #loginArea {
-    background-color: #E0E8A0;
+    background-color: #cde2b1;
     border: 1px black solid;
     width: 500px;
     margin: auto;
@@ -117,15 +117,15 @@ footer {
 }
 .loginInput {
     padding: 0px 10px;
-    background-color: #E1E5AC;
+    background-color: #C9DBB1;
 }
 .loginInput:focus {
-    background-color: #C4C796;
+    background-color: #B8CAA0;
 }
 .loginInput:-webkit-autofill,
 .loginInput:-webkit-autofill:hover,
 .loginInput:-webkit-autofill:active  {
-    -webkit-box-shadow: 0 0 0 30px #E1E5AC inset !important;
+    -webkit-box-shadow: 0 0 0 30px #C9DBB1 inset !important;
 }
 .otherLogin, .otherLogin:hover {
     padding: 0px 50px;
@@ -415,30 +415,64 @@ footer {
 
 /*Reserva*/
 .tablaTarifas{
-    margin: 20px;
-}
-.divTarifas{
     border: 1px black solid;
+    background-color: #EEEEEE;
+}
+.tdPaddingTop {
+    padding-top: 20px;
+}
+.tdPaddingLeftRight {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.tdPaddingBottom {
+    padding-bottom: 20px;
 }
 .tarifaName {
     text-align: left;
 }
 .activityFotoReserva {
-    width: 350px;
-    height: 210px;
+    width: 400px;
+    height: 240px;
 }
 .tdActivityFotoReserva {
     vertical-align: top !important;
     padding-right: 30px;
+    width: 35%px;
+    padding-left: 50px;
 }
 .tdTarifasReserva {
-    padding-right: 200px;
+    width: 40%;
 }
 .divInicioTarifas {
-    background-color: #A6A6A6;
+    background-color: #cde2b1;
     padding: 20px 0px;
     width: 100%;
     vertical-align: top;
+}
+.tdRelleno {
+    width: 25%;
+}
+.actividadNameReserva {
+    text-align: left;
+}
+.tablaNumeroPersonas {
+    margin-left: 35%;
+}
+.divResumenReserva {
+    border: 1px black solid;
+    padding: 30px;
+    background-color: #cde2b1;
+    display: inline-block;
+}
+.tdSummary {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.tdSummaryTitle {
+    padding-bottom: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 /*Content alineado arriba*/

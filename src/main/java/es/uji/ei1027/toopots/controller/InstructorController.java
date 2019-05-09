@@ -447,6 +447,8 @@ public class InstructorController {
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
             ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
+            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+
             List<Reservation> reservations = reservationDao.getReserves(ac.getId());
             float total = 0;
             for (Reservation res: reservations) {
@@ -458,7 +460,6 @@ public class InstructorController {
             int ocupation = (int) total;
             ac.setOcupation(ocupation);
 
-            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
             activitiesWithOcupation.add(ac);
         }
         model.addAttribute("activities", activitiesWithOcupation);

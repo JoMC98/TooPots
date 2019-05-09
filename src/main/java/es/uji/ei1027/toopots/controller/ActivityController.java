@@ -5,7 +5,6 @@ import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.model.Activity;
-import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
 import es.uji.ei1027.toopots.validator.ActivityValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.Time;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
+import java.util.*;
 
 @Controller
 @RequestMapping("/activity")
@@ -326,11 +320,69 @@ public class ActivityController {
     }
 
     //Reservar una activitat
-    @RequestMapping("/book")
-    public String bookActivity(Model model) {
+    @RequestMapping("/book/{id}")
+    public String bookActivity(Model model, @PathVariable int id) {
+        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+        Activity activity = activityDao.getActivity(id);
+        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
+        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+        model.addAttribute("reservation", new Reservation());
+        model.addAttribute("activity", activity);
+        model.addAttribute("rates", rates);
         return "activity/book";
     }
 
+    //Modificar dades reserva
+    @RequestMapping(value="/book/{id}", method = RequestMethod.POST)
+    public String dataBookModification(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+        Activity activity = activityDao.getActivity(id);
+        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
+        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+        System.out.println(reservation);
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("activity", activity);
+        model.addAttribute("rates", rates);
+        return "activity/book";
+    }
+
+    //Mostrar resum reserva
+    @RequestMapping(value="/summary/{id}", method = RequestMethod.POST)
+    public String summaryBooking(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+        Activity activity = activityDao.getActivity(id);
+        Random r = new Random();
+
+        HashMap<String, Float> t = new HashMap<String, Float>();
+        for (ActivityRates rate: rates) {
+            t.put(rate.getRateName(), rate.getPrice());
+        }
+
+        List<SummaryPrice> prices = reservationDao.calcularPrecio(reservation, activity, t);
+
+        boolean grupo = prices.get(0).isGrupo();
+        float totalPrice = 0;
+        for (SummaryPrice price: prices) {
+            totalPrice += price.getTotalPrice();
+        }
+        reservation.setTotalPrice(totalPrice);
+        reservation.setIdActivity(id);
+        reservation.setTransactionNumber(r.nextInt());
+
+        System.out.println(reservation);
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("activity", activity);
+        model.addAttribute("rates", rates);
+        model.addAttribute("prices", prices);
+        model.addAttribute("grupo", grupo);
+        model.addAttribute("totalPrice", totalPrice);
+
+        return "activity/summary";
+    }
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

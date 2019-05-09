@@ -4,99 +4,87 @@
       layout:decorate="~{fragments/base}">
     <head>
         <title>Reservar activitat</title>
-        <meta charset="UTF-8" />
+        <meta charset="UTF-8"/>
     </head>
     <body layout:fragment="content">
         <div class="divInicioTarifas">
             <table class="marginAuto">
                 <tr>
                     <td rowspan="2" class="tdActivityFotoReserva">
-                        <img src="/images/activityTypes/Alpinisme_Baix.jpg" class="activityFotoReserva">
+                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFotoReserva">
                     </td>
                     <td class="tdTarifasReserva">
-                        <h1>Senderisme en la muntanya</h1>
+                        <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
                     </td>
+                    <td rowspan="2" class="tdRelleno"></td>
                 </tr>
+                <!--<div th:each="pais: ${classificacions.keySet()}">-->
                 <tr>
                     <td class="tdTarifasReserva">
-                        <div class="divTarifas">
-                            <table class="tablaTarifas">
-                                <tr>
-                                    <td><b>Tarifa</b></td>
-                                    <td><b>Precio por persona</b></td>
-                                </tr>
-                                <tr>
-                                    <td class="tarifaName">Adultos</td>
-                                    <td>20 €</td>
-                                </tr>
-                                <tr>
-                                    <td class="tarifaName">Menors de 16 anys</td>
-                                    <td>20 €</td>
-                                </tr>
-                                <tr>
-                                    <td class="tarifaName">Estudiants</td>
-                                    <td>20 €</td>
-                                </tr>
-                                <tr>
-                                    <td class="tarifaName">Majors de 60 anys</td>
-                                    <td>20 €</td>
-                                </tr>
-                                <tr>
-                                    <td class="tarifaName">Grups de 10 persones o mes</td>
-                                    <td>20 €</td>
-                                </tr>
-                            </table>
-                        </div>
+                        <table class="tablaTarifas">
+                            <tr>
+                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
+                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
+                            </tr>
+                            <tr class="tdPaddingLeftRight">
+                                <td class="tarifaName tdPaddingLeftRight">Adults</td>
+                                <td class="tdPaddingLeftRight" th:text="${activity.pricePerPerson}"></td>
+                            </tr>
+                            <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
+                                <td class="tarifaName tdPaddingLeftRight" th:text="${rate.rateName}"></td>
+                                <td class="tdPaddingLeftRight" th:text="${rate.price}"></td>
+                            </tr>
+                            <tr>
+                                <td class="tdPaddingBottom"></td>
+                                <td class="tdPaddingBottom"></td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
         </div>
-
         <br><br>
-        <table class="marginAuto">
-            <tr>
-                <td>
-                    <table>
-                        <tr>
-                            <td>
-                                <label>Nombre d'adults</label>
-                            </td>
-                            <td>
-                                <input type="text" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Nombre de menors de 16 anys</label>
-                            </td>
-                            <td>
-                                <input type="text" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Nombre d'estudiants</label>
-                            </td>
-                            <td>
-                                <input type="text" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label>Nombre de majors de 60 anys</label>
-                            </td>
-                            <td>
-                                <input type="text" />
-                            </td>
-                        </tr>
-
-                    </table>
-                </td>
-                <td>
-
-                </td>
-            </tr>
-        </table>
-
+        <form action="#" th:action="@{/activity/summary/{id}(id=${activity.id})}" method="post">
+            <table class="tablaNumeroPersonas">
+                <tr>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre d'adults</label>
+                    </td>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre de menors de 16 anys</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="input inputPequeño" type="number" th:field="${reservation.numAdults}"/>
+                    </td>
+                    <td>
+                        <input class="input inputPequeño" type="number" th:field="${reservation.numUnder16}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre d'estudiants</label>
+                    </td>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre de majors de 60 anys</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="input inputPequeño" type="number" th:field="${reservation.numStudents}"/>
+                    </td>
+                    <td>
+                        <input class="input inputPequeño" type="number" th:field="${reservation.numOver60}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br>
+                        <input class="btn btn-success" type="submit" value="Reservar" />
+                    </td>
+                </tr>
+            </table>
+        </form>
     </body>
 </html>
