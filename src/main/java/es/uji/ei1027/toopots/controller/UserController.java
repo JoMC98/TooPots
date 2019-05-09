@@ -39,18 +39,15 @@ public class UserController {
 
     //Processa la informació de la actualització de contrasenya
     @RequestMapping(value="/updatePasswd", method = RequestMethod.POST)
-    public String processUpdatePasswdSubmit(@PathVariable int id, @ModelAttribute("newUser") Users newUser, BindingResult bindingResult) {
-
-        Users user = userDao.getUser(id);
+    public String processUpdatePasswdSubmit(HttpSession session, @ModelAttribute("newUser") Users newUser, BindingResult bindingResult) {
+        Users user = (Users) session.getAttribute("user");
 
         LoginValidator loginValidator = new LoginValidator();
         loginValidator.validate(newUser, bindingResult);
         if (bindingResult.hasErrors()) {
             System.out.println(bindingResult.toString());
-            return "updatePasswd";
+            return "user/updatePasswd";
         }
-
-
 
         BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
