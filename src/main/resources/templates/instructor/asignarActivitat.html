@@ -9,7 +9,7 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <h1>Assignar activitat a</h1><br>
+        <br><br><h1>Assignar activitat a</h1><br>
         <h1 th:text="${instructor.name}"></h1><br><br><br>
         <form action="#" th:action="@{/instructor/asignarActivitat/{id}(id=${instructor.id})}" method="post">
             <table class="marginAuto">

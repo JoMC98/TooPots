@@ -9,7 +9,8 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <div class="center">
+        <br>
+        <div class="center verticalAlignLogin">
             <div th:if="${#strings.equals(name,'LoginException')}">
                 <div class="alertaLogin alert-info">
                     <h2 class="alertaLoginText" th:text="${message}"></h2><br>

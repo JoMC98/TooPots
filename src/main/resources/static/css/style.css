@@ -445,3 +445,11 @@ footer {
 .bodyVerticalTop {
     vertical-align: top;
 }
+
+/*Content alineado en medio*/
+.verticalAlignAdminHome {
+    padding-top: 18%;
+}
+.verticalAlignLogin {
+     padding-top: 7.5%;
+ }
