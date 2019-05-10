@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Cancel·lar activitat</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body layout:fragment="content">
+<br><br><h1>Cancel·lar Activitat</h1><br>
+<form action="#" th:action="@{/activity/cancel/{id}(id=${activity.id})}" method="post" enctype="multipart/form-data">
+    <table class="marginAuto" th:object="${activity}">
+
+        <tr>
+            <td colspan="2"><label class="inputLabel inputDoble">Motiu cancel·lació</label></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea class="input inputDoble inputAlto" rows="2" cols="50"  th:errorclass="needCorrection" th:field="*{description}" maxlength="100"></textarea>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <input class="btn btn-danger" type="submit" value="Cancel·lar" />
+</form>
+</body>
+</html>

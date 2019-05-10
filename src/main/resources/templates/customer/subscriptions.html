@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Subscripció a les activitats</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+<body layout:fragment="content">
+<br>
+<table class="marginAuto tableBotonAddLista">
+    <tr>
+        <td class="tdBotonAddLista"></td>
+        <td><h1>Tipus d'Activitats</h1></td>
+    </tr>
+</table>
+<br>
+<div th:if="${#lists.isEmpty(activityTypes)}">
+    No hi cap tipus d'activitat per subscriures
+</div>
+<div th:unless="${#lists.isEmpty(activityTypes)}">
+    <table class="table_bordered" th:each="activityType: ${#lists.sort(activityTypes)}">
+        <tr>
+            <td rowspan="2" class="tdListIzquierda tdListArriba tdListAbajo">
+                <div class="activityFoto">
+                    <img th:src="@{*{activityType.photo}}" class="activityFoto"/>
+                </div>
+            </td>
+            <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
+            <td colspan="2"><label class="inputLabel inputDoble">Descripció</label></td>
+            <td class="tdListCentroAbajo tdListArriba tdListBotones">
+                <a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Edita</a>
+            </td>
+        </tr>
+        <tr>
+            <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                <b>Nivell: </b>
+                <label th:text="${activityType.level}"></label>
+            </td>
+            <td class="listCertificados" th:text="${activityType.description}"></td>
+
+
+
+        </tr>
+    </table>
+</div>
+<br>
+</body>
+</html>
