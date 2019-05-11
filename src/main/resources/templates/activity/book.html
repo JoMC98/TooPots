@@ -56,10 +56,10 @@
                 </tr>
                 <tr>
                     <td>
-                        <input class="input inputPequeño" type="number" th:field="${reservation.numAdults}"/>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numAdults}" min="0"/>
                     </td>
                     <td>
-                        <input class="input inputPequeño" type="number" th:field="${reservation.numUnder16}"/>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numUnder16}" min="0"/>
                     </td>
                 </tr>
                 <tr>
@@ -72,10 +72,10 @@
                 </tr>
                 <tr>
                     <td>
-                        <input class="input inputPequeño" type="number" th:field="${reservation.numStudents}"/>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numStudents}" min="0"/>
                     </td>
                     <td>
-                        <input class="input inputPequeño" type="number" th:field="${reservation.numOver60}"/>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numOver60}" min="0"/>
                     </td>
                 </tr>
                 <tr>

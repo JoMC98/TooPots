@@ -6,6 +6,7 @@ import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.validator.ActivityValidator;
+import es.uji.ei1027.toopots.validator.ReservationValidator;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -321,16 +322,25 @@ public class ActivityController {
 
     //Reservar una activitat
     @RequestMapping("/book/{id}")
-    public String bookActivity(Model model, @PathVariable int id) {
-        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
-        Activity activity = activityDao.getActivity(id);
-        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
-        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+    public String bookActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/book/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+            Activity activity = activityDao.getActivity(id);
+            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
+            activity.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-        model.addAttribute("reservation", new Reservation());
-        model.addAttribute("activity", activity);
-        model.addAttribute("rates", rates);
-        return "activity/book";
+            model.addAttribute("reservation", new Reservation());
+            model.addAttribute("activity", activity);
+            model.addAttribute("rates", rates);
+            return "activity/book";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Modificar dades reserva
@@ -341,47 +351,106 @@ public class ActivityController {
         ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
         activity.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-        System.out.println(reservation);
-
         model.addAttribute("reservation", reservation);
         model.addAttribute("activity", activity);
         model.addAttribute("rates", rates);
         return "activity/book";
     }
 
+    @RequestMapping(value="/summary/{id}")
+    public String summaryBooking(@PathVariable int id) {
+        return "redirect:/home";
+    }
+
     //Mostrar resum reserva
     @RequestMapping(value="/summary/{id}", method = RequestMethod.POST)
-    public String summaryBooking(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
-        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
-        Activity activity = activityDao.getActivity(id);
-        Random r = new Random();
+    public String processSummaryBooking(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/summary/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            ReservationValidator reservationValidator = new ReservationValidator();
+            reservationValidator.validate(reservation, bindingResult);
 
-        HashMap<String, Float> t = new HashMap<String, Float>();
-        for (ActivityRates rate: rates) {
-            t.put(rate.getRateName(), rate.getPrice());
+            if (bindingResult.hasErrors()) {
+                List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+                Activity activity = activityDao.getActivity(id);
+                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
+                activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+                model.addAttribute("activity", activity);
+                model.addAttribute("rates", rates);
+                System.out.println(bindingResult.toString());
+                return "activity/book";
+            }
+
+
+            List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+            Activity activity = activityDao.getActivity(id);
+
+            HashMap<String, Float> t = new HashMap<String, Float>();
+            for (ActivityRates rate: rates) {
+                t.put(rate.getRateName(), rate.getPrice());
+            }
+
+            List<SummaryPrice> prices = reservationDao.calcularPrecio(reservation, activity, t);
+
+            boolean grupo = prices.get(0).isGrupo();
+            float totalPrice = 0;
+            for (SummaryPrice price: prices) {
+                totalPrice += price.getTotalPrice();
+            }
+            reservation.setTotalPrice(totalPrice);
+            reservation.setIdActivity(id);
+
+            model.addAttribute("reservation", reservation);
+            model.addAttribute("activity", activity);
+            model.addAttribute("rates", rates);
+            model.addAttribute("prices", prices);
+            model.addAttribute("grupo", grupo);
+            model.addAttribute("totalPrice", totalPrice);
+
+            return "activity/summary";
+        } else {
+            return "redirect:/";
         }
 
-        List<SummaryPrice> prices = reservationDao.calcularPrecio(reservation, activity, t);
+    }
 
-        boolean grupo = prices.get(0).isGrupo();
-        float totalPrice = 0;
-        for (SummaryPrice price: prices) {
-            totalPrice += price.getTotalPrice();
+    @RequestMapping(value="/bookConfirmation/{id}")
+    public String confirmBooking(@PathVariable int id) {
+        return "redirect:/home";
+    }
+
+    //Confirmar reserva
+    @RequestMapping(value="/bookConfirmation/{id}", method = RequestMethod.POST)
+    public String processConfirmBooking(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/bookConfirmation/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Random r = new Random();
+            int trans = r.nextInt();
+            if (trans < 0) {
+                trans *= -1;
+            }
+            reservation.setTransactionNumber(trans);
+            reservation.setIdActivity(id);
+            Users user = (Users) session.getAttribute("user");
+            reservation.setIdCustomer(user.getId());
+
+            System.out.println(reservation);
+            reservationDao.addReservation(reservation);
+
+            return "redirect:../..";
+        } else {
+            return "redirect:/";
         }
-        reservation.setTotalPrice(totalPrice);
-        reservation.setIdActivity(id);
-        reservation.setTransactionNumber(r.nextInt());
 
-        System.out.println(reservation);
-
-        model.addAttribute("reservation", reservation);
-        model.addAttribute("activity", activity);
-        model.addAttribute("rates", rates);
-        model.addAttribute("prices", prices);
-        model.addAttribute("grupo", grupo);
-        model.addAttribute("totalPrice", totalPrice);
-
-        return "activity/summary";
     }
 
     private int controlarAcceso(HttpSession session, String rol) {

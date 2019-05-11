@@ -49,11 +49,26 @@
             <tr>
                 <td class="tdGrupos">
                     <form action="#" th:action="@{/activity/book/{id}(id=${activity.id})}" method="post">
+                        <div hidden>
+                            <input type="text" th:field="${reservation.numAdults}"/>
+                            <input type="text" th:field="${reservation.numUnder16}"/>
+                            <input type="text" th:field="${reservation.numStudents}"/>
+                            <input type="text" th:field="${reservation.numOver60}"/>
+                        </div>
                         <input class="btn btn-warning" value="Modificar dades" type="submit">
                     </form>
                 </td>
                 <td class="tdGrupos">
-                    <a th:href="@{/}" class="btn btn-success">Confirmar reserva</a>
+                    <form action="#" th:action="@{/activity/bookConfirmation/{id}(id=${activity.id})}" method="post">
+                        <div hidden>
+                            <input type="text" th:field="${reservation.numAdults}"/>
+                            <input type="text" th:field="${reservation.numUnder16}"/>
+                            <input type="text" th:field="${reservation.numStudents}"/>
+                            <input type="text" th:field="${reservation.numOver60}"/>
+                            <input type="text" th:field="${reservation.totalPrice}"/>
+                        </div>
+                        <input class="btn btn-success" value="Confirmar reserva" type="submit">
+                    </form>
                 </td>
             </tr>
         </table>

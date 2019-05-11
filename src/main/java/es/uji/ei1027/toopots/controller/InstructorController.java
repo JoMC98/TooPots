@@ -39,9 +39,7 @@ public class InstructorController {
     private InstructorDao instructorDao;
     private UsersDao userDao;
     private ActivityDao activityDao;
-    private ActivityTypeDao activityTypeDao;
     private CertificationDao certificationDao;
-    private ActivityCertificationDao activityCertificationDao;
     private ReservationDao reservationDao;
     private ActivityPhotosDao activityPhotosDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
@@ -63,13 +61,7 @@ public class InstructorController {
     public void setActivityDao(ActivityDao activityDao){this.activityDao=activityDao;}
 
     @Autowired
-    public void setActivityTypeDao(ActivityTypeDao activityTypeDao){this.activityTypeDao=activityTypeDao;}
-
-    @Autowired
     public void setCertificationDao(CertificationDao certificationDao){this.certificationDao=certificationDao;}
-
-    @Autowired
-    public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
     @Autowired
     public void setActivityPhotosDao(ActivityPhotosDao activityPhotosDao) {
@@ -79,57 +71,6 @@ public class InstructorController {
     @Autowired
     public void setReservationDao(ReservationDao reservationDao) {
         this.reservationDao=reservationDao;
-    }
-
-    /*PART QUE UTILITZA EL ADMINISTRADOR*/
-
-    //Llistar tots els instructors
-    @RequestMapping("/list")
-    public String listInstructors(HttpSession session, Model model) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/list");
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            List<Users> users = userDao.getInstructors();
-            List<Instructor> instructors = new ArrayList<Instructor>();
-            for (Users us: users) {
-                Instructor ins = instructorDao.getInstructor(us.getId());
-                ins.setName(us.getName());
-                ins.setActivities(activityCertificationDao.getAuthorizations(us.getId()));
-                instructors.add(ins);
-            }
-            model.addAttribute("instructors", instructors);
-            return "instructor/list";
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Llistar totes les sol·licituds
-
-    @RequestMapping("/listRequests")
-    public String listRequests(HttpSession session, Model model) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/listRequests");
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            List<Users> users = userDao.getRequests();
-            List<Instructor> instructors = new ArrayList<Instructor>();
-            for (Users us: users) {
-                Instructor ins = instructorDao.getInstructor(us.getId());
-                ins.setName(us.getName());
-                ins.setCertifications(certificationDao.getCertifications(us.getId()));
-                instructors.add(ins);
-            }
-            model.addAttribute("instructors", instructors);
-            return "instructor/listRequests";
-        } else {
-            return "redirect:/";
-        }
     }
 
     //Esborra un instructor
@@ -148,160 +89,6 @@ public class InstructorController {
             return "redirect:/";
         }
     }
-
-    //Veure perfil monitor
-    @RequestMapping("/profile/{id}")
-    public String seeInstructor(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/profile/" + id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
-            if (user.getRol().equals("Instructor")) {
-                Instructor ins = instructorDao.getInstructor(id);
-                ins.setCertifications(certificationDao.getCertifications(id));
-                ins.setActivities(activityCertificationDao.getAuthorizations(id));
-                model.addAttribute("user", userDao.getUser(id));
-                model.addAttribute("instructor", ins);
-                return "instructor/profile";
-            } else {
-                return "redirect:/";
-            }
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Veure solicitud monitor
-    @RequestMapping("/request/{id}")
-    public String seeInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/request/" + id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
-            if (user.getRol().equals("Request")) {
-                Instructor ins = instructorDao.getInstructor(id);
-                ins.setCertifications(certificationDao.getCertifications(id));
-                model.addAttribute("user", userDao.getUser(id));
-                model.addAttribute("instructor", ins);
-                return "instructor/request";
-            } else {
-                return "redirect:/";
-            }
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Acceptar solicitud monitor
-    @RequestMapping("/accept/{id}")
-    public String acceptInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/accept/" + id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
-            if (user.getRol().equals("Request")) {
-                userDao.updateRole(id, "Instructor");
-                return "redirect:/instructor/listRequests";
-            } else {
-                return "redirect:/";
-            }
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Rebutjar solicitud monitor
-    @RequestMapping("/reject/{id}")
-    public String rejectInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/reject/" + id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
-            if (user.getRol().equals("Request")) {
-                userDao.updateRole(id, "Rejected");
-                return "redirect:/instructor/listRequests";
-            } else {
-                return "redirect:/";
-            }
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Assignar activitat a monitor
-    @RequestMapping(value="/asignarActivitat/{id}", method= RequestMethod.GET)
-    public String asignarActivitats(HttpSession session, Model model, @PathVariable int id){
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/asignarActivitat/" + id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
-            if (user.getRol().equals("Instructor")) {
-                List<Certification> certifications = certificationDao.getCertifications(id);
-                List<ActivityType> todas = activityTypeDao.getActivityTypes();
-                List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(id);
-                todas.removeAll(asignadas);
-
-                Instructor instructor = instructorDao.getInstructor(id);
-                instructor.setName(user.getName());
-                instructor.setCertifications(certifications);
-                instructor.setActivities(todas);
-
-                model.addAttribute("instructor", instructor);
-                model.addAttribute("authorization", new ActivityCertification());
-                return "instructor/asignarActivitat";
-            } else {
-                return "redirect:/";
-            }
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Processa la informació del assignar activitat
-    @RequestMapping(value="/asignarActivitat/{id}", method = RequestMethod.POST)
-    public String processAsignarSubmit(Model model, @PathVariable int id, @ModelAttribute("instructor") Instructor instructor,
-                                       @ModelAttribute("authorization") ActivityCertification authorization,
-                                       BindingResult bindingResult) {
-
-        ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
-        activityCertificationValidator.validate(authorization,bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            List<Certification> certifications = certificationDao.getCertifications(id);
-            List<ActivityType> todas = activityTypeDao.getActivityTypes();
-            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(id);
-            todas.removeAll(asignadas);
-
-            Users user = userDao.getUser(id);
-            instructor.setName(user.getName());
-            instructor.setCertifications(certifications);
-            instructor.setActivities(todas);
-
-            model.addAttribute("instructor", instructor);
-            return "instructor/asignarActivitat";
-        }
-        activityCertificationDao.addActivityCertification(authorization);
-
-        return "redirect:/instructor/profile/" + id;
-    }
-
-
-    /*PART QUE UTILITZA UN INSTRUCTOR*/
 
     //Afegir un nou instructor
     @RequestMapping("/add")
@@ -418,10 +205,20 @@ public class InstructorController {
     //Actualitzar un instructor
     @RequestMapping(value="/update", method = RequestMethod.GET)
     public String editInstructor(Model model, HttpSession session) {
-        Users user = (Users) session.getAttribute("user");
-        model.addAttribute("user", userDao.getUser(user.getId()));
-        model.addAttribute("instructor", instructorDao.getInstructor(user.getId()));
-        return "instructor/update";
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/instructor/update");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            model.addAttribute("user", userDao.getUser(user.getId()));
+            model.addAttribute("instructor", instructorDao.getInstructor(user.getId()));
+            return "instructor/update";
+        } else {
+            return "redirect:/";
+        }
+
     }
 
     //Processa la informació del update
@@ -440,30 +237,40 @@ public class InstructorController {
     //Llistar totes les activitats del monitor
     @RequestMapping("/listActivities")
     public String listActivities(Model model, HttpSession session) {
-        Users user = (Users) session.getAttribute("user");
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/instructor/listActivities");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
 
-        List<Activity> activities = activityDao.getActivities(user.getId());
+            List<Activity> activities = activityDao.getActivities(user.getId());
 
-        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
-        for (Activity ac: activities) {
-            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
-            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+            List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+            for (Activity ac: activities) {
+                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
+                ac.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
-            float total = 0;
-            for (Reservation res: reservations) {
-                total += res.getNumPeople();
+                List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+                float total = 0;
+                for (Reservation res: reservations) {
+                    total += res.getNumPeople();
+                }
+
+                total = (total/ac.getMaxNumberPeople())*100;
+                total = (float) Math.floor(total);
+                int ocupation = (int) total;
+                ac.setOcupation(ocupation);
+
+                activitiesWithOcupation.add(ac);
             }
-
-            total = (total/ac.getMaxNumberPeople())*100;
-            total = (float) Math.floor(total);
-            int ocupation = (int) total;
-            ac.setOcupation(ocupation);
-
-            activitiesWithOcupation.add(ac);
+            model.addAttribute("activities", activitiesWithOcupation);
+            return "instructor/listActivities";
+        } else {
+            return "redirect:/";
         }
-        model.addAttribute("activities", activitiesWithOcupation);
-        return "instructor/listActivities";
+
     }
 
     private int controlarAcceso(HttpSession session, String rol) {

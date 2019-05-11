@@ -11,7 +11,7 @@
     <body layout:fragment="content">
         <br><br><h1>Assignar activitat a</h1><br>
         <h1 th:text="${instructor.name}"></h1><br><br><br>
-        <form action="#" th:action="@{/instructor/asignarActivitat/{id}(id=${instructor.id})}" method="post">
+        <form action="#" th:action="@{/admin/asignarActivitat/{id}(id=${instructor.id})}" method="post">
             <table class="marginAuto">
                 <tr>
                     <td class="tdAsignacio"><label>Certificats</label></td>

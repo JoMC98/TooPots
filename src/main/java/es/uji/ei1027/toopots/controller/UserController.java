@@ -21,6 +21,10 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    private final static int NOT_LOGGED = 1;
+    private final static int USER_AUTHORIZED = 2;
+    private final static int USER_NOT_AUTHORIZED = 3;
+
     private UsersDao userDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
@@ -32,9 +36,19 @@ public class UserController {
     //Actualitzar contrasenya
     @RequestMapping(value="/updatePasswd", method = RequestMethod.GET)
     public String editPasswd(Model model, HttpSession session) {
-        Users user = (Users) session.getAttribute("user");
-        model.addAttribute("newUser", userDao.getUser(user.getId()));
-        return "user/updatePasswd";
+        int acceso = controlarAcceso(session);
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/user/updatePasswd");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            model.addAttribute("newUser", userDao.getUser(user.getId()));
+            return "user/updatePasswd";
+        } else {
+            return "redirect:/";
+        }
+
     }
 
     //Processa la informació de la actualització de contrasenya
@@ -60,6 +74,20 @@ public class UserController {
         }
         else {
             return "user/updatePasswd";
+        }
+    }
+
+
+    private int controlarAcceso(HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return NOT_LOGGED;
+        }
+        Users user = (Users) session.getAttribute("user");
+        String rol = user.getRol();
+        if (rol.equals("Instructor") || rol.equals("Customer")) {
+            return USER_AUTHORIZED;
+        } else {
+            return USER_NOT_AUTHORIZED;
         }
     }
 
