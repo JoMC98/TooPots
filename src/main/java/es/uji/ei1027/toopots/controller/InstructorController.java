@@ -42,6 +42,8 @@ public class InstructorController {
     private CertificationDao certificationDao;
     private ReservationDao reservationDao;
     private ActivityPhotosDao activityPhotosDao;
+    private ActivityCertificationDao activityCertificationDao;
+
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Value("${upload.file.directory}")
@@ -72,6 +74,9 @@ public class InstructorController {
     public void setReservationDao(ReservationDao reservationDao) {
         this.reservationDao=reservationDao;
     }
+
+    @Autowired
+    public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
     //Esborra un instructor
     @RequestMapping(value="/delete/{id}")
@@ -234,7 +239,7 @@ public class InstructorController {
         return "redirect:../list";
     }
 
-    //Llistar totes les activitats del monitor
+    //Llistat de totes les activitats del monitor per a ell
     @RequestMapping("/listActivities")
     public String listActivities(Model model, HttpSession session) {
         int acceso = controlarAcceso(session, "Instructor");
@@ -272,6 +277,54 @@ public class InstructorController {
         }
 
     }
+
+    //Llistat de totes les activitats del monitor per als clients
+    @RequestMapping("/showActivities/{id}")
+    public String activityListForCustomers(Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+
+        List<Activity> activities = activityDao.getActivities(user.getId());
+
+        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+        for (Activity ac: activities) {
+            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
+            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            float total = 0;
+            for (Reservation res: reservations) {
+                total += res.getNumPeople();
+            }
+
+            total = (total/ac.getMaxNumberPeople())*100;
+            total = (float) Math.floor(total);
+            int ocupation = (int) total;
+            ac.setOcupation(ocupation);
+
+            activitiesWithOcupation.add(ac);
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("activities", activitiesWithOcupation);
+        return "instructor/showActivities";
+
+    }
+
+    //Veure perfil monitor
+    @RequestMapping("/profile/{id}")
+    public String seeInstructor(Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user.getRol().equals("Instructor")) {
+            Instructor ins = instructorDao.getInstructor(id);
+            ins.setCertifications(certificationDao.getCertifications(id));
+            ins.setActivities(activityCertificationDao.getAuthorizations(id));
+            model.addAttribute("user", userDao.getUser(id));
+            model.addAttribute("instructor", ins);
+            return "instructor/profile";
+        } else {
+            return "redirect:/";
+        }
+    }
+
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

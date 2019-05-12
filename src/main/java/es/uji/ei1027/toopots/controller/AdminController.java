@@ -217,16 +217,16 @@ public class AdminController {
         }
         activityCertificationDao.addActivityCertification(authorization);
 
-        return "redirect:/admin/profile/" + id;
+        return "redirect:/admin/instructorProfile/" + id;
     }
 
     //Veure perfil monitor
-    @RequestMapping("/profile/{id}")
+    @RequestMapping("/instructorProfile/{id}")
     public String seeInstructor(HttpSession session, Model model, @PathVariable int id) {
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/admin/profile/" + id);
+            session.setAttribute("nextUrl", "/admin/instructorProfile/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = userDao.getUser(id);
@@ -236,7 +236,7 @@ public class AdminController {
                 ins.setActivities(activityCertificationDao.getAuthorizations(id));
                 model.addAttribute("user", userDao.getUser(id));
                 model.addAttribute("instructor", ins);
-                return "admin/profile";
+                return "admin/instructorProfile";
             } else {
                 return "redirect:/";
             }
@@ -246,12 +246,12 @@ public class AdminController {
     }
 
     //Veure solicitud monitor
-    @RequestMapping("/request/{id}")
+    @RequestMapping("/instructorRequest/{id}")
     public String seeInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/admin/request/" + id);
+            session.setAttribute("nextUrl", "/admin/instructorRequest/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = userDao.getUser(id);
@@ -260,7 +260,7 @@ public class AdminController {
                 ins.setCertifications(certificationDao.getCertifications(id));
                 model.addAttribute("user", userDao.getUser(id));
                 model.addAttribute("instructor", ins);
-                return "admin/request";
+                return "admin/instructorRequest";
             } else {
                 return "redirect:/";
             }

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Gestionar Activitats</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+    <body layout:fragment="content">
+        <br>
+        <table class="marginAuto tableBotonAddLista">
+            <tr>
+                <td class="tdBotonAddLista"></td>
+                <td>
+                    <h1>Llista d'activitats del monitor</h1><br>
+                    <h3 th:text="${user.name}"></h3>
+                </td>
+                <td class="tdBotonAddLista"><a th:href="@{/instructor/profile/{id}(id=${user.id})}" class="btn btn-warning" role="button">Perfil</a></td>
+            </tr>
+        </table>
+        <br>
+        <table class="table_bordered" th:each="activity: ${activities}">
+            <tr>
+                <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
+                    <div class="activityFoto">
+                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
+                    </div>
+                </td>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="tdListCentroArriba tdListTexto">
+                    <label th:text="${activity.place}"></label>
+                </td>
+                <td class="tdListCentroAbajo tdListAbajo tdListBotones">
+                    <a th:href="@{/activity/book/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Reservar</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdListCentroArriba tdListTexto">
+                    <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
+                </td>
+                <td class="tdListCentroArriba tdListArriba tdListBotones">
+                    <a th:href="@{/}" class="btn btn-info listBoton" role="button">+ info</a>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                    <label th:text="${activity.ocupation}"></label>
+                    <label> %</label>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+    </body>
+</html>

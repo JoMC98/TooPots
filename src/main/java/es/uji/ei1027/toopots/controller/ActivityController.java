@@ -443,7 +443,6 @@ public class ActivityController {
             Users user = (Users) session.getAttribute("user");
             reservation.setIdCustomer(user.getId());
 
-            System.out.println(reservation);
             reservationDao.addReservation(reservation);
 
             return "redirect:../..";
