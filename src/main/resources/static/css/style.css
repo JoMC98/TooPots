@@ -199,11 +199,19 @@ footer {
     width: 150px;
     height: 150px;
 }
+.profileFotoSpace {
+    border: 1px black solid;
+    margin: 0px 0px 5px 43px;
+}
 
 /*Fotos actividades*/
 .activityFoto {
     width: 250px;
     height: 150px;
+}
+.activityFotoSpace {
+    border: 1px black solid;
+    margin: 0px 14px 5px 10px;
 }
 
 /*Tarifas*/

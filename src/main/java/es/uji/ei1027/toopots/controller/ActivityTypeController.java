@@ -2,6 +2,7 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
+import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Users;
 import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
@@ -119,7 +120,7 @@ public class ActivityTypeController {
         int acceso = controlarAccesoAdmin(session);
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/activityType/update");
+            session.setAttribute("nextUrl", "/activityType/update/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             model.addAttribute("activityType", activityTypeDao.getActivityType(id));
@@ -131,26 +132,29 @@ public class ActivityTypeController {
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
-            return "activityType/update";
+    public String processUpdateSubmit(Model model, @PathVariable int id, @RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType,
+                                      BindingResult bindingResult) {
 
-        try {
-            // Obtener el fichero y guardarlo
-            byte[] bytes = foto.getBytes();
+        ActivityType activityTypeOld = activityTypeDao.getActivityType(id);
+        if (!foto.isEmpty()) {
+            try {
+                // Obtener el fichero y guardarlo
+                byte[] bytes = foto.getBytes();
 
-            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
-            String direccion = "images/activityTypes/" + activityType.getName() + "_" + activityType.getLevel() + "." + extension;
+                String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+                String direccion = "images/activityTypes/" + activityTypeOld.getName() + "_" + activityTypeOld.getLevel() + "." + extension;
 
-            Path path = Paths.get(uploadDirectory + direccion);
-            activityType.setPhoto("/" + direccion);
+                Path path = Paths.get(uploadDirectory + direccion);
+                activityType.setPhoto("/" + direccion);
 
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
+                Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         activityTypeDao.updateActivityType(activityType);
+
         return "redirect:../list";
     }
 

@@ -299,18 +299,36 @@ public class ActivityController {
 
     //Actualitzar una activitat
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
-    public String editActivity(Model model, @PathVariable int id) {
-        model.addAttribute("activity", activityDao.getActivity(id));
-        return "activity/update";
+    public String editActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/activity/update/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+            Instructor instructor = instructorDao.getInstructor(user.getId());
+            instructor.setActivities(asignadas);
+            Activity activity = activityDao.getActivity(id);
+            List<ActivityPhotos> photos = activityPhotosDao.getPhotos(id);
+            model.addAttribute("activity", activity);
+            model.addAttribute("photos", photos);
+            model.addAttribute("instructor", instructor);
+            return "activity/update";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(@PathVariable int id, @ModelAttribute("activity") Activity activity, BindingResult bindingResult) {
+    public String processUpdateSubmit(HttpSession session, @PathVariable int id, @ModelAttribute("activity") Activity activity, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "activity/update";
+        Users user = (Users) session.getAttribute("user");
         activityDao.updateActivity(activity);
-        return "redirect:../list";
+        return "redirect:/instructor/listActivities";
     }
 
     //Esborra una activitat

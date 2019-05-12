@@ -9,43 +9,37 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><h1>Editar Tipus Activitat</h1><br>
+        <br><br><h1>Editar la Descripció i la Foto</h1><br>
         <form action="#" th:action="@{/activityType/update/{id}(id=${activityType.id})}" method="post" enctype="multipart/form-data">
             <table class="marginAuto" th:object="${activityType}">
                 <tr>
-                    <td><label class="inputLabel">Foto</label></td>
-                </tr>
-                <tr>
-                    <td class="marginAuto">
-                        <div class="activityFotoSpace activityFoto">
-                            <img th:src="@{*{photo}}" class="activityFoto" id="photo1"/>
-                        </div>
+                    <td colspan="2">
+                        <label class="inputLabel">Foto de perfil</label>
                     </td>
                 </tr>
                 <tr>
-                    <td class="marginAuto">
-                        <input type="file" accept="image/*" class="inputFoto" id="foto" name="foto"
-                               onChange="document.getElementById('photo1').src = window.URL.createObjectURL(this.files[0]);">
+                    <td colspan="2" class="marginAuto">
+                        <img th:src="@{*{photo}}" class="activityFoto"/>
                     </td>
                 </tr>
-            </table>
-            <br>
-            <table class="marginAuto" th:object="${activityType}">
+                <tr>
+                    <td colspan="2">
+                        <b><label class="inputLabel">Elige un nuevo archivo si quieres cambiar la imagen</label></b><br>
+                        <input class="inputAdjunto" name="foto" type="file" accept="image/*">
+                        <input th:field="*{photo}" hidden/>
+                    </td>
+                </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Nom</label></td>
                     <td><label class="inputLabel inputPequeño">Nivell</label></td>
 
                 </tr>
                 <tr>
-
-                    <td><input class="input inputPequeño" type="text" th:field="*{name}" maxlength="40"/></td>
-                    <td><select class = "input inputPequeño" type = "text"  th:field = "*{level}" >
-                        <option value = "No seleccionat" ></option>
-                        <option value = "Baix" > Baix </option>
-                        <option value = "Mitja" > Mitja </option>
-                        <option value = "Alt" > Alt </option>
-                        <option value = "Extrem" > Extrem </option>
-                    </select>
+                    <td>
+                        <label class="input inputPequeño inputText" th:text="*{name}"></label>
+                    </td>
+                    <td>
+                        <label class="input inputPequeño inputText" th:text="*{level}"></label>
                     </td>
                 </tr>
                 <tr>
@@ -58,7 +52,7 @@
                 </tr>
             </table>
             <br>
-            <input class="btn btn-success" type="submit" value="Editar activitat" />
+            <input class="btn btn-success" type="submit" value="Editar actividad" />
             <br><br><label class="inputLabel">* Camps no obligatoris</label>
         </form>
     </body>
