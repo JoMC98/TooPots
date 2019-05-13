@@ -57,8 +57,8 @@
                         <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
                     </div>
                 </td>
-                <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
-                <td rowspan="4" class="tdListArriba tdListAbajo tdListBotones">
+                <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
+                <td rowspan="4" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
                     <table>
                         <tr><td class="tdListCentroArribaAbajo"><a th:href="@{/activity/book/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Reservar</a></td></tr>
                         <tr><td class="tdListCentroArribaAbajo"><a th:href="@{/}" class="btn btn-info listBoton" role="button">+ info</a></td></tr>

@@ -17,7 +17,7 @@
             <table class="table_bordered" th:each="instructor: ${#lists.sort(instructors)}">
                 <tr>
                     <td class="tdListIzquierda tdListArriba tdListAbajo"><img class="profileFoto" th:src="@{*{instructor.photo}}"></td>
-                    <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto"><b th:text="${instructor.name}"></b></td>
+                    <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTextoName"><b th:text="${instructor.name}"></b></td>
                     <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto">
                         <b>Certificats</b>
                         <div class="listCertificados">

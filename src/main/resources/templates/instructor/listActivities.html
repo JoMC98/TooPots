@@ -25,7 +25,7 @@
                         <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
                     </div>
                 </td>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
                 <td class="tdListCentroAbajo tdListArriba tdListBotones">
                     <a th:href="@{/activity/update/{id}(id=${activity.id})}" class="btn btn-warning listBoton" >Editar</a>
                 </td>

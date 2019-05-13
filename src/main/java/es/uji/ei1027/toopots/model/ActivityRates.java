@@ -1,6 +1,7 @@
 package es.uji.ei1027.toopots.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class ActivityRates {
     private int idActivity;
@@ -9,6 +10,11 @@ public class ActivityRates {
 
     //Constructor
     public ActivityRates() {
+    }
+    public ActivityRates(int idActivity, String rateName, float price) {
+        this.idActivity = idActivity;
+        this.rateName = rateName;
+        this.price = price;
     }
 
     //Getters
@@ -47,5 +53,13 @@ public class ActivityRates {
                 ", rateName='" + rateName + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ActivityRates that = (ActivityRates) o;
+        return Float.compare(that.price, price) == 0;
     }
 }

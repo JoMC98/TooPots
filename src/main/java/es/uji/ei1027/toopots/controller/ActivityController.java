@@ -308,10 +308,27 @@ public class ActivityController {
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
             List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+            List<ActivityRates> tarifas = activityRatesDao.getActivityRates(id);
+
             Instructor instructor = instructorDao.getInstructor(user.getId());
             instructor.setActivities(asignadas);
             Activity activity = activityDao.getActivity(id);
             List<ActivityPhotos> photos = activityPhotosDao.getPhotos(id);
+
+            for (ActivityRates tarifa: tarifas) {
+                if(tarifa.getRateName().equals("Menors de 16 anys")) {
+                    activity.setTarifaMenores(tarifa);
+                }
+                else if(tarifa.getRateName().equals("Estudiants")) {
+                    activity.setTarifaEstudiantes(tarifa);
+                }
+                else if(tarifa.getRateName().equals("Majors de 60 anys")) {
+                    activity.setTarifaMayores(tarifa);
+                } else {
+                    activity.setTarifaGrupos(tarifa);
+                }
+            }
+
             model.addAttribute("activity", activity);
             model.addAttribute("photos", photos);
             model.addAttribute("instructor", instructor);
@@ -323,10 +340,73 @@ public class ActivityController {
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(HttpSession session, @PathVariable int id, @ModelAttribute("activity") Activity activity, BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+    public String processUpdateSubmit(Model model, HttpSession session, @PathVariable int id, @ModelAttribute("activity") Activity activity,
+                                      BindingResult bindingResult) {
+
+        ActivityValidator activityValidator = new ActivityValidator();
+        activityValidator.validate(activity, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            Users user = (Users) session.getAttribute("user");
+            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+            Instructor instructor = instructorDao.getInstructor(user.getId());
+            instructor.setActivities(asignadas);
+            model.addAttribute("instructor", instructor);
             return "activity/update";
+        }
+
         Users user = (Users) session.getAttribute("user");
+        activity.setIdInstructor(user.getId());
+
+        List<ActivityRates> tarifasOld = activityRatesDao.getActivityRates(id);
+        Activity activityOld = activityDao.getActivity(id);
+
+        for (ActivityRates tarifa: tarifasOld) {
+            if (tarifa.getRateName().equals("Menors de 16 anys")) {
+                activityOld.setTarifaMenores(tarifa);
+            } else if (tarifa.getRateName().equals("Estudiants")) {
+                activityOld.setTarifaEstudiantes(tarifa);
+            } else if (tarifa.getRateName().equals("Majors de 60 anys")) {
+                activityOld.setTarifaMayores(tarifa);
+            } else {
+                activityOld.setTarifaGrupos(tarifa);
+            }
+        }
+
+        List<ActivityRates> vieja = new LinkedList<ActivityRates>();
+        vieja.add(activityOld.getTarifaMenores());
+        vieja.add(activityOld.getTarifaEstudiantes());
+        vieja.add(activityOld.getTarifaMayores());
+        vieja.add(activityOld.getTarifaGrupos());
+
+        List<ActivityRates> nueva = new LinkedList<ActivityRates>();
+        nueva.add(activity.getTarifaMenores());
+        nueva.add(activity.getTarifaEstudiantes());
+        nueva.add(activity.getTarifaMayores());
+        nueva.add(activity.getTarifaGrupos());
+
+        for (int i=0; i<4; i++) {
+            ActivityRates tarifaNueva = nueva.get(i);
+            ActivityRates tarifaVieja = vieja.get(i);
+            tarifaNueva.setIdActivity(id);
+
+            //Si la tarifa cambia
+            if (! tarifaNueva.equals(tarifaVieja)) {
+                //Si ahora es 0, eliminar
+                if (tarifaNueva.getPrice() == 0) {
+                    activityRatesDao.deleteActivityRates(tarifaNueva);
+                }
+                //Si la de antes era 0, añadir
+                else if (tarifaVieja.getPrice() == 0) {
+                    activityRatesDao.addActivityRates(tarifaNueva);
+                }
+                //Sino modificar
+                else {
+                    activityRatesDao.updateActivityRates(tarifaNueva);
+                }
+            }
+        }
+
         activityDao.updateActivity(activity);
         return "redirect:/instructor/listActivities";
     }

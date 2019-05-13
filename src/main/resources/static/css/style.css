@@ -247,6 +247,9 @@ footer {
 .tdListTexto {
     width: 200px;
 }
+.tdListTextoName {
+    width: 300px;
+}
 .tdListCentroArribaAbajo {
     padding-top: 10px;
     padding-bottom: 10px;
