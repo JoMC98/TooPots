@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Perfil monitor</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+</head>
+    <body layout:fragment="content">
+        <br><h1>Perfil monitor</h1><br>
+        <table class="marginAuto">
+            <tr>
+                <td colspan="2" class="marginAuto">
+                    <img class="profileFoto" id="perfil" th:src="@{*{instructor.photo}}">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><label class="inputLabel inputDoble">Nom Complet</label></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label class="input inputDoble inputText" type="text" th:text="${user.name}"></label></td>
+            </tr>
+            <tr>
+                <td><label class="inputLabel inputPequeño">NIF</label></td>
+                <td><label class="inputLabel inputPequeño">Correo</label></td>
+            </tr>
+            <tr>
+                <td><label class="input inputPequeño inputText" type="text" th:text="${user.nif}"></label></td>
+                <td><label class="input inputPequeño inputText" type="email" th:text="${user.mail}"></label></td>
+            </tr>
+            <tr>
+                <td><label class="inputLabel inputPequeño">Residencia</label></td>
+                <td><label class="inputLabel inputPequeño">Compte corrent</label></td>
+            </tr>
+            <tr>
+                <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.residence}"></label></td>
+                <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.accountNumber}"></label></td>
+            </tr>
+        </table>
+        <table class="marginAuto">
+            <tr>
+                <td>
+                    <br><b>Certificats</b><br>
+                </td>
+                <td>
+                    <br><b>Activitats assignades</b><br>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdGrupos">
+                    <div class="requestCertificados">
+                        <div th:each="certification: ${instructor.certifications}">
+                            <table class="tdRequestTableActivity">
+                                <tr>
+                                    <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
+                                    <td class="tdListCertificadosSolicitud tdRequestActivityLevel">
+                                        <a th:href="@{*{certification.doc}}" target="_blank"><img width="32" height="32" th:src="@{/images/logoPDF.png}" /></a>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr />
+                        </div>
+                    </div>
+                </td>
+                <td class="tdGrupos">
+                    <div class="profileCertificados">
+                        <div th:each="activityType: ${instructor.activities}">
+                            <table class="tdProfileTableActivity">
+                                <tr>
+                                    <td>
+                                        <label th:text="${activityType.name}"></label>
+                                    </td>
+                                    <td class="tdProfileActivityLevel">
+                                        <label th:text="${activityType.level}"></label>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br><br><a th:href="@{/admin/reject/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
+                </td>
+                <td>
+                    <br><br><a th:href="@{/admin/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a>
+                </td>
+            </tr>
+        </table>
+        <br>
+    </body>
+</html>
+
+

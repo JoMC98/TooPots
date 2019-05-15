@@ -87,6 +87,16 @@ public class ActivityDao {
         }
     }
 
+    /* Obté la activitat. Torna una llista buida si no n'hi ha cap. */
+    public Activity getActivityCustomer(int id) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * from Activity where idActivity = ?", new ActivityRowMapper(), id);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     /* Obté totes les activitats amb ixe tipus d'activitat */
     public List<Activity> getActivitiesByActivityType(int idActivityType) {
         try {

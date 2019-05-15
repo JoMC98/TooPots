@@ -1,6 +1,7 @@
 package es.uji.ei1027.toopots.controller;
 
 
+import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.daos.CustomerDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Customer;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpSession;
 public class CustomerController {
     private CustomerDao customerDao;
     private UsersDao userDao;
+    private ActivityTypeDao activityDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
@@ -109,6 +111,13 @@ public class CustomerController {
         userDao.updateUser(user);
         customerDao.updateCustomer(customer);
         return "redirect:/";
+    }
+
+    //Ver una reserva
+    @RequestMapping(value="/viewReservation/{id}")
+    public String z(@PathVariable int id) {
+        customerDao.getReservation();
+        return "customer/viewReservation";
     }
 
     //Esborra un client

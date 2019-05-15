@@ -329,6 +329,18 @@ public class ActivityController {
         return "redirect:../list";
     }
 
+    //Llistar totes les reserves per activitat
+    @RequestMapping(value="/list/{id}")
+    public String listReserves(Model model, @PathVariable int id) {
+        model.addAttribute("reserves", activityDao.getActivitiesByActivityType(id));
+        return "activity/listReservation";
+    }
+    //Llistar la reserva
+    @RequestMapping(value="/list/{id}")
+    public String listReserve(Model model, @PathVariable int id) {
+        model.addAttribute("reserves", activityDao.getActivitiesByActivityType(id));
+        return "activity/listReservation";
+    }
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

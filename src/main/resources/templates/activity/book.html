@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <title>Reservar activitat</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body layout:fragment="content">
+        <div class="divInicioTarifas">
+            <table class="marginAuto">
+                <tr>
+                    <td rowspan="2" class="tdActivityFotoReserva">
+                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFotoReserva">
+                    </td>
+                    <td class="tdTarifasReserva">
+                        <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
+                    </td>
+                    <td rowspan="2" class="tdRelleno"></td>
+                </tr>
+                <!--<div th:each="pais: ${classificacions.keySet()}">-->
+                <tr>
+                    <td class="tdTarifasReserva">
+                        <table class="tablaTarifas">
+                            <tr>
+                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
+                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
+                            </tr>
+                            <tr class="tdPaddingLeftRight">
+                                <td class="tarifaName tdPaddingLeftRight">Adults</td>
+                                <td class="tdPaddingLeftRight" th:text="${activity.pricePerPerson}"></td>
+                            </tr>
+                            <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
+                                <td class="tarifaName tdPaddingLeftRight" th:text="${rate.rateName}"></td>
+                                <td class="tdPaddingLeftRight" th:text="${rate.price}"></td>
+                            </tr>
+                            <tr>
+                                <td class="tdPaddingBottom"></td>
+                                <td class="tdPaddingBottom"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br><br>
+        <form action="#" th:action="@{/activity/summary/{id}(id=${activity.id})}" method="post">
+            <table class="tablaNumeroPersonas">
+                <tr>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre d'adults</label>
+                    </td>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre de menors de 16 anys</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numAdults}" min="0"/>
+                    </td>
+                    <td>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numUnder16}" min="0"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre d'estudiants</label>
+                    </td>
+                    <td>
+                        <label class="inputLabel inputPequeño">Nombre de majors de 60 anys</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numStudents}" min="0"/>
+                    </td>
+                    <td>
+                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numOver60}" min="0"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <br>
+                        <input class="btn btn-success" type="submit" value="Reservar" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>

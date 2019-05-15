@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+    <head>
+        <title>Reservar activitat</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body layout:fragment="content">
+        <br><h1>Resumen de la reserva</h1><br>
+        <div class="marginAuto divResumenReserva">
+            <table>
+                <tr>
+                    <td class="tdSummaryTitle"><b>Tipus</b></td>
+                    <td class="tdSummaryTitle"><b>Cantitat</b></td>
+                    <td class="tdSummaryTitle"><b>Preu per persona</b></td>
+                    <td class="tdSummaryTitle"><b>Preu total</b></td>
+                </tr>
+                <tr th:each="price: ${prices}">
+                    <td class="tdSummary" th:text="${price.rateName}"></td>
+                    <td class="tdSummary" th:text="${price.cantidad}"></td>
+                    <td class="tdSummary" >
+                        <label th:text="${price.basePrice}"></label>
+                        <label> €</label>
+                    </td>
+                    <td class="tdSummary">
+                        <label th:text="${price.totalPrice}"></label>
+                        <label> €</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><hr/></td>
+                </tr>
+                <tr>
+                    <td colspan="2"></td>
+                    <td><b>Preu total</b></td>
+                    <td>
+                        <label th:text="${totalPrice}"></label>
+                        <label> €</label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <label th:if="${grupo}" class="inputLabel"><b>S'ha aplicat la tarifa de grup</b></label>
+        <label th:unless="${grupo}" class="inputLabel"><b>No s'ha aplicat la tarifa de grup</b></label>
+        <br><br><br>
+        <table class="marginAuto">
+            <tr>
+                <td class="tdGrupos">
+                    <form action="#" th:action="@{/activity/book/{id}(id=${activity.id})}" method="post">
+                        <div hidden>
+                            <input type="text" th:field="${reservation.numAdults}"/>
+                            <input type="text" th:field="${reservation.numUnder16}"/>
+                            <input type="text" th:field="${reservation.numStudents}"/>
+                            <input type="text" th:field="${reservation.numOver60}"/>
+                        </div>
+                        <input class="btn btn-warning" value="Modificar dades" type="submit">
+                    </form>
+                </td>
+                <td class="tdGrupos">
+                    <form action="#" th:action="@{/activity/bookConfirmation/{id}(id=${activity.id})}" method="post">
+                        <div hidden>
+                            <input type="text" th:field="${reservation.numAdults}"/>
+                            <input type="text" th:field="${reservation.numUnder16}"/>
+                            <input type="text" th:field="${reservation.numStudents}"/>
+                            <input type="text" th:field="${reservation.numOver60}"/>
+                            <input type="text" th:field="${reservation.totalPrice}"/>
+                        </div>
+                        <input class="btn btn-success" value="Confirmar reserva" type="submit">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

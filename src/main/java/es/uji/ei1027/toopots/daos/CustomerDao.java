@@ -1,7 +1,9 @@
 package es.uji.ei1027.toopots.daos;
 
 
+import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Customer;
+import es.uji.ei1027.toopots.rowMapper.ActivityRowMapper;
 import es.uji.ei1027.toopots.rowMapper.CustomerRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -57,9 +59,17 @@ public class CustomerDao {
     public List<Customer> getCustomers() {
         try {
             return jdbcTemplate.query("SELECT * from Customer", new CustomerRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return new ArrayList<Customer>();
+        }
+    }
+    /* Obté tots els clients. Torna una llista buida si no n'hi ha cap. */
+    public List<Activity> getReservation(int id) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity  WHERE idCustomer=?", new ActivityRowMapper(), id);
         }
         catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Customer>();
+            return new ArrayList<Activity>();
         }
     }
 
