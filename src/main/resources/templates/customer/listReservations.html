@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Veure Reserves</title>
+    <meta charset="UTF-8" />
+</head>
+<body layout:fragment="content">
+
+<table class="table_bordered" th:each="activity: ${#lists.sort(activities)}">
+    <tr>
+        <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
+            <div class="activityFoto">
+                <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
+            </div>
+        </td>
+        <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
+        <td rowspan="4" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
+            <table>
+                <tr><td class="tdListCentroArribaAbajo"><a th:href="/" class="btn btn-success listBoton" >Ver</a></td></tr>
+                <tr><td class="tdListCentroArribaAbajo"><a th:href="activity/cancel" class="btn btn-warning listBoton" role="button">Cancel·lar</a></td></tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="tdListCentroArriba tdListTexto">
+            <label th:text="${activity.name}"></label>
+        </td>
+    </tr>
+    <tr>
+        <td class="tdListCentroArriba tdListTexto">
+            <label th:text="${activity.activityTypeName}"></label>
+        </td>
+        <td class="tdListCentroArriba tdListTexto">
+            <label>Nivell </label>
+            <label th:text="${activity.activityTypeLevel}"></label>
+        </td>
+    </tr>
+    <tr>
+        <td class="tdListCentroArriba tdListTexto">
+            <label th:text="${activity.dates}"></label>
+        </td>
+        <td class="tdListCentroArriba tdListTexto">
+            <label>Nivell </label>
+            <label th:text="${activity.place}"></label>
+        </td>
+    </tr>
+    <tr>
+        <td class="tdListCentroArriba tdListTexto">
+            <label th:text="${activity.totalPrice}"></label>
+        </td>
+        <td class="tdListCentroArriba tdListTexto">
+            <label>Nivell </label>
+            <label th:text="${activity.state}"></label>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -46,6 +46,11 @@ public class Activity {
     private String activityTypeName;
     private String activityTypeLevel;
 
+
+
+    //Para usar en reservas
+    private float totalPrice;
+
     //Constructor
     public Activity() {
         tarifaMenores = new ActivityRates();
@@ -156,6 +161,12 @@ public class Activity {
         return activityTypeLevel;
     }
 
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+
+
 //Setters
 
     public void setId(int id) {
@@ -246,6 +257,10 @@ public class Activity {
 
     public void setActivityTypeLevel(String activityTypeLevel) {
         this.activityTypeLevel = activityTypeLevel;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     //To String

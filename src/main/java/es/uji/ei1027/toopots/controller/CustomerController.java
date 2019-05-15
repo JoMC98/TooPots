@@ -1,12 +1,8 @@
 package es.uji.ei1027.toopots.controller;
 
 
-import es.uji.ei1027.toopots.daos.ActivityTypeDao;
-import es.uji.ei1027.toopots.daos.CustomerDao;
-import es.uji.ei1027.toopots.daos.ReservationDao;
-import es.uji.ei1027.toopots.daos.UsersDao;
-import es.uji.ei1027.toopots.model.Customer;
-import es.uji.ei1027.toopots.model.Users;
+import es.uji.ei1027.toopots.daos.*;
+import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.validator.UserValidator;
 import es.uji.ei1027.toopots.validator.CustomerValidator;
 import org.jasypt.util.password.BasicPasswordEncryptor;
@@ -20,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,8 +28,10 @@ public class CustomerController {
 
     private CustomerDao customerDao;
     private UsersDao userDao;
-    private ActivityTypeDao activityDao;
+    private ActivityDao activityDao;
+    private ActivityTypeDao activityTypeDao;
     private ReservationDao reservationDao;
+    private ActivityPhotosDao activityPhotosDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
@@ -43,6 +42,11 @@ public class CustomerController {
     @Autowired
     public void setUserDao(UsersDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Autowired
+    public void setActivityPhotosDao(ActivityPhotosDao activityPhotosDao) {
+        this.activityPhotosDao=activityPhotosDao;
     }
 
     //Llistar tots els clients
@@ -141,13 +145,43 @@ public class CustomerController {
 
 
     //Llistar tots els clients
-    @RequestMapping("/listReservations")
-    public String listReservations(Model model) {
-        model.addAttribute("customers", customerDao.getCustomers());
-        model.addAttribute("activities", activityDao.getActivityTypes());
-        //int id = activityDao.getActivityType();
-        //model.addAttribute("reservations", reservationDao.getReserves(id))
-        return "customer/listReservation";
+    @RequestMapping(value="/listReservation", method = RequestMethod.GET)
+    public String listReservations(Model model,  HttpSession session) {
+
+        int acceso = controlarAcceso(session, "Customer");
+
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/customer/update");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            List<Reservation> reserves = customerDao.getReservations(user.getId());
+            //llista que passem al controlador
+            List<Activity> activities = new ArrayList<Activity>();
+            //crear una llista de activitats mitjançant el id de activitat i anyadir els metodos de reserva
+            for (Reservation reserve: reserves){
+                Activity activity = activityDao.getActivity(reserve.getIdActivity());
+                activity.setTotalPrice(reserve.getTotalPrice());
+                //obtener el nivel
+                ActivityType activityType = activityTypeDao.getActivityType(activity.getActivityType());
+                activity.setActivityTypeLevel(activity.getActivityTypeLevel());
+                activity.setActivityTypeName(activity.getActivityTypeName());
+                //obtener la foto
+                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(activity.getId());
+                activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+                activities.add(activity);
+            }
+            model.addAttribute("activities",activities);
+            //model.addAttribute("user", userDao.getUser(user.getId()));
+            model.addAttribute("customer", customerDao.getCustomer(user.getId()));
+            return "customer/listReservations";
+        } else {
+            return "redirect:/";
+        }
+        //obtindre les reserves
+        //un for reserva per reserva
+        //a la vista creo una llista de activitats
     }
 
     private int controlarAcceso(HttpSession session, String rol) {
