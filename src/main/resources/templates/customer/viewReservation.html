@@ -3,68 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
-<<<<<<< HEAD
-    <title>Ver reserva</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
-</head>
-<body layout:fragment="content">
-<form action="#" th:action="@{/customer/showReserve}" >
-    <table class="marginAuto" th:object="${reserve}">
-        <table class="table_bordered" th:object="${#lists.sort(activities, comparator)}">
-            <tr>
-                <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
-                    <div class="activityFoto">
-                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
-                    </div>
-                </td>
-                <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${activity.place}"></label>
-                </td>
-                <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
-                </td>
-                <td class="tdListCentroAbajo tdListAbajo tdListBotones">
-                    <!--<a th:href="@{/reservation/add/{id}(id=${activity.id}))}" class="btn btn-success listBoton" >Reservar</a>-->
-                    <a th:href="@{/}" class="btn btn-success listBoton" >Reservar</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${activity.activityTypeName}"></label>
-                </td>
-                <td class="tdListCentroArriba tdListTexto">
-                    <label>Nivell </label>
-                    <label th:text="${activity.activityTypeLevel}"></label>
-                </td>
-                <td class="tdListCentroArriba tdListArriba tdListBotones">
-                    <!--<a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>-->
-                    <a th:href="@{/}" class="btn btn-info listBoton" role="button">+ info</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
-                    <b>Ocupació: </b>
-                    <label th:text="${activity.ocupation}"></label>
-                    <label> %</label>
-                </td>
-                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
-                    <b>Preu base: </b>
-                    <label th:text="${activity.pricePerPerson}"></label>
-                    <label> €</label>
-                </td>
-                <td></td>
-            </tr>
-        </table>
-    <br>
-    <input class="btn btn-success" type="submit" value="Registrar-se" />
-</form>
-=======
     <title>Veure Activitat</title>
     <meta charset="UTF-8" />
 </head>
@@ -151,6 +89,5 @@
     </tr>
 </table>
 
->>>>>>> db3d79967294ee96cb6c3ef2f6ea4eb6e75c4f63
 </body>
 </html>

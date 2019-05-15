@@ -3,6 +3,7 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.daos.CustomerDao;
+import es.uji.ei1027.toopots.daos.ReservationDao;
 import es.uji.ei1027.toopots.daos.UsersDao;
 import es.uji.ei1027.toopots.model.Customer;
 import es.uji.ei1027.toopots.model.Users;
@@ -31,6 +32,7 @@ public class CustomerController {
     private CustomerDao customerDao;
     private UsersDao userDao;
     private ActivityTypeDao activityDao;
+    private ReservationDao reservationDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
@@ -128,12 +130,6 @@ public class CustomerController {
         return "redirect:/";
     }
 
-    //Ver una reserva
-    @RequestMapping(value="/viewReservation/{id}")
-    public String z(@PathVariable int id) {
-        customerDao.getReservation();
-        return "customer/viewReservation";
-    }
 
     //Esborra un client
     @RequestMapping(value="/delete/{id}")
@@ -143,6 +139,16 @@ public class CustomerController {
         return "redirect:../list";
     }
 
+
+    //Llistar tots els clients
+    @RequestMapping("/listReservations")
+    public String listReservations(Model model) {
+        model.addAttribute("customers", customerDao.getCustomers());
+        model.addAttribute("activities", activityDao.getActivityTypes());
+        //int id = activityDao.getActivityType();
+        //model.addAttribute("reservations", reservationDao.getReserves(id))
+        return "customer/listReservation";
+    }
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

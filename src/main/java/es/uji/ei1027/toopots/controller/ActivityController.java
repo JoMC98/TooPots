@@ -418,19 +418,6 @@ public class ActivityController {
         return "redirect:../list";
     }
 
-<<<<<<< HEAD
-    //Llistar totes les reserves per activitat
-    @RequestMapping(value="/list/{id}")
-    public String listReserves(Model model, @PathVariable int id) {
-        model.addAttribute("reserves", activityDao.getActivitiesByActivityType(id));
-        return "activity/listReservation";
-    }
-    //Llistar la reserva
-    @RequestMapping(value="/list/{id}")
-    public String listReserve(Model model, @PathVariable int id) {
-        model.addAttribute("reserves", activityDao.getActivitiesByActivityType(id));
-        return "activity/listReservation";
-=======
     //Reservar una activitat
     @RequestMapping("/book/{id}")
     public String bookActivity(HttpSession session, Model model, @PathVariable int id) {
@@ -575,7 +562,6 @@ public class ActivityController {
         model.addAttribute("activity", activity);
         model.addAttribute("rates", rates);
         return "activity/view";
->>>>>>> db3d79967294ee96cb6c3ef2f6ea4eb6e75c4f63
     }
 
     private int controlarAcceso(HttpSession session, String rol) {
