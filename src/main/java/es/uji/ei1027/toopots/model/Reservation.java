@@ -19,7 +19,7 @@ public class Reservation {
     private int numAdults;
     private int numOver60;
 
-    private int totalPrice;
+    private float totalPrice;
     private int transactionNumber;
     private int idActivity;
     private int idCustomer;
@@ -55,7 +55,7 @@ public class Reservation {
         return numOver60;
     }
 
-    public int getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
@@ -106,7 +106,7 @@ public class Reservation {
         this.numOver60 = numOver60;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
 

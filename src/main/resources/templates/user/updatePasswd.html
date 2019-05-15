@@ -9,20 +9,20 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <h1>Modificar contrasenya</h1><br>
+        <br><br><br><h1>Modificar contrasenya</h1><br>
         <form action="#" th:action="@{/user/updatePasswd}" method="post">
             <table class="marginAuto">
                 <tr>
                     <td><label class="inputLabel inputPequeño">Contrasenya anterior</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="password" th:field="${newUser.username}" maxlength="50"/></td>
+                    <td><input class="input inputPequeño" type="password" th:errorclass="needCorrection" th:field="${newUser.username}" maxlength="50"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Nova contrasenya</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="password" th:field="${newUser.passwd}" maxlength="50"/></td>
+                    <td><input class="input inputPequeño" type="password" th:errorclass="needCorrection" th:field="${newUser.passwd}" maxlength="50"/></td>
                 </tr>
             </table>
             <br>

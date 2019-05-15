@@ -3,6 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
 <head>
+<<<<<<< HEAD
     <title>Ver reserva</title>
     <meta charset="UTF-8" />
     <link rel="stylesheet"
@@ -63,5 +64,93 @@
     <br>
     <input class="btn btn-success" type="submit" value="Registrar-se" />
 </form>
+=======
+    <title>Veure Activitat</title>
+    <meta charset="UTF-8" />
+</head>
+<body layout:fragment="content">
+
+<table class="marginAuto">
+    <tr>
+        <td rowspan="2" class="tdActivityFotoReserva">
+            <img th:src="@{*{activity.photoPrincipal}}" class="activityFotoReserva">
+        </td>
+        <td class="tdTarifasReserva">
+            <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
+            <h4 class="actividadNameReserva" th:text="${activity.description}"></h4>
+        </td>
+        <td rowspan="2" class="tdRelleno"></td>
+    </tr>
+</table>
+
+<table class="marginAuto">
+    <tr>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Lloc Quedada</b></label>
+        </td>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Hora quedada</b></label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="input inputPequeño" th:text="${activity.meetingPoint}" />
+        </td>
+        <td>
+            <label class="input inputPequeño" th:text="${activity.meetingTime}" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Maxim persones</b></label>
+        </td>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Minim persones</b></label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="input inputPequeño"   th:text="${activity.maxNumberPeople}" />
+        </td>
+        <td>
+            <label class="input inputPequeño"   th:text="${activity.minNumberPeople}" />
+        </td>
+    </tr>
+</table >
+
+
+<table class="tablaTarifas marginAuto">
+    <tr>
+        <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
+        <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
+    </tr>
+    <tr class="tdPaddingLeftRight">
+        <td class="tarifaName tdPaddingLeftRight">Adults</td>
+        <td class="tdPaddingLeftRight" th:text="${activity.pricePerPerson}"></td>
+    </tr>
+    <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
+        <td class="tarifaName tdPaddingLeftRight" th:text="${rate.rateName}"></td>
+        <td class="tdPaddingLeftRight" th:text="${rate.price}"></td>
+    </tr>
+    <tr>
+        <td class="tdPaddingBottom"></td>
+        <td class="tdPaddingBottom"></td>
+    </tr>
+</table>
+
+<br><br>
+<table class="marginAuto">
+    <tr>
+        <td>
+            <input class="btn btn-warning" type="submit" value="Veure monitor" />
+        </td>
+        <td>
+            <input class="btn btn-delete" type="submit" value="Cancel·lar" />
+        </td>
+
+    </tr>
+</table>
+
+>>>>>>> db3d79967294ee96cb6c3ef2f6ea4eb6e75c4f63
 </body>
 </html>

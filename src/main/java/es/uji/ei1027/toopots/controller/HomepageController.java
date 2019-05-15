@@ -14,8 +14,9 @@ import java.util.List;
 @RequestMapping("/")
 public class HomepageController {
     private final static int NOT_LOGGED = 1;
-    private final static int USER_AUTHORIZED = 2;
-    private final static int USER_NOT_AUTHORIZED = 3;
+    private final static int ADMIN = 2;
+    private final static int INSTRUCTOR = 3;
+    private final static int CUSTOMER = 4;
 
     private UsersDao userDao;
 
@@ -25,35 +26,47 @@ public class HomepageController {
     }
 
     @RequestMapping("/")
-    public String homepage(Model model) {
+    public String index(Model model) {
+//        TODO ACTIVAR
+//        int acceso = controlarAcceso(session);
+//        if(acceso == NOT_LOGGED) {
+//            return "redirect:activity/offer";
+//        } else if (acceso == ADMIN) {
+//            return "redirect:admin/home";
+//        } else if (acceso == INSTRUCTOR){
+//            return "redirect:instructor/listActivities";
+//        } else {
+//            return "redirect:activity/offer";
+//        }
         return "index";
     }
 
-    @RequestMapping("/admin/home")
-    public String homepageAdmin(HttpSession session, Model model) {
-        int acceso = controlarAcceso(session, "Admin");
+    @RequestMapping("/home")
+    public String homepage(HttpSession session, Model model) {
+        int acceso = controlarAcceso(session);
         if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/admin/home");
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            List<Users> users = userDao.getRequests();
-            model.addAttribute("total", users.size());
-            return "/admin/home";
+            return "redirect:activity/offer";
+        } else if (acceso == ADMIN) {
+            return "redirect:admin/home";
+        } else if (acceso == INSTRUCTOR){
+            return "redirect:instructor/listActivities";
         } else {
-            return "redirect:/";
+            return "redirect:activity/offer";
         }
     }
 
-    private int controlarAcceso(HttpSession session, String rol) {
+    private int controlarAcceso(HttpSession session) {
         if (session.getAttribute("user") == null) {
             return NOT_LOGGED;
         }
         Users user = (Users) session.getAttribute("user");
-        if (user.getRol().equals(rol)) {
-            return USER_AUTHORIZED;
+        if (user.getRol().equals("Admin")) {
+            return ADMIN;
+        }
+        else if (user.getRol().equals("Instructor")) {
+            return INSTRUCTOR;
         } else {
-            return USER_NOT_AUTHORIZED;
+            return CUSTOMER;
         }
     }
 }

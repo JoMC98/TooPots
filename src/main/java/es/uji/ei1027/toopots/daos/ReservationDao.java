@@ -1,7 +1,9 @@
 package es.uji.ei1027.toopots.daos;
 
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.model.ActivityRates;
 import es.uji.ei1027.toopots.model.Reservation;
+import es.uji.ei1027.toopots.model.SummaryPrice;
 import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,7 +12,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 @Repository
 public class ReservationDao {
@@ -31,56 +35,66 @@ public class ReservationDao {
 
     /* Afegeix la reserva a la base de dades */
     public void addReservation(Reservation reservation) {
-        float totalPrice = calcularPrecio(reservation);
         jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 reservation.getNumUnder16(), reservation.getNumStudents(),
-                reservation.getNumAdults(), reservation.getNumOver60(), totalPrice, reservation.getTransactionNumber(),
+                reservation.getNumAdults(), reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
                 reservation.getIdActivity(), reservation.getIdCustomer(), "Pendent");
     }
 
-    private float calcularPrecio(Reservation r) {
+    public List<SummaryPrice> calcularPrecio(Reservation r, Activity a, HashMap<String, Float> t) {
         float totalAdults;
         float totalUnder16;
         float totalOver60;
         float totalStudents;
 
-        Activity a = activityDao.getActivity(r.getIdActivity());
-
         float priceBase = a.getPricePerPerson();
+        float priceEstudiants;
+        float priceMenors;
+        float priceMajors;
 
         boolean grupo = false;
 
-//        //ADULTS
-//        if (r.getNumPeople() > 9 && t.containsKey("Grups de 10 persones o mes")) {
-//            priceBase = t.get("Grups de 10 persones o mes");
-//            grupo = true;
-//        }
-//
-//        totalAdults = priceBase * r.getNumAdults();
-//
-//        //MENORS 16
-//        if (t.containsKey("Menors de 16 anys")) {
-//            totalUnder16 = t.get("Menors de 16 anys") * r.getNumUnder16();
-//        } else {
-//            totalUnder16 = priceBase * r.getNumUnder16();
-//        }
-//
-//        //MAJORS 60
-//        if (t.containsKey("Majors de 60 anys")){
-//            totalOver60 = t.get("Majors de 60 anys") * r.getNumOver60();
-//        } else {
-//            totalOver60 = priceBase * r.getNumOver60();
-//        }
-//
-//        //ESTUDIANTS
-//        if (t.containsKey("Estudiants")){
-//            totalStudents = t.get("Estudiants") * r.getNumStudents();
-//        } else {
-//            totalStudents = priceBase * r.getNumStudents();
-//        }
+        //ADULTS
+        if (r.getNumPeople() > 9 && t.containsKey("Grups de 10 persones o mes")) {
+            priceBase = t.get("Grups de 10 persones o mes");
+            grupo = true;
+        }
 
-//        return totalUnder16 + totalStudents + totalAdults + totalOver60;
-        return 0f;
+        //MENORS 16
+        if (t.containsKey("Menors de 16 anys")) {
+            priceMenors = t.get("Menors de 16 anys");
+
+        } else {
+            priceMenors = priceBase;
+        }
+
+        //MAJORS 60
+        if (t.containsKey("Majors de 60 anys")){
+            priceMajors = t.get("Majors de 60 anys");
+        } else {
+            priceMajors = priceBase;
+        }
+
+        //ESTUDIANTS
+        if (t.containsKey("Estudiants")){
+            priceEstudiants = t.get("Estudiants");
+        } else {
+            priceEstudiants = priceBase;
+        }
+
+        totalAdults = priceBase * r.getNumAdults();
+        totalUnder16 = priceMenors * r.getNumUnder16();
+        totalOver60 = priceMajors * r.getNumOver60();
+        totalStudents = priceEstudiants * r.getNumStudents();
+
+
+        List<SummaryPrice> prices = new ArrayList<SummaryPrice>();
+        prices.add(new SummaryPrice("Adults", r.getNumAdults(), priceBase, totalAdults, grupo));
+        prices.add(new SummaryPrice("Estudiants", r.getNumStudents(), priceEstudiants, totalStudents, grupo));
+        prices.add(new SummaryPrice("Menors de 16 anys", r.getNumUnder16(), priceMenors, totalUnder16, grupo));
+        prices.add(new SummaryPrice("Majors de 60 anys", r.getNumOver60(), priceMajors, totalOver60, grupo));
+
+        return prices;
     }
 
     /* Esborra la reserva de la base de dades */

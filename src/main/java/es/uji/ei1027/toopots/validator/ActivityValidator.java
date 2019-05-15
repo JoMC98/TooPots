@@ -29,10 +29,6 @@ public class ActivityValidator implements Validator {
             errors.rejectValue("place", "obligatori",
                     "Cal introduir un valor");
 
-        if (activity.getMinNumberPeople() == 0)
-            errors.rejectValue("minNumberPeople", "obligatori",
-                    "Cal introduir un valor");
-
         if (activity.getMaxNumberPeople() == 0)
             errors.rejectValue("maxNumberPeople", "obligatori",
                     "Cal introduir un valor");
@@ -51,6 +47,10 @@ public class ActivityValidator implements Validator {
 
         if (activity.getDescription().trim().equals(""))
             errors.rejectValue("description", "obligatori",
+                    "Cal introduir un valor");
+
+        if (activity.getActivityType() == 0)
+            errors.rejectValue("activityType", "obligatori",
                     "Cal introduir un valor");
 
 

@@ -25,9 +25,9 @@
                         <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
                     </div>
                 </td>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
                 <td class="tdListCentroAbajo tdListArriba tdListBotones">
-                    <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Veure</a>
+                    <a th:href="@{/activity/update/{id}(id=${activity.id})}" class="btn btn-warning listBoton" >Editar</a>
                 </td>
             </tr>
             <tr>
@@ -43,7 +43,7 @@
                     <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                 </td>
                 <td class="tdListCentroArribaAbajo tdListBotones">
-                    <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-warning listBoton" role="button">Tancar</a>
+                    <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Tancar</a>
                 </td>
             </tr>
             <tr>

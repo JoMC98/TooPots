@@ -59,11 +59,9 @@ public class LoginController {
             session.setAttribute("user", user);
             String nextUrl = (String) session.getAttribute("nextUrl");
             if (nextUrl == null)
-                if(user.getRol().equals("Admin"))
-                    return "redirect:/admin/home";
-                else
-                    // Torna a la pàgina principal
-                    return "redirect:/";
+                return "redirect:/home";
+            //TODO ACTIVAR
+//                return "redirect:/";
             else
                 return "redirect:" + nextUrl;
         }

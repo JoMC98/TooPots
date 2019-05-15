@@ -32,11 +32,11 @@
             </tr>
             <tr>
                 <td><label class="inputLabel inputPequeño">Residencia</label></td>
-                <td><label class="inputLabel inputPequeño">Compte corrent</label></td>
+                <td></td>
             </tr>
             <tr>
                 <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.residence}"></label></td>
-                <td><label class="input inputPequeño inputText" type="text" th:text="${instructor.accountNumber}"></label></td>
+                <td><a th:href="@{/instructor/showActivities/{id}(id=${user.id})}" class="btn btn-info input">Veure activitats</a></td>
             </tr>
         </table>
         <table class="marginAuto">
@@ -80,14 +80,6 @@
                             <hr/>
                         </div>
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <br><br><a th:href="@{/instructor/reject/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
-                </td>
-                <td>
-                    <br><br><a th:href="@{/instructor/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a>
                 </td>
             </tr>
         </table>

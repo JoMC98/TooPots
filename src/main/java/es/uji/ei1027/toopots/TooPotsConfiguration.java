@@ -9,6 +9,7 @@ import org.springframework.format.Formatter;
 import javax.sql.DataSource;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -39,4 +40,18 @@ public class TooPotsConfiguration {
         };
     }
 
+    @Bean
+    public Formatter<LocalTime> localTimeFormatter() {
+        return new Formatter<LocalTime>() {
+            @Override
+            public LocalTime parse(String text, Locale locale) throws ParseException {
+                return LocalTime.parse(text, DateTimeFormatter.ISO_LOCAL_TIME);
+            }
+
+            @Override
+            public String print(LocalTime object, Locale locale) {
+                return DateTimeFormatter.ISO_LOCAL_TIME.format(object);
+            }
+        };
+    }
 }

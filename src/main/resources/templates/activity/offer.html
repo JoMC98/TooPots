@@ -7,7 +7,7 @@
         <meta charset="UTF-8" />
     </head>
     <body layout:fragment="content">
-        <!--<br><h1>Llista d'activitats</h1><br>-->
+        <br>
         <div class="filtroArea">
             <form action="#" th:object="${filtroYorden}" th:action="@{/activity/offer}" method="post">
                 <table>
@@ -57,8 +57,14 @@
                         <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
                     </div>
                 </td>
-                <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activity.name}"></b></td>
-                <td></td>
+                <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
+                <td rowspan="4" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
+                    <table>
+                        <tr><td class="tdListCentroArribaAbajo"><a th:href="@{/activity/book/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Reservar</a></td></tr>
+                        <tr><td class="tdListCentroArribaAbajo"><a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a></td></tr>
+                        <tr><td class="tdListCentroArribaAbajo"><a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning listBoton" role="button">Perfil monitor</a></td></tr>
+                    </table>
+                </td>
             </tr>
             <tr>
                 <td class="tdListCentroArriba tdListTexto">
@@ -66,10 +72,6 @@
                 </td>
                 <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
-                </td>
-                <td class="tdListCentroAbajo tdListAbajo tdListBotones">
-                    <!--<a th:href="@{/reservation/add/{id}(id=${activity.id}))}" class="btn btn-success listBoton" >Reservar</a>-->
-                    <a th:href="@{/}" class="btn btn-success listBoton" >Reservar</a>
                 </td>
             </tr>
             <tr>
@@ -79,10 +81,6 @@
                 <td class="tdListCentroArriba tdListTexto">
                     <label>Nivell </label>
                     <label th:text="${activity.activityTypeLevel}"></label>
-                </td>
-                <td class="tdListCentroArriba tdListArriba tdListBotones">
-                    <!--<a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>-->
-                    <a th:href="@{/}" class="btn btn-info listBoton" role="button">+ info</a>
                 </td>
             </tr>
             <tr>
@@ -96,7 +94,6 @@
                     <label th:text="${activity.pricePerPerson}"></label>
                     <label> €</label>
                 </td>
-                <td></td>
             </tr>
         </table>
     </body>

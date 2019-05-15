@@ -28,8 +28,9 @@ public class ActivityRatesDao {
     }
 
     /* Esborra la tarifa de la base de dades */
-    public void deleteActivityRates(int id, String rateName) {
-        jdbcTemplate.update("DELETE from Activity_rates where idActivity=? AND rateName=?", id, rateName);
+    public void deleteActivityRates(ActivityRates activityRates) {
+        jdbcTemplate.update("DELETE from Activity_rates where idActivity=? AND rateName=?", activityRates.getIdActivity(),
+                activityRates.getRateName());
     }
 
 

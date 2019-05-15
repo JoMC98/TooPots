@@ -19,10 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
+    private final static int NOT_LOGGED = 1;
+    private final static int USER_AUTHORIZED = 2;
+    private final static int USER_NOT_AUTHORIZED = 3;
+
     private CustomerDao customerDao;
     private UsersDao userDao;
     private ActivityTypeDao activityDao;
@@ -80,16 +85,26 @@ public class CustomerController {
         session.setAttribute("user", newUser);
 
         customerDao.addCustomer(customer, newUser.getId());
-        return "redirect:../";
+        return "redirect:../home";
     }
 
     //Actualitzar un client
     @RequestMapping(value="/update", method = RequestMethod.GET)
     public String editCustomer(Model model, HttpSession session) {
-        Users user = (Users) session.getAttribute("user");
-        model.addAttribute("user", userDao.getUser(user.getId()));
-        model.addAttribute("customer", customerDao.getCustomer(user.getId()));
-        return "customer/update";
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/customer/update");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            model.addAttribute("user", userDao.getUser(user.getId()));
+            model.addAttribute("customer", customerDao.getCustomer(user.getId()));
+            return "customer/update";
+        } else {
+            return "redirect:/";
+        }
+
     }
 
     //Processa la informació del update
@@ -126,5 +141,18 @@ public class CustomerController {
         userDao.deleteUser(id);
         customerDao.deleteCustomer(id);
         return "redirect:../list";
+    }
+
+
+    private int controlarAcceso(HttpSession session, String rol) {
+        if (session.getAttribute("user") == null) {
+            return NOT_LOGGED;
+        }
+        Users user = (Users) session.getAttribute("user");
+        if (user.getRol().equals(rol)) {
+            return USER_AUTHORIZED;
+        } else {
+            return USER_NOT_AUTHORIZED;
+        }
     }
 }
