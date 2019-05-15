@@ -549,6 +549,20 @@ public class ActivityController {
         }
 
     }
+    //TODO controlador adrian
+    //Veure dades activitat
+    @RequestMapping(value="/view/{id}", method = RequestMethod.GET)
+    public String dataViewActivity(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+        Activity activity = activityDao.getActivity(id);
+        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
+        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("activity", activity);
+        model.addAttribute("rates", rates);
+        return "activity/view";
+    }
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

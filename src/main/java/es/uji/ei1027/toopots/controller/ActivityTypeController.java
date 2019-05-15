@@ -2,7 +2,6 @@ package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
-import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Users;
 import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
