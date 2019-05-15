@@ -13,8 +13,8 @@ public class ActivityCancelationValidator implements Validator {
     public void validate(Object obj, Errors errors) {
         Activity activity = (Activity) obj;
 
-        if (activity.getDescription().trim().equals(""))
-            errors.rejectValue("description", "obligatori",
+        if (activity.getCancelationReason().trim().equals(""))
+            errors.rejectValue("cancelationReason", "obligatori",
                     "Cal introduir un valor");
 
     }

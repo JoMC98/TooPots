@@ -5,6 +5,7 @@ import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.validator.ActivityCancelationValidator;
 import es.uji.ei1027.toopots.validator.ActivityValidator;
 import es.uji.ei1027.toopots.validator.ReservationValidator;
 import org.apache.commons.io.FilenameUtils;
@@ -562,6 +563,38 @@ public class ActivityController {
         model.addAttribute("activity", activity);
         model.addAttribute("rates", rates);
         return "activity/view";
+    }
+    //Controlar una cancelacio
+    @RequestMapping("/cancel/{id}")
+    public String cancelActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/cancel/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            model.addAttribute("activity", activityDao.getActivity(id));
+            return "activity/cancel";
+        } else {
+            return "redirect:/";
+        }
+
+    }
+
+    //Processa la informació de la cancelació
+    @RequestMapping(value="/cancel/{id}", method = RequestMethod.POST)
+    public String processCancelSubmit(Model model, @PathVariable int id, @ModelAttribute("activity") Activity activity,
+                                      BindingResult bindingResult) {
+
+        ActivityCancelationValidator cancelationValidator = new ActivityCancelationValidator();
+        cancelationValidator.validate(activity, bindingResult);
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.toString());
+            return "activity/cancel";
+        }
+        activity.setState("Cancelada");
+        activityDao.cancelActivity(activity);
+        return "redirect:/instructor/listActivities";
     }
 
     private int controlarAcceso(HttpSession session, String rol) {

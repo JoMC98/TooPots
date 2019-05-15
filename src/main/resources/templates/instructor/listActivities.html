@@ -14,7 +14,7 @@
             <tr>
                 <td class="tdBotonAddLista"></td>
                 <td><h1>Llista d'activitats</h1></td>
-                <td class="tdBotonAddLista"><a href="add" class="btn btn-success" role="button">Crear Activitat</a></td>
+                <td class="tdBotonAddLista"><a  th:href="@{/activity/add}" class="btn btn-success" role="button">Crear Activitat</a></td>
             </tr>
         </table>
         <br>
@@ -52,7 +52,7 @@
                     <label> %</label>
                 </td>
                 <td class="tdListCentroArriba tdListAbajo tdListBotones">
-                    <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Esborrar</a>
+                    <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Cancel·lar</a>
                 </td>
             </tr>
         </table>

@@ -266,6 +266,7 @@ public class Activity {
                 ", state='" + state + '\'' +
                 ", activityType=" + activityType +
                 ", idInstructor=" + idInstructor +
+                ", cancellationReason=" + cancelationReason +
                 '}';
     }
 

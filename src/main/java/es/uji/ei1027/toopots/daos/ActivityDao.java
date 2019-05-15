@@ -52,6 +52,13 @@ public class ActivityDao {
                 activity.getState(), activity.getId());
     }
 
+    /* Motiu cancelació l'activitat*/
+    public void cancelActivity(Activity activity) {
+        jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
+                activity.getCancelationReason(), activity.getState(), activity.getId());
+    }
+
+
     /* Obté l'Activitat amb el id donat. Torna null si no existeix. */
     public Activity getActivity(int id) {
         try {
