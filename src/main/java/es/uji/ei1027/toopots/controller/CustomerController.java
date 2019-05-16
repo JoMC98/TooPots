@@ -184,6 +184,28 @@ public class CustomerController {
         //a la vista creo una llista de activitats
     }
 
+    //Llistar tots les subscripcions disponibles
+    @RequestMapping(value="/listSubscriptions", method = RequestMethod.GET) // ficar el GET nose si es necessari
+    public String listSubscriptions(Model model,  HttpSession session) {
+
+        int acceso = controlarAcceso(session, "Customer");
+
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/customer/listSubscriptions");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
+            return "customer/listReservations";
+        } else {
+            return "redirect:/";
+        }
+        //obtindre les activitats a les que es pot subscriure, no se si son totes o no,
+        //i si se fa un metode apart per al gestionar el subcriures
+        //també mirar lo del boto subscriure, nose si un state o una variable normal
+    }
+
+
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {
             return NOT_LOGGED;
