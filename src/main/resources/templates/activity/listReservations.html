@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Veure Reserves</title>
+    <meta charset="UTF-8" />
+</head>
+<body layout:fragment="content">
+
+<table class="table_bordered" th:each="reserve: ${#lists.sort(reserves)}">
+    <td>
+        <tr colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${userName}"></b></tr>
+        <tr class="tdListCentroArriba tdListTexto">
+            <label th:text="${{reserve.bookingDate}}"></label>
+        </tr>
+    </td>
+    <td>
+        <tr colspan="4" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${{reserve.numAdults}}"></b></tr>
+        <tr colspan="4" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${{reserve.numUnder16}}"></b></tr>
+        <tr colspan="4" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${{reserve.numStudents}}"></b></tr>
+        <tr colspan="4" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${}{reserve.numOver60}"></b></tr>
+    </td>
+    <td>
+        <tr class="tdListCentroArriba tdListTexto">
+            <label th:text="${{reserve.totalPrice}"></label>
+        </tr>
+        <tr class="tdListCentroArriba tdListTexto">
+            <label>Nivell </label>
+            <label th:text="${{reserve.state}}"></label>
+        </tr>
+    </td>
+</table>
+
+</body>
+</html>

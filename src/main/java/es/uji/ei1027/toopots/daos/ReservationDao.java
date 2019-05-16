@@ -1,7 +1,6 @@
 package es.uji.ei1027.toopots.daos;
 
 import es.uji.ei1027.toopots.model.Activity;
-import es.uji.ei1027.toopots.model.ActivityRates;
 import es.uji.ei1027.toopots.model.Reservation;
 import es.uji.ei1027.toopots.model.SummaryPrice;
 import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
@@ -14,7 +13,6 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
 
 @Repository
 public class ReservationDao {
@@ -141,6 +139,15 @@ public class ReservationDao {
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Reservation>();
+        }
+    }
+    /* Obté totes les reserves d'una activitat. Torna una llista buida si no n'hi ha cap. */
+    public Reservation getUser(int idcustomer) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * from Reservation where idcustomer=?", new ReservationRowMapper(), idcustomer);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return null;
         }
     }
 

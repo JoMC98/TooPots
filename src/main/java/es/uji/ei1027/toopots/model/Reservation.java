@@ -25,6 +25,8 @@ public class Reservation {
     private int idCustomer;
     private String state;
 
+    //Para las reserves de actividades
+    private String nameCustomer;
     //Constructor
 
     public Reservation() {
@@ -79,6 +81,10 @@ public class Reservation {
         return numUnder16 + numStudents + numAdults + numOver60;
     }
 
+    public String getNameCustomer(String nameCustomer) {
+        return nameCustomer;
+    }
+
     //Setters
 
 
@@ -124,6 +130,10 @@ public class Reservation {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public void setNameCustomer(String nameCustomer) {
+        this.nameCustomer = nameCustomer;
     }
 
     //toString
