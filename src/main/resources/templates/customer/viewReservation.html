@@ -65,6 +65,19 @@
         <td>
             <label class="inputLabel inputPequeño"><b>Estudiants: </b></label>
         </td>
+
+    </tr>
+
+    <tr>
+        <td>
+        <label class="input inputPequeño" th:text="${reservation.numAdults}" />
+        </td>
+        <td>
+            <label class="input inputPequeño" th:text="${reservation.numStudents}" />
+        </td>
+
+    </tr>
+    <tr>
         <td>
             <label class="inputLabel inputPequeño"><b>Menos de 16 anys:</b></label>
         </td>
@@ -75,12 +88,6 @@
 
     <tr>
         <td>
-        <label class="input inputPequeño" th:text="${reservation.numAdults}" />
-    </td>
-        <td>
-            <label class="input inputPequeño" th:text="${reservation.numStudents}" />
-        </td>
-        <td>
             <label class="input inputPequeño" th:text="${reservation.numUnder16}" />
         </td>
         <td>
@@ -88,6 +95,8 @@
         </td>
     </tr>
 </table>
+
+
 
 
 <table class="tablaTarifas marginAuto">
