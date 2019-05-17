@@ -27,8 +27,8 @@ public class Reservation {
 
     //Para las reserves de actividades
     private String nameCustomer;
-    //Constructor
 
+    //Constructor
     public Reservation() {
     }
 
@@ -81,13 +81,11 @@ public class Reservation {
         return numUnder16 + numStudents + numAdults + numOver60;
     }
 
-    public String getNameCustomer(String nameCustomer) {
+    public String getNameCustomer() {
         return nameCustomer;
     }
 
     //Setters
-
-
     public void setId(int id) {
         this.id = id;
     }

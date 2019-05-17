@@ -134,7 +134,6 @@ public class CustomerController {
         return "redirect:/";
     }
 
-
     //Esborra un client
     @RequestMapping(value="/delete/{id}")
     public String processDelete(@PathVariable int id) {

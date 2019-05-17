@@ -39,6 +39,7 @@ public class ActivityController {
     private InstructorDao instructorDao;
     private ReservationDao reservationDao;
     private ActivityCertificationDao activityCertificationDao;
+    private UsersDao usersDao;
 
     @Value("${upload.file.directory}")
     private String uploadDirectory;
@@ -76,6 +77,10 @@ public class ActivityController {
     @Autowired
     public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
+    @Autowired
+    public void setUsersDao(UsersDao userDao) {
+        this.usersDao = userDao;
+    }
 
     //Llistar totes les activitats del monitor
     @RequestMapping("/offer")
@@ -595,6 +600,19 @@ public class ActivityController {
         activity.setState("Cancelada");
         activityDao.cancelActivity(activity);
         return "redirect:/instructor/listActivities";
+    }
+
+    //Llistar totes les reserves d'una activitat
+    @RequestMapping(value="/listReservations/{id}", method = RequestMethod.GET)
+    public String listReservesActivity(Model model, @PathVariable int id) {
+        List<Reservation> reserves = reservationDao.getReserves(id);
+        for (Reservation reserve: reserves){
+            Users user = usersDao.getUser(reserve.getIdCustomer());
+            reserve.setNameCustomer(user.getName());
+        }
+
+        model.addAttribute("reserves", reserves);
+        return "activity/listReservations";
     }
 
     private int controlarAcceso(HttpSession session, String rol) {
