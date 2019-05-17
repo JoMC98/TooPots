@@ -49,7 +49,7 @@ public class HomepageController {
         } else if (acceso == ADMIN) {
             return "redirect:admin/home";
         } else if (acceso == INSTRUCTOR){
-            return "redirect:instructor/listActivities";
+            return "redirect:instructor/listActivities/opened";
         } else {
             return "redirect:activity/offer";
         }

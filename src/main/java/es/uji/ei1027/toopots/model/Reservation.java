@@ -2,6 +2,7 @@ package es.uji.ei1027.toopots.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Reservation {
@@ -10,8 +11,7 @@ public class Reservation {
 
     private int id;
 
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date bookingDate;
+    private LocalDate bookingDate;
 
     //Por edad
     private int numUnder16;
@@ -37,7 +37,7 @@ public class Reservation {
         return id;
     }
 
-    public Date getBookingDate() {
+    public LocalDate getBookingDate() {
         return bookingDate;
     }
 
@@ -90,7 +90,7 @@ public class Reservation {
         this.id = id;
     }
 
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(LocalDate bookingDate) {
         this.bookingDate = bookingDate;
     }
 

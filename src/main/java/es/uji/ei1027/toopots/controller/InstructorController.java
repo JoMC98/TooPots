@@ -112,8 +112,7 @@ public class InstructorController {
                                    @ModelAttribute("user") Users user, BindingResult bindingResultUser,
                                    @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResultInstructor,
                                    @ModelAttribute("certificationNames") CertificationNames certificationNames,
-                                   BindingResult bindingResultNames, @RequestParam("cert") MultipartFile[] cert,
-                                   BindingResult bindingResult) {
+                                   BindingResult bindingResultNames, @RequestParam("cert") MultipartFile[] cert) {
 
         InstructorValidator instructorValidator = new InstructorValidator();
         instructorValidator.validate(instructor, bindingResultInstructor);
@@ -181,7 +180,6 @@ public class InstructorController {
             MultipartFile file = cert[i];
             saveCertificate(file, newUser.getId(), names.get(i), i+1);
         }
-
         return "redirect:../";
     }
 
@@ -240,17 +238,21 @@ public class InstructorController {
     }
 
     //Llistat de totes les activitats del monitor per a ell
-    @RequestMapping("/listActivities")
-    public String listActivities(Model model, HttpSession session) {
+    @RequestMapping("/listActivities/{state}")
+    public String listActivities(Model model, HttpSession session, @PathVariable String state) {
         int acceso = controlarAcceso(session, "Instructor");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/listActivities");
+            session.setAttribute("nextUrl", "/instructor/listActivities/" + state);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
 
-            List<Activity> activities = activityDao.getActivities(user.getId());
+            if (!state.equals("opened") && !state.equals("closed") && !state.equals("canceled")) {
+                return "redirect:/";
+            }
+
+            List<Activity> activities = activityDao.getActivities(user.getId(), state);
 
             List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
             for (Activity ac: activities) {
@@ -271,11 +273,11 @@ public class InstructorController {
                 activitiesWithOcupation.add(ac);
             }
             model.addAttribute("activities", activitiesWithOcupation);
+            model.addAttribute("estat", state);
             return "instructor/listActivities";
         } else {
             return "redirect:/";
         }
-
     }
 
     //Llistat de totes les activitats del monitor per als clients
@@ -283,7 +285,7 @@ public class InstructorController {
     public String activityListForCustomers(Model model, @PathVariable int id) {
         Users user = userDao.getUser(id);
 
-        List<Activity> activities = activityDao.getActivities(user.getId());
+        List<Activity> activities = activityDao.getActivities(user.getId(), "all");
 
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {

@@ -91,14 +91,26 @@ public class ActivityDao {
     }
 
     /* Obté totes les activitats d'un monitor. Torna una llista buida si no n'hi ha cap. */
-    public List<Activity> getActivities(int id) {
+    public List<Activity> getActivities(int id, String state) {
         try {
-            return jdbcTemplate.query("SELECT * from Activity where idInstructor = ?", new ActivityRowMapper(), id);
+            String estat = "";
+            if (state.equals("opened")) {
+                estat = "Oberta";
+            } else if (state.equals("closed")) {
+                estat = "Tancada";
+            } else if (state.equals("canceled")) {
+                estat = "Cancelada";
+            } else {
+                return jdbcTemplate.query("SELECT * from Activity where idInstructor = ?", new ActivityRowMapper(), id);
+            }
+            return jdbcTemplate.query("SELECT * from Activity where idInstructor = ? and state=?", new ActivityRowMapper(), id, estat);
         }
+
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();
         }
     }
+
 
     /* Obté la activitat. Torna una llista buida si no n'hi ha cap. */
     public Activity getActivityCustomer(int id) {

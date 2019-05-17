@@ -278,7 +278,7 @@ public class ActivityController {
             activityRatesDao.addActivityRates(tarifa);
         }
 
-        return "redirect:/instructor/listActivities";
+        return "redirect:/instructor/listActivities/opened";
     }
 
     private void saveFoto(MultipartFile foto, Activity activity, int idFoto) {
@@ -568,6 +568,7 @@ public class ActivityController {
         model.addAttribute("rates", rates);
         return "activity/view";
     }
+
     //Controlar una cancelacio
     @RequestMapping("/cancel/{id}")
     public String cancelActivity(HttpSession session, Model model, @PathVariable int id) {
@@ -598,7 +599,43 @@ public class ActivityController {
         }
         activity.setState("Cancelada");
         activityDao.cancelActivity(activity);
-        return "redirect:/instructor/listActivities";
+        return "redirect:/home";
+    }
+
+    //Tancar una activitat
+    @RequestMapping("/close/{id}")
+    public String closeActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/close/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Activity activity = activityDao.getActivity(id);
+            activity.setState("Tancada");
+            activityDao.updateActivityState(activity);
+            return "redirect:/home";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Obrir una activitat
+    @RequestMapping("/open/{id}")
+    public String openActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/open/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Activity activity = activityDao.getActivity(id);
+            activity.setState("Oberta");
+            activityDao.updateActivityState(activity);
+            return "redirect:/home";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Llistar totes les reserves d'una activitat

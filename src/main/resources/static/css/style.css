@@ -300,6 +300,13 @@ footer {
 .tdListTextoPrice {
     width: 200px;
 }
+.tdListTextoFecha {
+    width: 350px;
+}
+.tdListCancelation {
+    padding-right: 20px;
+    width: 250px;
+}
 .tdBotonAddLista {
     width: 300px;
     padding-left: 50px;
@@ -517,3 +524,9 @@ footer {
 .verticalAlignLogin {
      padding-top: 7.5%;
  }
+
+ /*Lista de actividades*/
+.botonListaActividades {
+    width: 200px;
+    margin: 0px 20px;
+}

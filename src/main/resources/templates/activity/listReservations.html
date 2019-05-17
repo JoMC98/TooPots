@@ -32,9 +32,9 @@
                 </td>
             </tr>
             <tr>
-                <td class="tdListCentroArriba tdListIzquierda tdListAbajo tdListTextoName">
+                <td class="tdListCentroArriba tdListIzquierda tdListAbajo tdListTextoFecha">
                     <b>Data de reserva: </b>
-                    <label class="margin0" th:text="${reserve.bookingDate}"></label>
+                    <label class="margin0" th:text="${#temporals.format(reserve.bookingDate, 'dd MMMM YYYY')}"></label>
                 </td>
                 <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListNombreTarifaCurt">
                     <b>Estudiants: </b>

@@ -2,19 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
-<head>
-    <title>Gestionar Activitats</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
-</head>
+    <head>
+        <title>Gestionar Activitats</title>
+        <meta charset="UTF-8" />
+    </head>
     <body layout:fragment="content">
+        <br>
+        <table class="marginAuto">
+            <tr>
+                <td><a th:href="@{/instructor/listActivities/{state}(state=opened)}" class="btn btn-outline-success botonListaActividades" role="button">Activitats obertes</a></td>
+                <td><a th:href="@{/instructor/listActivities/{state}(state=closed)}" class="btn btn-outline-info botonListaActividades" role="button">Activitats tancades</a></td>
+                <td><a th:href="@{/instructor/listActivities/{state}(state=canceled)}" class="btn btn-outline-danger botonListaActividades" role="button">Activitats cancel·lades</a></td>
+            </tr>
+        </table>
         <br>
         <table class="marginAuto tableBotonAddLista">
             <tr>
                 <td class="tdBotonAddLista"></td>
-                <td><h1>Llista d'activitats</h1></td>
-                <td class="tdBotonAddLista"><a  th:href="@{/activity/add}" class="btn btn-success" role="button">Crear Activitat</a></td>
+                <td>
+                    <h1>
+                        Llista d'activitats
+                        <label th:if="${estat} == opened"> obertes</label>
+                        <label th:if="${estat} == closed"> tancades</label>
+                        <label th:if="${estat} == canceled"> cancelades</label>
+                    </h1>
+                </td>
+                <td class="tdBotonAddLista"><a th:href="@{/activity/add}" class="btn btn-success" role="button">Crear Activitat</a></td>
             </tr>
         </table>
         <br>
@@ -26,15 +39,21 @@
                     </div>
                 </td>
                 <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
-                <td class="tdListCentroAbajo tdListArriba tdListBotones">
+                <td th:unless="${estat} == canceled" class="tdListCentroAbajo tdListArriba tdListBotones">
                     <a th:href="@{/activity/update/{id}(id=${activity.id})}" class="btn btn-warning listBoton" >Editar</a>
+                </td>
+                <td th:if="${estat} == canceled" rowspan="4" class="tdListArriba tdListAbajo tdListCancelation tdListIzquierda">
+                    <b>Motiu: </b>
+                    <label th:text="${activity.cancelationReason}"></label><br><br>
+                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
+
                 </td>
             </tr>
             <tr>
                 <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${activity.place}"></label>
                 </td>
-                <td class="tdListCentroArribaAbajo tdListBotones">
+                <td th:unless="${estat} == canceled" class="tdListCentroArribaAbajo tdListBotones">
                     <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
                 </td>
             </tr>
@@ -42,16 +61,18 @@
                 <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                 </td>
-                <td class="tdListCentroArribaAbajo tdListBotones">
-                    <a th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Tancar</a>
+                <td th:unless="${estat} == canceled" class="tdListCentroArribaAbajo tdListBotones">
+                    <a th:if="${estat} == closed" th:href="@{/activity/open/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Obrir</a>
+                    <a th:if="${estat} == opened" th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Tancar</a>
                 </td>
             </tr>
             <tr>
                 <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                    <label>Ocupació: </label>
                     <label th:text="${activity.ocupation}"></label>
                     <label> %</label>
                 </td>
-                <td class="tdListCentroArriba tdListAbajo tdListBotones">
+                <td th:unless="${estat} == canceled" class="tdListCentroArriba tdListAbajo tdListBotones">
                     <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Cancel·lar</a>
                 </td>
             </tr>
