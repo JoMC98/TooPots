@@ -285,12 +285,30 @@ footer {
 .tdListTableActivity {
     width: 270px;
 }
+.tdListNombreTarifaCurt {
+    text-align: right;
+    width: 140px;
+}
+.tdListNombreTarifaLlarg {
+    text-align: right;
+    width: 230px;
+}
+.tdListPrecioTarifa {
+    text-align: left;
+    width: 60px;
+}
+.tdListTextoPrice {
+    width: 200px;
+}
 .tdBotonAddLista {
     width: 300px;
     padding-left: 50px;
 }
 .tableBotonAddLista {
     width: 100%;
+}
+.margin0 {
+    margin: 0px;
 }
 
 /*Profile*/

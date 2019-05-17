@@ -30,7 +30,6 @@ public class CustomerController {
     private UsersDao userDao;
     private ActivityDao activityDao;
     private ActivityTypeDao activityTypeDao;
-    private ReservationDao reservationDao;
     private ActivityPhotosDao activityPhotosDao;
     private ActivityRatesDao activityRatesDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
@@ -53,6 +52,16 @@ public class CustomerController {
     @Autowired
     public void setActivityRatesDao(ActivityRatesDao activityRatesDao) {
         this.activityRatesDao=activityRatesDao;
+    }
+
+    @Autowired
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao=activityDao;
+    }
+
+    @Autowired
+    public void setActivityTypeDao(ActivityTypeDao activityTypeDao) {
+        this.activityTypeDao=activityTypeDao;
     }
 
     //Llistar tots els clients
@@ -148,45 +157,43 @@ public class CustomerController {
         return "redirect:../list";
     }
 
-
     //Llistar tots els clients
-    @RequestMapping(value="/listReservation", method = RequestMethod.GET)
+    @RequestMapping(value="/listReservations", method = RequestMethod.GET)
     public String listReservations(Model model,  HttpSession session) {
 
         int acceso = controlarAcceso(session, "Customer");
 
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/customer/update");
+            session.setAttribute("nextUrl", "/customer/listReservations");
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
             List<Reservation> reserves = customerDao.getReservations(user.getId());
+
             //llista que passem al controlador
             List<Activity> activities = new ArrayList<Activity>();
+
             //crear una llista de activitats mitjançant el id de activitat i anyadir els metodos de reserva
             for (Reservation reserve: reserves){
                 Activity activity = activityDao.getActivity(reserve.getIdActivity());
-                activity.setTotalPrice(reserve.getTotalPrice());
+                activity.setReservationPriceTotal(reserve.getTotalPrice());
+
                 //obtener el nivel
                 ActivityType activityType = activityTypeDao.getActivityType(activity.getActivityType());
-                activity.setActivityTypeLevel(activity.getActivityTypeLevel());
-                activity.setActivityTypeName(activity.getActivityTypeName());
+                activity.setActivityTypeLevel(activityType.getLevel());
+                activity.setActivityTypeName(activityType.getName());
+
                 //obtener la foto
                 ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(activity.getId());
                 activity.setPhotoPrincipal(photoPrincipal.getPhoto());
                 activities.add(activity);
             }
             model.addAttribute("activities",activities);
-            //model.addAttribute("user", userDao.getUser(user.getId()));
-            model.addAttribute("customer", customerDao.getCustomer(user.getId()));
             return "customer/listReservations";
         } else {
             return "redirect:/";
         }
-        //obtindre les reserves
-        //un for reserva per reserva
-        //a la vista creo una llista de activitats
     }
 
     //Llistar tots les subscripcions disponibles

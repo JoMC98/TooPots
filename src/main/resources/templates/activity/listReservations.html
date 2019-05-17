@@ -7,50 +7,50 @@
         <meta charset="UTF-8" />
     </head>
     <body layout:fragment="content">
-        <br><h1>Reserves de l'activitat</h1>
+        <br><h1>Reserves de l'activitat</h1><br>
         <table class="table_bordered" th:each="reserve: ${reserves}">
             <tr>
-                <td rowspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${reserve.nameCustomer}"></b></td>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName">
+                <td class="tdListCentroAbajo tdListIzquierda tdListArriba tdListTextoName">
+                    <b th:text="${reserve.nameCustomer}"></b>
+                </td>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListNombreTarifaCurt">
                     <b>Adults: </b>
                 </td>
-                <td>
-                    <label th:text="${reserve.numAdults}"></label>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListPrecioTarifa">
+                    <label class="margin0" th:text="${reserve.numAdults}"></label>
                 </td>
-                <td rowspan="2" class="tdListCentroArriba tdListTexto">
-                    <b>Preu total: </b>
-                    <label th:text="${reserve.totalPrice}"></label>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName">
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListNombreTarifaLlarg">
                     <b>Menors de 16 anys: </b>
                 </td>
-                <td>
-                    <label th:text="${reserve.numUnder16}"></label>
+                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListPrecioTarifa">
+                    <label class="margin0"th:text="${reserve.numUnder16}"></label>
+                </td>
+                <td class="tdListCentroAbajo tdListBotones tdListArriba tdListTextoPrice">
+                    <b>Preu total: </b>
+                    <label class="margin0" th:text="${reserve.totalPrice}"></label>
+                    <label class="margin0"> €</label>
                 </td>
             </tr>
             <tr>
-                <td rowspan="2" class="tdListCentroArriba tdListTexto">
-                    <label th:text="${reserve.bookingDate}"></label>
+                <td class="tdListCentroArriba tdListIzquierda tdListAbajo tdListTextoName">
+                    <b>Data de reserva: </b>
+                    <label class="margin0" th:text="${reserve.bookingDate}"></label>
                 </td>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName">
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListNombreTarifaCurt">
                     <b>Estudiants: </b>
                 </td>
-                <td>
-                    <label th:text="${reserve.numStudents}"></label>
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListPrecioTarifa">
+                    <label class="margin0" th:text="${reserve.numStudents}"></label>
                 </td>
-                <td rowspan="2" class="tdListCentroArriba tdListTexto">
-                    <b>Estat: </b>
-                    <label th:text="${reserve.state}"></label>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName">
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListNombreTarifaCurt">
                     <b>Majors de 60 anys: </b>
                 </td>
-                <td>
-                    <label th:text="${reserve.numOver60}"></label>
+                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListPrecioTarifa">
+                    <label class="margin0" th:text="${reserve.numOver60}"></label>
+                </td>
+                <td class="tdListCentroArriba tdListBotones tdListAbajo">
+                    <b>Estat: </b>
+                    <label class="margin0" th:text="${reserve.state}"></label>
                 </td>
             </tr>
         </table>

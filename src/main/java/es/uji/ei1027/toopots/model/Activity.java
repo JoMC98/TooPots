@@ -46,10 +46,8 @@ public class Activity {
     private String activityTypeName;
     private String activityTypeLevel;
 
-
-
     //Para usar en reservas
-    private float totalPrice;
+    private float reservationPriceTotal;
 
     //Constructor
     public Activity() {
@@ -161,13 +159,11 @@ public class Activity {
         return activityTypeLevel;
     }
 
-    public float getTotalPrice() {
-        return totalPrice;
+    public float getReservationPriceTotal() {
+        return reservationPriceTotal;
     }
 
-
-
-//Setters
+    //Setters
 
     public void setId(int id) {
         this.id = id;
@@ -259,8 +255,8 @@ public class Activity {
         this.activityTypeLevel = activityTypeLevel;
     }
 
-    public void setTotalPrice(float totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setReservationPriceTotal(float reservationPriceTotal) {
+        this.reservationPriceTotal = reservationPriceTotal;
     }
 
     //To String
