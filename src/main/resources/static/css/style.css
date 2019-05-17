@@ -455,6 +455,10 @@ footer {
     border: 1px black solid;
     background-color: #EEEEEE;
 }
+.tablaTarifasActividad {
+    border: 1px black solid;
+    width: 530px;
+}
 .tdPaddingTop {
     padding-top: 20px;
 }
@@ -471,6 +475,10 @@ footer {
 .activityFotoReserva {
     width: 400px;
     height: 240px;
+}
+.activityFotoReservaPequeño {
+    width: 200px;
+    height: 120px;
 }
 .tdActivityFotoReserva {
     vertical-align: top !important;
@@ -529,4 +537,20 @@ footer {
 .botonListaActividades {
     width: 200px;
     margin: 0px 20px;
+}
+
+/*Ver actividad*/
+.tdNombreActividad {
+    width: 400px;
+    padding-left: 10px;
+}
+.divViewActivity {
+    width: 270px;
+}
+.divViewActivityBig {
+    margin-left: 18px;
+    width: 530px;
+}
+.paddingLeft5 {
+    padding-left: 5px;
 }
