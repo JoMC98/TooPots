@@ -555,7 +555,6 @@ public class ActivityController {
         }
 
     }
-    //TODO controlador adrian
     //Veure dades activitat
     @RequestMapping(value="/view/{id}", method = RequestMethod.GET)
     public String dataViewActivity(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {

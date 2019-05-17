@@ -24,6 +24,22 @@
 <table class="marginAuto">
     <tr>
         <td>
+            <label class="inputLabel inputPequeño"><b>Lloc</b></label>
+        </td>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Data</b></label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label class="input inputPequeño"   th:text="${activity.place}" />
+        </td>
+        <td>
+            <label class="input inputPequeño"   th:text="${activity.dates}" />
+        </td>
+    </tr>
+    <tr>
+        <td>
             <label class="inputLabel inputPequeño"><b>Lloc Quedada</b></label>
         </td>
         <td>
@@ -38,23 +54,40 @@
             <label class="input inputPequeño" th:text="${activity.meetingTime}" />
         </td>
     </tr>
-    <tr>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Maxim persones</b></label>
-        </td>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Minim persones</b></label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="input inputPequeño"   th:text="${activity.maxNumberPeople}" />
-        </td>
-        <td>
-            <label class="input inputPequeño"   th:text="${activity.minNumberPeople}" />
-        </td>
-    </tr>
+
 </table >
+
+<table class="marginAuto">
+    <tr>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Adults:</b></label>
+        </td>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Estudiants: </b></label>
+        </td>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Menos de 16 anys:</b></label>
+        </td>
+        <td>
+            <label class="inputLabel inputPequeño"><b>Majors de 60 anys: </b></label>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+        <label class="input inputPequeño" th:text="${reservation.numAdults}" />
+    </td>
+        <td>
+            <label class="input inputPequeño" th:text="${reservation.numStudents}" />
+        </td>
+        <td>
+            <label class="input inputPequeño" th:text="${reservation.numUnder16}" />
+        </td>
+        <td>
+            <label class="input inputPequeño" th:text="${reservation.numOver60}" />
+        </td>
+    </tr>
+</table>
 
 
 <table class="tablaTarifas marginAuto">

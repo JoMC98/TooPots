@@ -32,6 +32,7 @@ public class CustomerController {
     private ActivityTypeDao activityTypeDao;
     private ReservationDao reservationDao;
     private ActivityPhotosDao activityPhotosDao;
+    private ActivityRatesDao activityRatesDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
@@ -47,6 +48,11 @@ public class CustomerController {
     @Autowired
     public void setActivityPhotosDao(ActivityPhotosDao activityPhotosDao) {
         this.activityPhotosDao=activityPhotosDao;
+    }
+
+    @Autowired
+    public void setActivityRatesDao(ActivityRatesDao activityRatesDao) {
+        this.activityRatesDao=activityRatesDao;
     }
 
     //Llistar tots els clients
@@ -204,6 +210,19 @@ public class CustomerController {
         //també mirar lo del boto subscriure, nose si un state o una variable normal
     }
 
+    //Veure dades reserves
+    @RequestMapping(value="/viewReservation/{id}", method = RequestMethod.GET)
+    public String dataViewReservation(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+        Activity activity = activityDao.getActivity(id);
+        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
+        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("activity", activity);
+        model.addAttribute("rates", rates);
+        return "customer/viewReservation";
+    }
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {
