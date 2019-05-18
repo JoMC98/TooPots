@@ -560,6 +560,7 @@ footer {
     border: 1px black solid;
     width: 812px;
 }
-td {
-    border: 1px black solid;
+.carousel.slide {
+    width: 250px !important;
+    margin-left: 15px;
 }

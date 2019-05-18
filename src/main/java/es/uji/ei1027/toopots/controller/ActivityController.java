@@ -561,9 +561,13 @@ public class ActivityController {
     public String dataViewActivity(Model model, @PathVariable int id) {
         List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
         Activity activity = activityDao.getActivity(id);
-        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
-        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
+        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
+        if (imatges.size() == 1) {
+            activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+        }
 
+        model.addAttribute("imatges", imatges);
+        model.addAttribute("totalFotos", imatges.size());
         model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
         model.addAttribute("activity", activity);
         model.addAttribute("rates", rates);
