@@ -555,15 +555,16 @@ public class ActivityController {
         }
 
     }
+
     //Veure dades activitat
     @RequestMapping(value="/view/{id}", method = RequestMethod.GET)
-    public String dataViewActivity(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+    public String dataViewActivity(Model model, @PathVariable int id) {
         List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
         Activity activity = activityDao.getActivity(id);
         ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
         activity.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-        model.addAttribute("reservation", reservation);
+        model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
         model.addAttribute("activity", activity);
         model.addAttribute("rates", rates);
         return "activity/view";
