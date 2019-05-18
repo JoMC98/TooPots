@@ -197,7 +197,7 @@ public class CustomerController {
     }
 
     //Llistar tots les subscripcions disponibles
-    @RequestMapping(value="/listSubscriptions", method = RequestMethod.GET) // ficar el GET nose si es necessari
+    @RequestMapping("/listSubscriptions/")
     public String listSubscriptions(Model model,  HttpSession session) {
 
         int acceso = controlarAcceso(session, "Customer");
@@ -207,14 +207,45 @@ public class CustomerController {
             session.setAttribute("nextUrl", "/customer/listSubscriptions");
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
-            return "customer/listReservations";
+//            model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
+//            return "customer/listSubscriptions";
+
+            Users user = (Users) session.getAttribute("user");
+            List<ActivityType> activities = activityTypeDao.getActivityTypes();
+
+
+            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
+            for (ActivityType ac: activities) {
+
+                List<Subscription> subscriptions = customerDao.getSubscriptions(user.getId());
+                subscriptions.contains(ac);
+                for (Subscription sub: subscriptions) {
+
+                    if (ac.getId() == sub.getIdActivityType())
+                        ac.setSubscribe(true);
+                }
+
+
+                total = (total/ac.getMaxNumberPeople())*100;
+                total = (float) Math.floor(total);
+                int ocupation = (int) total;
+                ac.setOcupation(ocupation);
+
+                activitiesWithOcupation.add(ac);
+            }
+            model.addAttribute("activityTypes", activitiesWithOcupation);
+            model.addAttribute("estat", state);
+            return "customer/listSubscriptions";
+
+
+
         } else {
             return "redirect:/";
         }
         //obtindre les activitats a les que es pot subscriure, no se si son totes o no,
         //i si se fa un metode apart per al gestionar el subcriures
         //també mirar lo del boto subscriure, nose si un state o una variable normal
+
     }
 
     //Veure dades reserves
