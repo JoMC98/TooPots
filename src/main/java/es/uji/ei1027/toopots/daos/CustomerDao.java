@@ -4,7 +4,6 @@ package es.uji.ei1027.toopots.daos;
 import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Customer;
 import es.uji.ei1027.toopots.model.Reservation;
-import es.uji.ei1027.toopots.model.Subscription;
 import es.uji.ei1027.toopots.rowMapper.ActivityRowMapper;
 import es.uji.ei1027.toopots.rowMapper.CustomerRowMapper;
 import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
@@ -78,12 +77,13 @@ public class CustomerDao {
     }
 
     /* Obté tots les subscripcions dels clients. Torna una llista buida si no n'hi ha cap. */
-    public List<Subscription> getSubscriptions(int id) {
+
+    public List<Integer> getSubscriptions(int id) {
         try {
-            return jdbcTemplate.query("SELECT * from Subscription WHERE idcustomer=?", new SubscriptionRowMapper(), id);
+            return jdbcTemplate.query("SELECT activityType from Subscription WHERE idcustomer=?", new SubscriptionRowMapper(), id);
         }
         catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Subscription>();
+            return new ArrayList<Integer>();
         }
     }
 

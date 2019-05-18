@@ -197,7 +197,7 @@ public class CustomerController {
     }
 
     //Llistar tots les subscripcions disponibles
-    @RequestMapping("/listSubscriptions/")
+    @RequestMapping("/listSubscriptions")
     public String listSubscriptions(Model model,  HttpSession session) {
 
         int acceso = controlarAcceso(session, "Customer");
@@ -212,29 +212,21 @@ public class CustomerController {
 
             Users user = (Users) session.getAttribute("user");
             List<ActivityType> activities = activityTypeDao.getActivityTypes();
-
+            List<Integer> subscriptions = customerDao.getSubscriptions(user.getId());
 
             List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
             for (ActivityType ac: activities) {
-
-                List<Subscription> subscriptions = customerDao.getSubscriptions(user.getId());
-                subscriptions.contains(ac);
-                for (Subscription sub: subscriptions) {
-
-                    if (ac.getId() == sub.getIdActivityType())
-                        ac.setSubscribe(true);
-                }
-
-
-                total = (total/ac.getMaxNumberPeople())*100;
-                total = (float) Math.floor(total);
-                int ocupation = (int) total;
-                ac.setOcupation(ocupation);
-
-                activitiesWithOcupation.add(ac);
+                if(subscriptions.contains(ac))
+                    ac.setSubscribe(true);
+                else
+                    ac.setSubscribe(false);
             }
-            model.addAttribute("activityTypes", activitiesWithOcupation);
-            model.addAttribute("estat", state);
+
+            for (ActivityType ac: activities) {
+                activitiesModified.add(ac);
+            }
+
+            model.addAttribute("activityTypes", activitiesModified);
             return "customer/listSubscriptions";
 
 
