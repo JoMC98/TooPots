@@ -8,6 +8,7 @@ public class ActivityType implements Comparable<ActivityType> {
     private String level;
     private String description;
     private String photo;
+    private boolean subscribe;
 
     //Constructor
     public ActivityType() {
@@ -34,6 +35,10 @@ public class ActivityType implements Comparable<ActivityType> {
         return photo;
     }
 
+    public boolean isSubscribe() {
+        return subscribe;
+    }
+
     //Setters
     public void setId(int id) {
         this.id = id;
@@ -55,18 +60,13 @@ public class ActivityType implements Comparable<ActivityType> {
         this.photo = photo;
     }
 
+    public void setSubscribe(boolean subscribe) {
+        this.subscribe = subscribe;
+    }
+
     //ToString
 
-    @Override
-    public String toString() {
-        return "ActivityType{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", level='" + level + '\'' +
-                ", description='" + description + '\'' +
-                ", photo='" + photo + '\'' +
-                '}';
-    }
+
 
     @Override
     public boolean equals(Object other) {
@@ -82,4 +82,15 @@ public class ActivityType implements Comparable<ActivityType> {
         }
     }
 
+    @Override
+    public String toString() {
+        return "ActivityType{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", level='" + level + '\'' +
+                ", description='" + description + '\'' +
+                ", photo='" + photo + '\'' +
+                ", subscribe=" + subscribe +
+                '}';
+    }
 }
