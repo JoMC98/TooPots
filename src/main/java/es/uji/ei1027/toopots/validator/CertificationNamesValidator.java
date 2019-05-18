@@ -37,9 +37,5 @@ public class CertificationNamesValidator implements Validator {
             errors.rejectValue("certificate4", "obligatori",
                     "Cal introduir un valor");
 
-        if (names.getCertificate5().trim().equals("") && numbFiles>4)
-            errors.rejectValue("certificate5", "obligatori",
-                    "Cal introduir un valor");
-
     }
 }

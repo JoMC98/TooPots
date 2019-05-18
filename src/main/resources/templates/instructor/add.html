@@ -58,7 +58,7 @@
             <br>
             <table class="marginAuto" th:object="${certificationNames}">
                 <tr>
-                    <td colspan="5"><label class="inputLabel">Certificats (mínim 1 i màxim 5)</label></td>
+                    <td colspan="4"><label class="inputLabel">Certificats (mínim 1 i màxim 5)</label></td>
                 </tr>
                 <tr>
                     <td class="marginAuto">
@@ -73,12 +73,9 @@
                     <td class="marginAuto">
                         <textarea th:field="*{certificate4}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                     </td>
-                    <td class="marginAuto">
-                        <textarea th:field="*{certificate5}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
-                    </td>
                 </tr>
                 <tr>
-                    <td colspan="5">
+                    <td colspan="4">
                         <input th:if="${errorCert}" class="inputAdjunto needCorrection" type="file" accept="application/pdf" name="cert" multiple>
                         <input th:unless="${errorCert}" class="inputAdjunto" type="file" accept="application/pdf" name="cert" multiple>
                     </td>

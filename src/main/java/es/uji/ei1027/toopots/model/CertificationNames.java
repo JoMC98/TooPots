@@ -6,7 +6,6 @@ public class CertificationNames {
     private String certificate2;
     private String certificate3;
     private String certificate4;
-    private String certificate5;
 
     //Constructor
     public CertificationNames() {
@@ -29,10 +28,6 @@ public class CertificationNames {
         return certificate4;
     }
 
-    public String getCertificate5() {
-        return certificate5;
-    }
-
     //Setter
     public void setCertificate1(String certificate1) {
         this.certificate1 = certificate1;
@@ -50,10 +45,6 @@ public class CertificationNames {
         this.certificate4 = certificate4;
     }
 
-    public void setCertificate5(String certificate5) {
-        this.certificate5 = certificate5;
-    }
-
     //ToString
 
     @Override
@@ -63,7 +54,6 @@ public class CertificationNames {
                 ", certificate2='" + certificate2 + '\'' +
                 ", certificate3='" + certificate3 + '\'' +
                 ", certificate4='" + certificate4 + '\'' +
-                ", certificate5='" + certificate5 + '\'' +
                 '}';
     }
 }

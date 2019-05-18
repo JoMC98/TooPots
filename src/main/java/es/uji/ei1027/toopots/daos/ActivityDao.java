@@ -90,6 +90,16 @@ public class ActivityDao {
         }
     }
 
+    /* Obté totes les activitats amb eixe estat. Torna una llista buida si no n'hi ha cap. */
+    public List<Activity> getActivities(String state) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where state=?", new ActivityRowMapper(),state);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
+
     /* Obté totes les activitats d'un monitor. Torna una llista buida si no n'hi ha cap. */
     public List<Activity> getActivities(int id, String state) {
         try {

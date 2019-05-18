@@ -10,11 +10,23 @@
 </head>
     <body layout:fragment="content">
         <br>
+        <table class="marginAuto">
+            <tr>
+                <td><a th:href="@{/instructor/showActivities/opened/{id}(id=${user.id})}" class="btn btn-outline-success botonListaActividades" role="button">Activitats obertes</a></td>
+                <td><a th:href="@{/instructor/showActivities/closed/{id}(id=${user.id})}" class="btn btn-outline-info botonListaActividades" role="button">Activitats tancades</a></td>
+            </tr>
+        </table>
+        <br>
         <table class="marginAuto tableBotonAddLista">
             <tr>
                 <td class="tdBotonAddLista"></td>
                 <td>
-                    <h1>Llista d'activitats del monitor</h1><br>
+                    <h1>
+                        Llista d'activitats
+                        <label th:if="${estat} == opened"> obertes </label>
+                        <label th:if="${estat} == closed"> tancades </label>
+                        del monitor
+                    </h1><br>
                     <h3 th:text="${user.name}"></h3>
                 </td>
                 <td class="tdBotonAddLista"><a th:href="@{/instructor/profile/{id}(id=${user.id})}" class="btn btn-warning" role="button">Perfil</a></td>
@@ -29,13 +41,16 @@
                     </div>
                 </td>
                 <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
-                <td></td>
+                <td th:if="${estat} == opened"></td>
+                <td th:if="${estat} == closed" rowspan="4" class="tdListArriba tdListAbajo tdListCentroIzquierda tdListBotones">
+                    <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>
+                </td>
             </tr>
             <tr>
                 <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${activity.place}"></label>
                 </td>
-                <td class="tdListCentroAbajo tdListAbajo tdListBotones">
+                <td th:if="${estat} == opened" class="tdListCentroAbajo tdListAbajo tdListBotones">
                     <a th:href="@{/activity/book/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Reservar</a>
                 </td>
             </tr>
@@ -43,8 +58,8 @@
                 <td class="tdListCentroArriba tdListTexto">
                     <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                 </td>
-                <td class="tdListCentroArriba tdListArriba tdListBotones">
-                    <a th:href="@{/}" class="btn btn-info listBoton" role="button">+ info</a>
+                <td th:if="${estat} == opened" class="tdListCentroArriba tdListArriba tdListBotones">
+                    <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>
                 </td>
             </tr>
             <tr>
@@ -52,7 +67,7 @@
                     <label th:text="${activity.ocupation}"></label>
                     <label> %</label>
                 </td>
-                <td></td>
+                <td th:if="${estat} == opened"></td>
             </tr>
         </table>
         <br>

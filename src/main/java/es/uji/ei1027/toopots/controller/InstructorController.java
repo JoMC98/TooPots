@@ -174,7 +174,6 @@ public class InstructorController {
         names.add(certificationNames.getCertificate2());
         names.add(certificationNames.getCertificate3());
         names.add(certificationNames.getCertificate4());
-        names.add(certificationNames.getCertificate5());
 
         for (int i=0; i<cert.length; i++) {
             MultipartFile file = cert[i];
@@ -281,11 +280,14 @@ public class InstructorController {
     }
 
     //Llistat de totes les activitats del monitor per als clients
-    @RequestMapping("/showActivities/{id}")
-    public String activityListForCustomers(Model model, @PathVariable int id) {
+    @RequestMapping("/showActivities/{state}/{id}")
+    public String activityListForCustomers(Model model, @PathVariable int id, @PathVariable String state) {
         Users user = userDao.getUser(id);
 
-        List<Activity> activities = activityDao.getActivities(user.getId(), "all");
+        if (!state.equals("opened") && !state.equals("closed")) {
+            return "redirect:/";
+        }
+        List<Activity> activities = activityDao.getActivities(user.getId(), state);
 
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
@@ -307,6 +309,7 @@ public class InstructorController {
         }
         model.addAttribute("user", user);
         model.addAttribute("activities", activitiesWithOcupation);
+        model.addAttribute("estat", state);
         return "instructor/showActivities";
 
     }

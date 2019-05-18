@@ -85,7 +85,7 @@ public class ActivityController {
     //Llistar totes les activitats del monitor
     @RequestMapping("/offer")
     public String listActivities(Model model) {
-        List<Activity> activities = activityDao.getActivities();
+        List<Activity> activities = activityDao.getActivities("Oberta");
         System.out.println("get");
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
