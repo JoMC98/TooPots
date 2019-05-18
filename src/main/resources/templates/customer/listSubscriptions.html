@@ -30,7 +30,8 @@
             <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
             <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b> Descripció</b></td>
             <td rowspan="2" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
-                <a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Subscriures</a>
+                <a th:if="${activityType.suscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-success listBoton" role="button">Desubscriures</a>
+                <a th:unless="${activityType.suscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Subscriures</a>
             </td>
         </tr>
         <tr>

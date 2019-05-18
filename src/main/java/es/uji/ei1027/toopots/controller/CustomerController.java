@@ -197,46 +197,41 @@ public class CustomerController {
     }
 
     //Llistar tots les subscripcions disponibles
-    @RequestMapping("/listSubscriptions")
+    @RequestMapping(value="/listSubscriptions", method = RequestMethod.GET)
     public String listSubscriptions(Model model,  HttpSession session) {
 
         int acceso = controlarAcceso(session, "Customer");
-
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/customer/listSubscriptions");
-            return "login";
+            List<ActivityType> activities = activityTypeDao.getActivityTypes();
+            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
+            for (ActivityType ac: activities) {
+                ac.setSubscribe(false);
+                activitiesModified.add(ac);
+            }
+            model.addAttribute("activityTypes", activitiesModified);
+            return "customer/listSubscriptions";
         } else if (acceso == USER_AUTHORIZED) {
-//            model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
-//            return "customer/listSubscriptions";
-
             Users user = (Users) session.getAttribute("user");
             List<ActivityType> activities = activityTypeDao.getActivityTypes();
             List<Integer> subscriptions = customerDao.getSubscriptions(user.getId());
 
             List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
             for (ActivityType ac: activities) {
-                if(subscriptions.contains(ac))
+                if(subscriptions.contains(ac.getId()))
                     ac.setSubscribe(true);
                 else
                     ac.setSubscribe(false);
-            }
 
-            for (ActivityType ac: activities) {
                 activitiesModified.add(ac);
             }
 
             model.addAttribute("activityTypes", activitiesModified);
             return "customer/listSubscriptions";
 
-
-
         } else {
             return "redirect:/";
         }
-        //obtindre les activitats a les que es pot subscriure, no se si son totes o no,
-        //i si se fa un metode apart per al gestionar el subcriures
-        //també mirar lo del boto subscriure, nose si un state o una variable normal
 
     }
 
