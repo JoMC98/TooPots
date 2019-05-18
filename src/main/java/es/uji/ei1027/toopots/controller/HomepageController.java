@@ -27,18 +27,7 @@ public class HomepageController {
 
     @RequestMapping("/")
     public String index(Model model) {
-//        TODO ACTIVAR
-//        int acceso = controlarAcceso(session);
-//        if(acceso == NOT_LOGGED) {
-//            return "redirect:activity/offer";
-//        } else if (acceso == ADMIN) {
-//            return "redirect:admin/home";
-//        } else if (acceso == INSTRUCTOR){
-//            return "redirect:instructor/listActivities";
-//        } else {
-//            return "redirect:activity/offer";
-//        }
-        return "index";
+        return "redirect:/home";
     }
 
     @RequestMapping("/home")
