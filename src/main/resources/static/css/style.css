@@ -455,10 +455,6 @@ footer {
     border: 1px black solid;
     background-color: #EEEEEE;
 }
-.tablaTarifasActividad {
-    border: 1px black solid;
-    width: 530px;
-}
 .tdPaddingTop {
     padding-top: 20px;
 }
@@ -548,9 +544,22 @@ footer {
     width: 270px;
 }
 .divViewActivityBig {
-    margin-left: 18px;
-    width: 530px;
+    width: 812px;
 }
 .paddingLeft5 {
     padding-left: 5px;
+}
+.inputDescripcionActividad {
+    width: 530px;
+    text-align: left;
+}
+.tdBotonActividad {
+    width: 406px;
+}
+.tablaTarifasActividad {
+    border: 1px black solid;
+    width: 812px;
+}
+td {
+    border: 1px black solid;
 }

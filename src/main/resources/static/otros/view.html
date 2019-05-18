@@ -14,21 +14,21 @@
             <td rowspan="3" class="tdFotoActividad">
                 <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto">
             </td>
-            <td colspan="2" class="tdNombreActividad">
+            <td class="tdNombreActividad">
                 <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td>
                 <div class="divViewActivity">
                     <label class="inputLabel inputPequeño paddingLeft5"><b>Descripció</b></label>
                 </div>
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td>
                 <div class="divViewActivity">
-                    <label class="input inputDescripcionActividad inputText inputAlto" th:text="${activity.description}"></label>
+                    <label class="input inputPequeño inputText inputAlto" th:text="${activity.description}"></label>
                 </div>
             </td>
         </tr>
@@ -41,9 +41,6 @@
                     <label class="inputLabel inputPequeño paddingLeft5"><b>Data</b></label>
                 </div>
             </td>
-            <td>
-                <label class="inputLabel inputPequeño"><b>Tipus d'activitat</b></label>
-            </td>
         </tr>
         <tr>
             <td>
@@ -54,14 +51,28 @@
                     <label class="input inputPequeño inputText" th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                 </div>
             </td>
+        </tr>
+        <tr>
             <td>
-                <label class="input inputPequeño inputText" th:text="${activityType.name}"></label>
+                <label class="inputLabel inputPequeño"><b>Tipus d'activitat</b></label>
+            </td>
+            <td>
+                <div class="divViewActivity">
+                    <label class="inputLabel inputPequeño paddingLeft5"><b>Nivell</b></label>
+                </div>
             </td>
         </tr>
         <tr>
             <td>
-                <label class="inputLabel inputPequeño paddingLeft5"><b>Nivell</b></label>
+                <label class="input inputPequeño inputText" th:text="${activityType.name}"></label>
             </td>
+            <td>
+                <div class="divViewActivity">
+                    <label class="input inputPequeño inputText" th:text="${activityType.level}"></label>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <td>
                 <label class="inputLabel inputPequeño"><b>Lloc de quedada</b></label>
             </td>
@@ -73,9 +84,6 @@
         </tr>
         <tr>
             <td>
-                <label class="input inputPequeño inputText" th:text="${activityType.level}"></label>
-            </td>
-            <td>
                 <label class="input inputPequeño inputText" th:text="${activity.meetingPoint}"></label>
             </td>
             <td>
@@ -84,8 +92,6 @@
                 </div>
             </td>
         </tr>
-    </table>
-    <table class="marginAuto">
         <tr>
             <td colspan="2">
                 <br>
@@ -95,22 +101,13 @@
                             <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
                             <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
                         </tr>
-                        <tr>
-                            <td colspan="2"><hr /></td>
-                        </tr>
                         <tr class="tdPaddingLeftRight">
                             <td class="tdPaddingLeftRight">Adults</td>
-                            <td class="tdPaddingLeftRight">
-                                <label th:text="${activity.pricePerPerson}"></label>
-                                <label> €</label>
-                            </td>
+                            <td class="tdPaddingLeftRight" th:text="${activity.pricePerPerson}"></td>
                         </tr>
                         <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
                             <td class="tdPaddingLeftRight" th:text="${rate.rateName}"></td>
-                            <td class="tdPaddingLeftRight">
-                                <label th:text="${rate.price}"></label>
-                                <label> €</label>
-                            </td>
+                            <td class="tdPaddingLeftRight" th:text="${rate.price}"></td>
                         </tr>
                         <tr>
                             <td class="tdPaddingBottom"></td>
@@ -122,10 +119,10 @@
             </td>
         </tr>
         <tr>
-            <td class="tdBotonActividad">
+            <td>
                 <a th:href="@{/activity/book/{id}(id=${activity.id})}" class="btn btn-success">Reservar</a>
             </td>
-            <td class="tdBotonActividad">
+            <td>
                 <div class="divViewActivity">
                     <a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning">Veure monitor</a>
                 </div>
