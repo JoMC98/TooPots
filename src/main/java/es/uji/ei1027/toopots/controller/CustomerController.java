@@ -242,31 +242,18 @@ public class CustomerController {
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "customer/subscribe/"+id);
+            session.setAttribute("nextUrl", "customer/listSubscriptions");
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
-//            List<ActivityType> activities = activityTypeDao.getActivityTypes();
             List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-
             ActivityType activityType = activityTypeDao.getActivityType(id);
             if(subscriptions.contains(activityType.getId())) {
                 subscriptionDao.deleteSubscription(activityType.getId());
-//                activityType.setSubscribe(false);
             }else {
                 subscriptionDao.addSubscription(activityType.getId(), user.getId());
-//                activityType.setSubscribe(true);
             }
-
-//            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
-//            for (ActivityType ac: activities) {
-//                if(ac.getId() == activityType.getId())
-//                    activitiesModified.add(activityType);
-//                activitiesModified.add(ac);
-//            }
-//            model.addAttribute("activityTypes", activitiesModified);
-//            return "customer/listSubscriptions";
-            return "redirect:/home";
+            return "redirect:/customer/listSubscriptions";
         } else {
             return "redirect:/";
         }
