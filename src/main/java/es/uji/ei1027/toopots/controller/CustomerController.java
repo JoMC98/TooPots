@@ -254,7 +254,7 @@ public class CustomerController {
                 subscriptionDao.deleteSubscription(activityType.getId());
 //                activityType.setSubscribe(false);
             }else {
-                subscriptionDao.addSubscription(activityType.getId());
+                subscriptionDao.addSubscription(activityType.getId(), user.getId());
 //                activityType.setSubscribe(true);
             }
 

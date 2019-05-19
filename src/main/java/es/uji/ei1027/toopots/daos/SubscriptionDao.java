@@ -32,11 +32,11 @@ public class SubscriptionDao {
     }
 
     public void deleteSubscription(int id) {
-        jdbcTemplate.update("DELETE from Subscription WHERE idcustomer=?", id);
+        jdbcTemplate.update("DELETE from Subscription WHERE activityType=?", id);
     }
 
-    public void addSubscription(int id) {
-        jdbcTemplate.update("INSERT INTO Subscription VALUES(?)", id);
+    public void addSubscription(int id, int idCustomer) {
+        jdbcTemplate.update("INSERT INTO Subscription VALUES(?, ?)",idCustomer, id);
     }
 
 }
