@@ -2,195 +2,200 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
-<head>
-    <title>Veure Activitat</title>
-    <meta charset="UTF-8" />
-</head>
-<body layout:fragment="content">
+    <head>
+        <title>Veure Activitat</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body layout:fragment="content">
+        <br>
+        <table class="marginAuto">
+            <tr>
+                <td rowspan="3" class="tdFotoActividad">
+                    <div th:unless="${totalFotos} == 1" id="miCarrusel" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li th:each="imatge,iterstat: ${imatges}"
+                                data-target="#miCarrusel"
+                                th:attr="data-slide-to=${iterstat.index}"
+                                th:class="${iterstat.index}== 0  ? 'active':''"></li>
 
-<table class="marginAuto">
-    <tr>
-        <td rowspan="3" class="tdFotoActividad">
-            <div th:unless="${totalFotos} == 1" id="miCarrusel" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li th:each="imatge,iterstat: ${imatges}"
-                        data-target="#miCarrusel"
-                        th:attr="data-slide-to=${iterstat.index}"
-                        th:class="${iterstat.index}== 0  ? 'active':''"></li>
-
-                </ol>
-                <div class="carousel-inner">
-                    <div th:each="imatge,iterstat: ${imatges}"
-                         th:class="${iterstat.index}==0 ? 'carousel-item active':'carousel-item'">
-                        <img th:src="@{${imatge.photo}}" class="activityFoto">
+                        </ol>
+                        <div class="carousel-inner">
+                            <div th:each="imatge,iterstat: ${imatges}"
+                                 th:class="${iterstat.index}==0 ? 'carousel-item active':'carousel-item'">
+                                <img th:src="@{${imatge.photo}}" class="activityFoto">
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#miCarrusel" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#miCarrusel" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
-                </div>
-                <a class="carousel-control-prev" href="#miCarrusel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#miCarrusel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
 
-            <img th:if="${totalFotos} == 1" th:src="@{*{activity.photoPrincipal}}" class="activityFoto">
-        </td>
-        <td colspan="2" class="tdNombreActividad">
-            <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div class="divViewActivity">
-                <label class="inputLabel inputPequeño paddingLeft5"><b>Descripció</b></label>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <div class="divViewActivity">
-                <label class="input inputDescripcionActividad inputText inputAlto" th:text="${activity.description}"></label>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Lloc</b></label>
-        </td>
-        <td>
-            <div class="divViewActivity">
-                <label class="inputLabel inputPequeño paddingLeft5"><b>Data</b></label>
-            </div>
-        </td>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Tipus d'activitat</b></label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${activity.place}"></label>
-        </td>
-        <td>
-            <div class="divViewActivity">
-                <label class="input inputPequeño inputText" th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
-            </div>
-        </td>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${activityType.name}"></label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="inputLabel inputPequeño paddingLeft5"><b>Nivell</b></label>
-        </td>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Lloc de quedada</b></label>
-        </td>
-        <td>
-            <div class="divViewActivity">
-                <label class="inputLabel inputPequeño paddingLeft5"><b>Hora de quedada</b></label>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${activityType.level}"></label>
-        </td>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${activity.meetingPoint}"></label>
-        </td>
-        <td>
-            <div class="divViewActivity">
-                <label class="input inputPequeño inputText" th:text="${activity.meetingTime}"></label>
-            </div>
-        </td>
-    </tr>
-</table>
-<table class="marginAuto">
-    <tr>
-        <td>
-            <label class="inputLabel inputPequeño paddingLeft5"><b>Adults:</b></label>
-        </td>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Estudiants:</b></label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${reservation.numAdults}"></label>
-        </td>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${reservation.numStudents}"></label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="inputLabel inputPequeño paddingLeft5"><b>Menors de 16 anys:</b></label>
-        </td>
-        <td>
-            <label class="inputLabel inputPequeño"><b>Majors de 60 anys:</b></label>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${reservation.numUnder16}"></label>
-        </td>
-        <td>
-            <label class="input inputPequeño inputText" th:text="${reservation.numOver60}"></label>
-        </td>
-    </tr>
+                    <img th:if="${totalFotos} == 1" th:src="@{*{activity.photoPrincipal}}" class="activityFoto">
+                </td>
+                <td colspan="2" class="tdNombreActividad">
+                    <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="divViewActivity">
+                        <label class="inputLabel inputPequeño paddingLeft5"><b>Descripció</b></label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="divViewActivity">
+                        <label class="input inputDescripcionActividad inputText inputAlto" th:text="${activity.description}"></label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="inputLabel inputPequeño"><b>Lloc</b></label>
+                </td>
+                <td>
+                    <div class="divViewActivity">
+                        <label class="inputLabel inputPequeño paddingLeft5"><b>Data</b></label>
+                    </div>
+                </td>
+                <td>
+                    <label class="inputLabel inputPequeño"><b>Tipus d'activitat</b></label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${activity.place}"></label>
+                </td>
+                <td>
+                    <div class="divViewActivity">
+                        <label class="input inputPequeño inputText" th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
+                    </div>
+                </td>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${activityType.name}"></label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="inputLabel inputPequeño paddingLeft5"><b>Nivell</b></label>
+                </td>
+                <td>
+                    <label class="inputLabel inputPequeño"><b>Lloc de quedada</b></label>
+                </td>
+                <td>
+                    <div class="divViewActivity">
+                        <label class="inputLabel inputPequeño paddingLeft5"><b>Hora de quedada</b></label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${activityType.level}"></label>
+                </td>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${activity.meetingPoint}"></label>
+                </td>
+                <td>
+                    <div class="divViewActivity">
+                        <label class="input inputPequeño inputText" th:text="${activity.meetingTime}"></label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="inputLabel inputPequeño paddingLeft5"><b>Adults</b></label>
+                </td>
+                <td>
+                    <label class="inputLabel inputPequeño"><b>Estudiants</b></label>
+                </td>
+                <td rowspan="4">
+                    <label class="inputLabel inputPequeño"><b>Preu total</b></label><br>
+                    <label class="input inputPequeño inputText inputPrice">
+                        <label th:text="${reservation.totalPrice}"></label>
+                        <label> €</label>
+                    </label><br>
+                    <label th:if="${pagada}" class="inputTextPagamentSi"><b>Activitat ja pagada</b></label>
+                    <label th:unless="${pagada}" class="inputTextPagamentNo"><b>Pendent de pagament</b></label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${reservation.numAdults}"></label>
+                </td>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${reservation.numStudents}"></label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="inputLabel inputPequeño paddingLeft5"><b>Menors de 16 anys</b></label>
+                </td>
+                <td>
+                    <label class="inputLabel inputPequeño"><b>Majors de 60 anys</b></label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${reservation.numUnder16}"></label>
+                </td>
+                <td>
+                    <label class="input inputPequeño inputText" th:text="${reservation.numOver60}"></label>
+                </td>
+            </tr>
 
-</table>
-<table class="marginAuto">
-    <tr>
-        <td colspan="2">
-            <br>
-            <div class="divViewActivityBig">
-                <table class="tablaTarifasActividad marginAuto">
-                    <tr>
-                        <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
-                        <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><hr /></td>
-                    </tr>
-                    <tr class="tdPaddingLeftRight">
-                        <td class="tdPaddingLeftRight">Adults</td>
-                        <td class="tdPaddingLeftRight">
-                            <label th:text="${activity.pricePerPerson}"></label>
-                            <label> €</label>
-                        </td>
-                    </tr>
-                    <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
-                        <td class="tdPaddingLeftRight" th:text="${rate.rateName}"></td>
-                        <td class="tdPaddingLeftRight">
-                            <label th:text="${rate.price}"></label>
-                            <label> €</label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="tdPaddingBottom"></td>
-                        <td class="tdPaddingBottom"></td>
-                    </tr>
-                </table>
-            </div>
-            <br>
-        </td>
-    </tr>
+        </table>
+        <table class="marginAuto">
+            <tr>
+                <td colspan="2">
+                    <br>
+                    <div class="divViewActivityBig">
+                        <table class="tablaTarifasActividad marginAuto">
+                            <tr>
+                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
+                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><hr /></td>
+                            </tr>
+                            <tr class="tdPaddingLeftRight">
+                                <td class="tdPaddingLeftRight">Adults</td>
+                                <td class="tdPaddingLeftRight">
+                                    <label th:text="${activity.pricePerPerson}"></label>
+                                    <label> €</label>
+                                </td>
+                            </tr>
+                            <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
+                                <td class="tdPaddingLeftRight" th:text="${rate.rateName}"></td>
+                                <td class="tdPaddingLeftRight">
+                                    <label th:text="${rate.price}"></label>
+                                    <label> €</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdPaddingBottom"></td>
+                                <td class="tdPaddingBottom"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                </td>
+            </tr>
 
-    <tr>
-        <td class="tdBotonActividad">
-            <a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning">Veure monitor</a>
-        </td>
-        <td class="tdBotonActividad">
-            <a th:href="@{/activity/cancel/{id}(id=${reservation.id})}" class="btn btn-danger">Cancelar</a>
+            <tr>
+                <td class="tdBotonActividad">
+                    <a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning">Perfil monitor</a>
+                </td>
+                <td class="tdBotonActividad">
+                    <a th:href="@{/customer/cancelReservation/{id}(id=${reservation.id})}" class="btn btn-danger">Cancelar</a>
+                </td>
+            </tr>
 
-        </td>
-    </tr>
-
-</table>
-
-</body>
+        </table>
+    </body>
 </html>

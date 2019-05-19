@@ -86,7 +86,6 @@ public class ActivityController {
     @RequestMapping("/offer")
     public String listActivities(Model model) {
         List<Activity> activities = activityDao.getActivities("Oberta");
-        System.out.println("get");
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
             ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
@@ -546,8 +545,9 @@ public class ActivityController {
             reservation.setIdActivity(id);
             Users user = (Users) session.getAttribute("user");
             reservation.setIdCustomer(user.getId());
+            Activity activity = activityDao.getActivity(id);
 
-            reservationDao.addReservation(reservation);
+            reservationDao.addReservation(reservation, activity);
 
             return "redirect:../..";
         } else {

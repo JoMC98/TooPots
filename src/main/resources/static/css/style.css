@@ -193,6 +193,19 @@ footer {
 .inputText {
     padding-top: 6px;
 }
+.inputPrice {
+    background-color: #cde2b1;
+}
+.inputTextPagamentSi {
+    text-align: center;
+    color: green;
+    font-size: 16px;
+}
+.inputTextPagamentNo {
+    text-align: center;
+    color: red;
+    font-size: 16px;
+}
 
 /*Foto instructor*/
 .profileFoto {

@@ -85,6 +85,7 @@ public class Reservation {
         return nameCustomer;
     }
 
+
     //Setters
     public void setId(int id) {
         this.id = id;
@@ -133,6 +134,7 @@ public class Reservation {
     public void setNameCustomer(String nameCustomer) {
         this.nameCustomer = nameCustomer;
     }
+
 
     //toString
     @Override

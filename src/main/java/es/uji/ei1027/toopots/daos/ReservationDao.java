@@ -4,15 +4,22 @@ import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Reservation;
 import es.uji.ei1027.toopots.model.SummaryPrice;
 import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.chrono.ChronoPeriod;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Repository
 public class ReservationDao {
@@ -32,11 +39,20 @@ public class ReservationDao {
     }
 
     /* Afegeix la reserva a la base de dades */
-    public void addReservation(Reservation reservation) {
+    public void addReservation(Reservation reservation, Activity activity) {
+        Date actualDate = new Date();
+        Date date = Date.from(activity.getDates().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        int dias = (int) ((date.getTime()-actualDate.getTime())/86400000);
+        String state = "Pendent";
+        if (dias < 10) {
+            System.out.println("Ja va pagaeta");
+            state = "Pagada";
+        }
         jdbcTemplate.update("INSERT INTO Reservation VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 reservation.getNumUnder16(), reservation.getNumStudents(),
                 reservation.getNumAdults(), reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
-                reservation.getIdActivity(), reservation.getIdCustomer(), "Pendent");
+                reservation.getIdActivity(), reservation.getIdCustomer(), state);
     }
 
     public List<SummaryPrice> calcularPrecio(Reservation r, Activity a, HashMap<String, Float> t) {
@@ -105,10 +121,16 @@ public class ReservationDao {
        (excepte el id, que és la clau primària) */
     public void updateReservation(Reservation reservation) {
         jdbcTemplate.update("UPDATE Reservation SET numUnder16=?, numStudents=?, numAdults=?, numOver60=?, " +
-                        "totalPrice=?, transactionNumber=?, idActivity=?, idCustomer=?, state=? where idReservation=?",
+                        "totalPrice=?, transactionNumber=?, idActivity=?, idCustomer=? where idReservation=?",
                 reservation.getNumUnder16(), reservation.getNumStudents(),reservation.getNumAdults(),
                 reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
-                reservation.getIdActivity(), reservation.getIdCustomer(), reservation.getState(), reservation.getId());
+                reservation.getIdActivity(), reservation.getIdCustomer(), reservation.getId());
+    }
+
+    /* Actualitza l'estat a pagat */
+    public void payReservation(Reservation reservation) {
+        jdbcTemplate.update("UPDATE Reservation SET state=? where idReservation=?",
+                "Pagada", reservation.getId());
     }
 
     /* Obté la reserva amb el id donat. Torna null si no existeix. */

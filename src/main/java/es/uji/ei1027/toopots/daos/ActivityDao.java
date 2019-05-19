@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -162,5 +163,24 @@ public class ActivityDao {
         }
     }
 
+    /* Obté totes les activitats que es realitzaran en menys de 10 dies i s'han de pagar */
+    public List<Activity> getActivitiesToPay() {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where DATE_PART('day', dates::timestamp - current_date::timestamp) < 10 AND dates > current_date AND state IN ('Oberta', 'Tancada')", new ActivityRowMapper());
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
+
+    /* Obté totes les activitats cuya fecha ja ha passat i no s'ha cambiat el estat */
+    public List<Activity> getActivitiesDone() {
+        try {
+            Date d = new Date();
+            return jdbcTemplate.query("SELECT * from Activity where current_date > dates AND state IN ('Oberta', 'Tancada')", new ActivityRowMapper());
+        } catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
     
 }

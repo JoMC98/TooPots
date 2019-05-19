@@ -48,6 +48,8 @@ public class Activity {
 
     //Para usar en reservas
     private float reservationPriceTotal;
+    private int idReservation;
+
 
     //Constructor
     public Activity() {
@@ -163,6 +165,10 @@ public class Activity {
         return reservationPriceTotal;
     }
 
+    public int getIdReservation() {
+        return idReservation;
+    }
+
     //Setters
 
     public void setId(int id) {
@@ -257,6 +263,10 @@ public class Activity {
 
     public void setReservationPriceTotal(float reservationPriceTotal) {
         this.reservationPriceTotal = reservationPriceTotal;
+    }
+
+    public void setIdReservation(int idReservation) {
+        this.idReservation = idReservation;
     }
 
     //To String

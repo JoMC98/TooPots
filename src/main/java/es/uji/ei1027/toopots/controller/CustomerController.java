@@ -33,6 +33,7 @@ public class CustomerController {
     private ActivityTypeDao activityTypeDao;
     private ActivityPhotosDao activityPhotosDao;
     private ActivityRatesDao activityRatesDao;
+    private ReservationDao reservationDao;
     private BasicPasswordEncryptor passwordEncryptor = new BasicPasswordEncryptor();
 
     @Autowired
@@ -69,6 +70,12 @@ public class CustomerController {
     public void setActivityTypeDao(ActivityTypeDao activityTypeDao) {
         this.activityTypeDao=activityTypeDao;
     }
+
+    @Autowired
+    public void setReservationDao(ReservationDao reservationDao) {
+        this.reservationDao = reservationDao;
+    }
+
 
     //Llistar tots els clients
     @RequestMapping("/list")
@@ -194,6 +201,8 @@ public class CustomerController {
                 ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(activity.getId());
                 activity.setPhotoPrincipal(photoPrincipal.getPhoto());
                 activities.add(activity);
+
+                activity.setIdReservation(reserve.getId());
             }
             model.addAttribute("activities",activities);
             return "customer/listReservations";
@@ -277,16 +286,23 @@ public class CustomerController {
 
     //Veure dades reserves
     @RequestMapping(value="/viewReservation/{id}", method = RequestMethod.GET)
-    public String dataViewReservation(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
-        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
-        Activity activity = activityDao.getActivity(id);
+    public String dataViewReservation(Model model, @PathVariable int id) {
+        Reservation reservation = reservationDao.getReservation(id);
+        List<ActivityRates> rates = activityRatesDao.getActivityRates(reservation.getIdActivity());
+        Activity activity = activityDao.getActivity(reservation.getIdActivity());
 
-        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
+        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(reservation.getIdActivity());
         if (imatges.size() == 1) {
             activity.setPhotoPrincipal(imatges.get(0).getPhoto());
         }
 
+        boolean pagada = false;
+        if (reservation.getState().equals("Pagada")) {
+            pagada = true;
+        }
+
         model.addAttribute("imatges", imatges);
+        model.addAttribute("pagada", pagada);
         model.addAttribute("totalFotos", imatges.size());
         model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
         model.addAttribute("activity", activity);
