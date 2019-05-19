@@ -41,11 +41,6 @@ public class CustomerController {
     }
 
     @Autowired
-    public void setSubscriptionDao(SubscriptionDao subscriptionDao) {
-        this.subscriptionDao = subscriptionDao;
-    }
-
-    @Autowired
     public void setUserDao(UsersDao userDao) {
         this.userDao = userDao;
     }
@@ -242,23 +237,22 @@ public class CustomerController {
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "customer/listSubscriptions");
+            session.setAttribute("nextUrl", "customer/subscribe/"+id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
             List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
             ActivityType activityType = activityTypeDao.getActivityType(id);
-            if(subscriptions.contains(activityType.getId())) {
-                subscriptionDao.deleteSubscription(activityType.getId());
+            if(subscriptions.contains(id)) {
+                subscriptionDao.deleteSubscription(id);
             }else {
-                subscriptionDao.addSubscription(activityType.getId(), user.getId());
+                subscriptionDao.addSubscription(id, user.getId());
             }
-            return "redirect:/customer/listSubscriptions";
+            return "redirect:/home";
         } else {
             return "redirect:/";
         }
     }
-
 
     //Veure dades reserves
     @RequestMapping(value="/viewReservation/{id}", method = RequestMethod.GET)
