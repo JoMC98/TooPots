@@ -44,8 +44,8 @@ public class SubscriptionDao {
         }
     }
 
-    public void deleteSubscription(int id) {
-        jdbcTemplate.update("DELETE from Subscription WHERE activityType=?", id);
+    public void deleteSubscription(int id, int idCustomer) {
+        jdbcTemplate.update("DELETE from Subscription WHERE idcustomer=? AND activityType=?",idCustomer, id);
     }
 
     public void addSubscription(int id, int idCustomer) {

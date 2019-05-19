@@ -41,6 +41,11 @@ public class CustomerController {
     }
 
     @Autowired
+    public void setSubscriptionDao(SubscriptionDao subscriptionDao) {
+        this.subscriptionDao = subscriptionDao;
+    }
+
+    @Autowired
     public void setUserDao(UsersDao userDao) {
         this.userDao = userDao;
     }
@@ -246,7 +251,25 @@ public class CustomerController {
             if (!isSuscribed) {
                 subscriptionDao.addSubscription(id, user.getId());
             }
-            return "redirect:/home";
+            return "redirect:/customer/listSubscriptions";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Desubscriures a una activitat
+    @RequestMapping("/unsubscribe/{id}")
+    public String unsubscribeActivityType(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "customer/listSubscriptions");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            subscriptionDao.deleteSubscription(id, user.getId());
+
+            return "redirect:/customer/listSubscriptions";
         } else {
             return "redirect:/";
         }
