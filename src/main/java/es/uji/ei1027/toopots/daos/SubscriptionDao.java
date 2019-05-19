@@ -31,6 +31,19 @@ public class SubscriptionDao {
         }
     }
 
+    public boolean isSuscribed(int idCustomer, int idActivityType) {
+        try {
+            List<Integer> lista = jdbcTemplate.query("SELECT activityType from Subscription WHERE idcustomer=? AND activityType=?",
+                    new SubscriptionRowMapper(), idCustomer, idActivityType);
+            if (lista.size() == 0)
+                return false;
+            return true;
+        }
+        catch(EmptyResultDataAccessException e) {
+            return false;
+        }
+    }
+
     public void deleteSubscription(int id) {
         jdbcTemplate.update("DELETE from Subscription WHERE activityType=?", id);
     }

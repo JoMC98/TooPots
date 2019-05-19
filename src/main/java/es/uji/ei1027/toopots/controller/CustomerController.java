@@ -241,11 +241,9 @@ public class CustomerController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
-            List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-            ActivityType activityType = activityTypeDao.getActivityType(id);
-            if(subscriptions.contains(id)) {
-                subscriptionDao.deleteSubscription(id);
-            }else {
+
+            boolean isSuscribed = subscriptionDao.isSuscribed(user.getId(), id);
+            if (!isSuscribed) {
                 subscriptionDao.addSubscription(id, user.getId());
             }
             return "redirect:/home";
