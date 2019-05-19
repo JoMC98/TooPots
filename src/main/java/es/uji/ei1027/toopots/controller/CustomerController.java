@@ -242,16 +242,14 @@ public class CustomerController {
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "customer/listSubscriptions");
+            session.setAttribute("nextUrl", "customer/subscribe/"+id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
-            List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-            ActivityType activityType = activityTypeDao.getActivityType(id);
-            if(subscriptions.contains(activityType.getId())) {
-                subscriptionDao.deleteSubscription(activityType.getId());
-            }else {
-                subscriptionDao.addSubscription(activityType.getId(), user.getId());
+            boolean isSuscribed = subscriptionDao.isSuscribed(user.getId(), id);
+            System.out.println("Suscribir " + isSuscribed);
+            if (!isSuscribed) {
+                subscriptionDao.addSubscription(id, user.getId());
             }
             return "redirect:/customer/listSubscriptions";
         } else {
