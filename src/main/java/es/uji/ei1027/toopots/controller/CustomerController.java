@@ -203,14 +203,16 @@ public class CustomerController {
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            List<ActivityType> activities = activityTypeDao.getActivityTypes();
-            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
-            for (ActivityType ac: activities) {
-                ac.setSubscribe(false);
-                activitiesModified.add(ac);
-            }
-            model.addAttribute("activityTypes", activitiesModified);
-            return "customer/listSubscriptions";
+//            List<ActivityType> activities = activityTypeDao.getActivityTypes();
+////            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
+////            for (ActivityType ac: activities) {
+////                ac.setSubscribe(false);
+////                activitiesModified.add(ac);
+////            }
+////            model.addAttribute("activityTypes", activitiesModified);
+
+            session.setAttribute("nextUrl", "/customer/listSubscriptions");
+            return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
             List<ActivityType> activities = activityTypeDao.getActivityTypes();
@@ -233,6 +235,44 @@ public class CustomerController {
             return "redirect:/";
         }
 
+    }
+
+    //Desubscriures a una activitat
+    @RequestMapping("/unsubscribe/{id}")
+    public String closeActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "customer/subscribe/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            ActivityType activityType = activityTypeDao.getActivityType(id);
+            activityType.setSubscribe(false);
+            activityTypeDao.updateActivityTypeSubscription(activityType);
+//            return "customer/listSubscriptions";
+            return "redirect:/home";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Subscriures a una activitat
+    @RequestMapping("/subscribe/{id}")
+    public String openActivity(HttpSession session, Model model, @PathVariable int id) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "customer/subscribe/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            ActivityType activityType = activityTypeDao.getActivityType(id);
+            activityType.setSubscribe(true);
+            activityTypeDao.updateActivityTypeSubscription(activityType);
+//            return "customer/listSubscriptions";
+            return "redirect:/home";
+        } else {
+            return "redirect:/";
+        }
     }
 
     //Veure dades reserves
