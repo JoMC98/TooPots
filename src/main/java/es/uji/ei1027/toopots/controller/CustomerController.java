@@ -280,11 +280,17 @@ public class CustomerController {
     public String dataViewReservation(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
         List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
         Activity activity = activityDao.getActivity(id);
-        ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(id);
-        activity.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-        model.addAttribute("reservation", reservation);
+        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
+        if (imatges.size() == 1) {
+            activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+        }
+
+        model.addAttribute("imatges", imatges);
+        model.addAttribute("totalFotos", imatges.size());
+        model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
         model.addAttribute("activity", activity);
+        model.addAttribute("reservation", reservation);
         model.addAttribute("rates", rates);
         return "customer/viewReservation";
     }
