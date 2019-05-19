@@ -76,15 +76,5 @@ public class CustomerDao {
         }
     }
 
-    /* Obté tots les subscripcions dels clients. Torna una llista buida si no n'hi ha cap. */
-
-    public List<Integer> getSubscriptions(int id) {
-        try {
-            return jdbcTemplate.query("SELECT activityType from Subscription WHERE idcustomer=?", new SubscriptionRowMapper(), id);
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Integer>();
-        }
-    }
 
 }

@@ -41,13 +41,6 @@ public class ActivityTypeDao {
                 activityType.getDescription(), activityType.getPhoto(), activityType.getId());
     }
 
-    /* Actualitza el estat de subscribció del activityType
-   (excepte el id, que és la clau primària) */
-    public void updateActivityTypeSubscription(ActivityType activityType) {
-        jdbcTemplate.update("UPDATE Activity_Type SET subscribe=? where idActivityType=?",
-                activityType.isSubscribe(), activityType.getId());
-    }
-
     /* Obté el activityType amb el id donat. Torna null si no existeix. */
     public ActivityType getActivityType(int id) {
         try {

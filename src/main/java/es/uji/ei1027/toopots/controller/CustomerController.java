@@ -27,6 +27,7 @@ public class CustomerController {
     private final static int USER_NOT_AUTHORIZED = 3;
 
     private CustomerDao customerDao;
+    private SubscriptionDao subscriptionDao;
     private UsersDao userDao;
     private ActivityDao activityDao;
     private ActivityTypeDao activityTypeDao;
@@ -37,6 +38,11 @@ public class CustomerController {
     @Autowired
     public void setCustomerDao(CustomerDao customerDao) {
         this.customerDao=customerDao;
+    }
+
+    @Autowired
+    public void setSubscriptionDao(SubscriptionDao subscriptionDao) {
+        this.subscriptionDao = subscriptionDao;
     }
 
     @Autowired
@@ -203,20 +209,14 @@ public class CustomerController {
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-//            List<ActivityType> activities = activityTypeDao.getActivityTypes();
-////            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
-////            for (ActivityType ac: activities) {
-////                ac.setSubscribe(false);
-////                activitiesModified.add(ac);
-////            }
-////            model.addAttribute("activityTypes", activitiesModified);
+            List<ActivityType> activities = activityTypeDao.getActivityTypes();
+            model.addAttribute("activityTypes", activities);
+            return "/customer/listSubscriptions";
 
-            session.setAttribute("nextUrl", "/customer/listSubscriptions");
-            return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
             List<ActivityType> activities = activityTypeDao.getActivityTypes();
-            List<Integer> subscriptions = customerDao.getSubscriptions(user.getId());
+            List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
 
             List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
             for (ActivityType ac: activities) {
@@ -227,7 +227,6 @@ public class CustomerController {
 
                 activitiesModified.add(ac);
             }
-
             model.addAttribute("activityTypes", activitiesModified);
             return "customer/listSubscriptions";
 
@@ -238,17 +237,34 @@ public class CustomerController {
     }
 
     //Desubscriures a una activitat
-    @RequestMapping("/unsubscribe/{id}")
-    public String closeActivity(HttpSession session, Model model, @PathVariable int id) {
+    @RequestMapping("/subscribe/{id}")
+    public String subscribeActivityType(HttpSession session, Model model, @PathVariable int id) {
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "customer/subscribe/"+id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+//            List<ActivityType> activities = activityTypeDao.getActivityTypes();
+            List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
+
             ActivityType activityType = activityTypeDao.getActivityType(id);
-            activityType.setSubscribe(false);
-            activityTypeDao.updateActivityTypeSubscription(activityType);
+            if(subscriptions.contains(activityType.getId())) {
+                subscriptionDao.deleteSubscription(activityType.getId());
+//                activityType.setSubscribe(false);
+            }else {
+                subscriptionDao.addSubscription(activityType.getId());
+//                activityType.setSubscribe(true);
+            }
+
+//            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
+//            for (ActivityType ac: activities) {
+//                if(ac.getId() == activityType.getId())
+//                    activitiesModified.add(activityType);
+//                activitiesModified.add(ac);
+//            }
+//            model.addAttribute("activityTypes", activitiesModified);
 //            return "customer/listSubscriptions";
             return "redirect:/home";
         } else {
@@ -256,24 +272,6 @@ public class CustomerController {
         }
     }
 
-    //Subscriures a una activitat
-    @RequestMapping("/subscribe/{id}")
-    public String openActivity(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Customer");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "customer/subscribe/"+id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            ActivityType activityType = activityTypeDao.getActivityType(id);
-            activityType.setSubscribe(true);
-            activityTypeDao.updateActivityTypeSubscription(activityType);
-//            return "customer/listSubscriptions";
-            return "redirect:/home";
-        } else {
-            return "redirect:/";
-        }
-    }
 
     //Veure dades reserves
     @RequestMapping(value="/viewReservation/{id}", method = RequestMethod.GET)
