@@ -25,15 +25,15 @@ public class CertificationNamesValidator implements Validator {
             errors.rejectValue("certificate1", "obligatori",
                     "Cal introduir un valor");
 
-        if (names.getCertificate2().trim().equals("") && numbFiles>1)
+        if (numbFiles>1 && names.getCertificate2().trim().equals(""))
             errors.rejectValue("certificate2", "obligatori",
                     "Cal introduir un valor");
 
-        if (names.getCertificate3().trim().equals("") && numbFiles>2)
+        if (numbFiles>2 && names.getCertificate3().trim().equals(""))
             errors.rejectValue("certificate3", "obligatori",
                     "Cal introduir un valor");
 
-        if (names.getCertificate4().trim().equals("") && numbFiles>3)
+        if (numbFiles>3 && names.getCertificate4().trim().equals(""))
             errors.rejectValue("certificate4", "obligatori",
                     "Cal introduir un valor");
 

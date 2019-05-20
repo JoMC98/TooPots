@@ -214,8 +214,12 @@ public class InstructorController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
+            Instructor ins = instructorDao.getInstructor(user.getId());
             model.addAttribute("user", userDao.getUser(user.getId()));
-            model.addAttribute("instructor", instructorDao.getInstructor(user.getId()));
+            model.addAttribute("instructor", ins);
+            model.addAttribute("certifications", certificationDao.getCertifications(user.getId()));
+            model.addAttribute("certificationNames", new CertificationNames());
+            model.addAttribute("errorFoto", false);
             return "instructor/update";
         } else {
             return "redirect:/";
@@ -225,15 +229,73 @@ public class InstructorController {
 
     //Processa la informació del update
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("user") Users user,
-                                      @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResult) {
+    public String processUpdateSubmit(Model model, HttpSession session, @ModelAttribute("user") Users newUser, BindingResult bindingResultUser,
+                                      @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResultInstructor,
+                                      @ModelAttribute("certificationNames") CertificationNames certificationNames, BindingResult bindingResultNames,
+                                      @RequestParam("foto") MultipartFile foto, @RequestParam("cert") MultipartFile cert) {
 
-        if (bindingResult.hasErrors())
+        Users user = (Users) session.getAttribute("user");
+        CertificationNamesValidator certificationNamesValidator = new CertificationNamesValidator();
+        if (!cert.isEmpty()) {
+            certificationNamesValidator.setNumbFiles(1);
+            certificationNamesValidator.validate(certificationNames, bindingResultNames);
+        }
+
+        InstructorValidator instructorValidator = new InstructorValidator();
+        instructorValidator.validate(instructor, bindingResultInstructor);
+
+        UserValidator userValidator = new UserValidator();
+        userValidator.validate(user,bindingResultUser);
+
+        if (bindingResultNames.hasErrors()) {
+            model.addAttribute("errorCert", true);
+        }
+
+        if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors() || bindingResultNames.hasErrors()) {
+            instructor.setPhoto(instructorDao.getInstructor(user.getId()).getPhoto());
+            model.addAttribute("certifications", certificationDao.getCertifications(user.getId()));
             return "instructor/update";
+        }
 
-        userDao.updateUser(user);
+        if (!foto.isEmpty()) {
+            try {
+                // Obtener el fichero y guardarlo
+                byte[] bytes = foto.getBytes();
+
+                String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+                String direccion = "images/instructorProfiles/" + user.getId() + "." + extension;
+
+                Path path = Paths.get(uploadDirectory + direccion);
+                instructor.setPhoto("/" + direccion);
+
+                Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!cert.isEmpty()) {
+            System.out.println(user.getId());
+            List<Certification> certifications= certificationDao.getCertifications(user.getId());
+            System.out.println(certifications);
+            saveCertificate(cert, user.getId(), certificationNames.getCertificate1(), certifications.size() + 1);
+        }
+
+        newUser.setId(user.getId());
+        instructor.setId(user.getId());
+        userDao.updateUser(newUser);
         instructorDao.updateInstructor(instructor);
-        return "redirect:../list";
+        return "redirect:/instructor/update";
+    }
+
+    //Processa la informació del nou certificat
+    @RequestMapping(value="/addCertification", method= RequestMethod.POST)
+    public String processAddCertificationSubmit(Model model, HttpSession session,
+                                   BindingResult bindingResult, @RequestParam("cert") MultipartFile cert) {
+
+
+
+        return "redirect:/instructor/update";
     }
 
     //Llistat de totes les activitats del monitor per a ell

@@ -3,11 +3,13 @@ package es.uji.ei1027.toopots.daos;
 import es.uji.ei1027.toopots.model.Certification;
 import es.uji.ei1027.toopots.rowMapper.CertificationRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,9 @@ import java.util.List;
 public class CertificationDao {
 
     private JdbcTemplate jdbcTemplate;
+
+    @Value("${upload.file.directory}")
+    private String uploadDirectory;
 
     // Obté el jdbcTemplate a partir del Data Source
     @Autowired
@@ -26,11 +31,6 @@ public class CertificationDao {
     public void addCertification(Certification certification) {
         jdbcTemplate.update("INSERT INTO Certification VALUES(DEFAULT, ?, ?, ?)",
                 certification.getCertificate(), certification.getDoc(),certification.getIdInstructor());
-    }
-
-    /* Esborra el Certificat de la base de dades */
-    public void deleteCertification(int id) {
-        jdbcTemplate.update("DELETE from Certification where idCertification=?", id);
     }
 
 

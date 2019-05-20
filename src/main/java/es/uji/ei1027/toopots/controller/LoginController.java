@@ -59,9 +59,7 @@ public class LoginController {
             session.setAttribute("user", user);
             String nextUrl = (String) session.getAttribute("nextUrl");
             if (nextUrl == null)
-                return "redirect:/home";
-            //TODO ACTIVAR
-//                return "redirect:/";
+                return "redirect:/";
             else
                 return "redirect:" + nextUrl;
         }

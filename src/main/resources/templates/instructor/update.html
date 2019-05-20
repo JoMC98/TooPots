@@ -9,54 +9,96 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><h1>Modificar perfil</h1><br>
-        <form action="#" th:action="@{/instructor/update}" method="post">
+    <br><h1>Modificar perfil</h1><br>
+        <form action="#" th:action="@{/instructor/update}" method="post" enctype="multipart/form-data">
             <table class="marginAuto">
-                <!--<tr>-->
-                <!--<td colspan="2"><label class="inputLabel">Foto de perfil</label></td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td colspan="2" class="marginAuto">-->
-                <!--<img class="profileFoto" id="photo" hidden/>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                <!--<td colspan="2"  class="marginAuto">-->
-                <!--<input type="file" onchange="document.getElementById('photo').src = window.URL.createObjectURL(this.files[0]); document.getElementById('photo').hidden=false"-->
-                <!--accept="image/*" class="inputFoto">-->
-                <!--</td>-->
-                <!--</tr>-->
+                <tr>
+                    <td colspan="2">
+                        <label class="inputLabel">Foto de perfil</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="marginAuto">
+                        <img th:src="${instructor.photo}" class="profileFoto"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b><label class="inputLabel">Elige un nuevo archivo si quieres cambiar la imagen</label></b><br>
+                        <input class="inputAdjunto" name="foto" type="file" accept="image/*">
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2"><label class="inputLabel inputDoble">Nom Complet</label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="input inputDoble" type="text" th:field="${user.name}"/></td>
+                    <td colspan="2"><input class="input inputDoble" th:errorclass="needCorrection" type="text" th:field="${user.name}" maxlength="40"/></td>
+
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">NIF</label></td>
                     <td><label class="inputLabel inputPequeño">Correo</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="text" th:field="${user.nif}"/></td>
-                    <td><input class="input inputPequeño" type="email" th:field="${user.mail}"/></td>
+                    <td><input class="input inputPequeño"  th:errorclass="needCorrection" type="text" th:field="${user.nif}" maxlength="12"/></td>
+                    <td><input class="input inputPequeño"  th:errorclass="needCorrection" type="email" th:field="${user.mail}" maxlength="40"/></td>
                 </tr>
                 <tr>
                     <td><label class="inputLabel inputPequeño">Residencia</label></td>
                     <td><label class="inputLabel inputPequeño">Compte corrent</label></td>
                 </tr>
                 <tr>
-                    <td><input class="input inputPequeño" type="text" th:field="${instructor.residence}"/></td>
-                    <td><input class="input inputPequeño" type="text" th:field="${instructor.accountNumber}"/></td>
+                    <td><input class="input inputPequeño" type="text" th:errorclass="needCorrection" th:field="${instructor.residence}" maxlength="40"/></td>
+                    <td><input class="input inputPequeño" type="text" th:errorclass="needCorrection" th:field="${instructor.accountNumber}" min="0"/></td>
                 </tr>
                 <tr>
                     <td colspan="2"><label class="inputLabel inputPequeño">Nom d'usuari</label></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><input class="input inputPequeño" type="text" th:field="${user.username}"/></td>
+                    <td colspan="2"><input class="input inputPequeño"  th:errorclass="needCorrection" type="text" th:field="${user.username}" maxlength="30"/></td>
                 </tr>
             </table>
-            <br>
-            <input class="btn btn-success" type="submit" value="Modificar perfil" />
+            <table class="marginAuto">
+                <tr>
+                    <td><label class="inputLabel">Llista de certificats</label></td>
+                    <td><label class="inputLabel">Afegir certificat</label></td>
+                </tr>
+                <tr>
+                    <td class="tdGrupos">
+                        <div class="requestCertificados">
+                            <div th:each="certification: ${certifications}">
+                                <table class="tdRequestTableActivity">
+                                    <tr>
+                                        <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
+                                        <td class="tdListCertificadosSolicitud tdRequestActivityLevel">
+                                            <a th:href="@{*{certification.doc}}" target="_blank"><img width="32" height="32" th:src="@{/images/logoPDF.png}" /></a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <hr />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <table th:object="${certificationNames}">
+                            <tr>
+                                <td class="marginAuto">
+                                    <textarea th:field="*{certificate1}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input th:if="${errorCert}" class="inputAdjunto needCorrection" type="file" accept="application/pdf" name="cert">
+                                    <input th:unless="${errorCert}" class="inputAdjunto" type="file" accept="application/pdf" name="cert">
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><br><input class="btn btn-success" type="submit" value="Modificar perfil" /></td>
+                </tr>
+            </table>
         </form>
     </body>
 </html>

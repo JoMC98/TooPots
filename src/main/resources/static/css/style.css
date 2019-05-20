@@ -577,3 +577,19 @@ footer {
     width: 250px !important;
     margin-left: 15px;
 }
+
+/*Update instructor*/
+.tdUpdateInstructorTableActivity {
+    width: 650px;
+}
+.updateCertificados {
+    width: 700px;
+    height: 200px;
+    margin-top: 20px;
+    overflow:scroll;
+}
+
+.tdBotonBorrarCertificado {
+    padding-left: 20px;
+    width: 100px;
+}
