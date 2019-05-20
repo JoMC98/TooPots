@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -310,6 +312,17 @@ public class CustomerController {
         model.addAttribute("rates", rates);
         return "customer/viewReservation";
     }
+
+    //Cancelar reserva si es posible
+    @RequestMapping(value="/cancelReservation/{id}", method = RequestMethod.GET)
+    public String cancelReservation(Model model, @PathVariable int id) {
+        Reservation reservation = reservationDao.getReservation(id);
+
+        if (reservation.getState().equals("Pendent")) {
+            reservationDao.deleteReservation(reservation.getId());
+        }
+        return "redirect:/customer/listReservations";
+}
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

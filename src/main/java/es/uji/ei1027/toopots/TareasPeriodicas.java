@@ -58,7 +58,7 @@ public class TareasPeriodicas {
         System.out.println("Es cambia l'estat de les activitats automáticament --> " + new Date());
         List<Activity> activities = activityDao.getActivitiesDone();
         for (Activity activity: activities) {
-            activity.setState("Completa");
+            activity.setState("Realitzada");
             activityDao.updateActivityState(activity);
         }
     }

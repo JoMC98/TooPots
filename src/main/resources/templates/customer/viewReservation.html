@@ -186,8 +186,12 @@
                     <br>
                 </td>
             </tr>
-
-            <tr>
+            <tr th:if="${pagada}">
+                <td colspan="2" class="tdBotonActividad">
+                    <a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning">Perfil monitor</a>
+                </td>
+            </tr>
+            <tr th:unless="${pagada}">
                 <td class="tdBotonActividad">
                     <a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning">Perfil monitor</a>
                 </td>

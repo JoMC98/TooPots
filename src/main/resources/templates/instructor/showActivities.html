@@ -14,6 +14,7 @@
             <tr>
                 <td><a th:href="@{/instructor/showActivities/opened/{id}(id=${user.id})}" class="btn btn-outline-success botonListaActividades" role="button">Activitats obertes</a></td>
                 <td><a th:href="@{/instructor/showActivities/closed/{id}(id=${user.id})}" class="btn btn-outline-info botonListaActividades" role="button">Activitats tancades</a></td>
+                <td><a th:href="@{/instructor/showActivities/done/{id}(id=${user.id})}" class="btn btn-outline-secondary botonListaActividades" role="button">Activitats realitzades</a></td>
             </tr>
         </table>
         <br>
@@ -25,6 +26,7 @@
                         Llista d'activitats
                         <label th:if="${estat} == opened"> obertes </label>
                         <label th:if="${estat} == closed"> tancades </label>
+                        <label th:if="${estat} == done"> realitzades</label>
                         del monitor
                     </h1><br>
                     <h3 th:text="${user.name}"></h3>
@@ -42,7 +44,7 @@
                 </td>
                 <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
                 <td th:if="${estat} == opened"></td>
-                <td th:if="${estat} == closed" rowspan="4" class="tdListArriba tdListAbajo tdListCentroIzquierda tdListBotones">
+                <td th:unless="${estat} == opened" rowspan="4" class="tdListArriba tdListAbajo tdListCentroIzquierda tdListBotones">
                     <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>
                 </td>
             </tr>

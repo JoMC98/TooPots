@@ -309,7 +309,7 @@ public class InstructorController {
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
 
-            if (!state.equals("opened") && !state.equals("closed") && !state.equals("canceled")) {
+            if (!state.equals("opened") && !state.equals("closed") && !state.equals("canceled") && !state.equals("done")) {
                 return "redirect:/";
             }
 
@@ -346,7 +346,7 @@ public class InstructorController {
     public String activityListForCustomers(Model model, @PathVariable int id, @PathVariable String state) {
         Users user = userDao.getUser(id);
 
-        if (!state.equals("opened") && !state.equals("closed")) {
+        if (!state.equals("opened") && !state.equals("closed") && !state.equals("done")) {
             return "redirect:/";
         }
         List<Activity> activities = activityDao.getActivities(user.getId(), state);
