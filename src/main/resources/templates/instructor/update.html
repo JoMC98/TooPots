@@ -9,7 +9,7 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-    <br><h1>Modificar perfil</h1><br>
+        <br><h1>Modificar perfil</h1><br>
         <form action="#" th:action="@{/instructor/update}" method="post" enctype="multipart/form-data">
             <table class="marginAuto">
                 <tr>
@@ -60,13 +60,18 @@
             </table>
             <table class="marginAuto">
                 <tr>
-                    <td><label class="inputLabel">Llista de certificats</label></td>
+                    <td th:if="${#lists.isEmpty(certifications)}" class="tdGrupos" rowspan="2">
+                        <b>No té cap certificat</b><br>
+                    </td>
+                    <td th:unless="${#lists.isEmpty(certifications)}" class="tdGrupos">
+                        <label class="inputLabel">Llista de certificats</label>
+                    </td>
                     <td><label class="inputLabel">Afegir certificat</label></td>
                 </tr>
                 <tr>
-                    <td class="tdGrupos">
+                    <td th:unless="${#lists.isEmpty(certifications)}" class="tdGrupos tdUpdateInstructor">
                         <div class="requestCertificados">
-                            <div th:each="certification: ${certifications}">
+                            <div th:each="certification: ${#lists.sort(certifications)}">
                                 <table class="tdRequestTableActivity">
                                     <tr>
                                         <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
@@ -79,11 +84,11 @@
                             </div>
                         </div>
                     </td>
-                    <td>
+                    <td class="tdUpdateInstructor">
                         <table th:object="${certificationNames}">
                             <tr>
                                 <td class="marginAuto">
-                                    <textarea th:field="*{certificate1}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="4" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
+                                    <textarea th:field="*{certificate1}" class="areaInfoCertificate" th:errorclass="needCorrection" rows="3" cols="20" placeholder="Nom del certificat" maxlength="60"></textarea>
                                 </td>
                             </tr>
                             <tr>

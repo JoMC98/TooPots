@@ -7,7 +7,10 @@ import java.util.Comparator;
 public class PlaceComparator implements Comparator<Activity> {
     @Override
     public int compare(Activity a, Activity b) {
-        return a.getPlace().compareTo(b.getPlace());
+        String aPlace = a.getPlace().toLowerCase();
+        String bPlace = b.getPlace().toLowerCase();
+
+        return aPlace.compareTo(bPlace);
     }
 }
 

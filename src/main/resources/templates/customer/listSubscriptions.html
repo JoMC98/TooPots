@@ -2,49 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
-<head>
-    <title>Subscripció a les activitats</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
-</head>
-<body layout:fragment="content">
-<br>
-<table class="marginAuto">
-    <tr>
-        <td><h1>Tipus d'Activitats</h1></td>
-    </tr>
-</table>
-<br>
-<div th:if="${#lists.isEmpty(activityTypes)}">
-    No hi cap tipus d'activitat per subscriures
-</div>
-<div th:unless="${#lists.isEmpty(activityTypes)}">
-    <table class="table_bordered" th:each="activityType: ${#lists.sort(activityTypes)}">
-        <tr>
-            <td rowspan="2" class="tdListIzquierda tdListArriba tdListAbajo">
-                <div class="activityFoto">
-                    <img th:src="@{*{activityType.photo}}" class="activityFoto"/>
-                </div>
-            </td>
-            <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
-            <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b> Descripció</b></td>
-            <td rowspan="2" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
-                <a th:if="${activityType.subscribe}" th:href="@{/customer/unsubscribe/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Desubscriures</a>
-                <a th:unless="${activityType.subscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-success listBoton" role="button">Subscriures</a>
-            </td>
-        </tr>
-        <tr>
-            <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
-                <b>Nivell: </b>
-                <label th:text="${activityType.level}"></label>
-            </td>
-            <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
-                <label th:text="${activityType.description}"></label>
-            </td>
-        </tr>
-    </table>
-</div>
-<br>
-</body>
+    <head>
+        <title>Subscripció a les activitats</title>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body layout:fragment="content">
+        <br>
+        <table class="marginAuto">
+            <tr>
+                <td><h1>Tipus d'Activitats</h1></td>
+            </tr>
+        </table>
+        <br>
+        <div th:if="${#lists.isEmpty(activityTypes)}">
+            No hi cap tipus d'activitat per subscriures
+        </div>
+        <div th:unless="${#lists.isEmpty(activityTypes)}">
+            <table class="table_bordered" th:each="activityType: ${#lists.sort(activityTypes)}">
+                <tr>
+                    <td rowspan="2" class="tdListIzquierda tdListArriba tdListAbajo">
+                        <div class="activityFoto">
+                            <img th:src="@{*{activityType.photo}}" class="activityFoto"/>
+                        </div>
+                    </td>
+                    <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b th:text="${activityType.name}"></b></td>
+                    <td th:unless="${activityType.description} == ''" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b> Descripció</b></td>
+                    <td rowspan="2" th:if="${activityType.description} == ''" class="tdListAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto">
+                        <label class="sinDescripcion">Sense descripció</label>
+                    </td>
+                    <td rowspan="2" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
+                        <a th:if="${activityType.subscribe}" th:href="@{/customer/unsubscribe/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Desubscriures</a>
+                        <a th:unless="${activityType.subscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-success listBoton" role="button">Subscriures</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                        <b>Nivell: </b>
+                        <label th:text="${activityType.level}"></label>
+                    </td>
+                    <td th:unless="${activityType.description} == ''" class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                        <label th:text="${activityType.description}"></label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br>
+    </body>
 </html>

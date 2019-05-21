@@ -12,8 +12,18 @@
         <br>
         <div class="center verticalAlignLogin">
             <div th:if="${#strings.equals(name,'LoginException')}">
-                <div class="alertaLogin alert-info">
+                <div class="alertaLogin alertaLoginError alert-info">
                     <h2 class="alertaLoginText" th:text="${message}"></h2><br>
+                </div>
+            </div>
+            <div th:if="${conexionRefused == 'Request'}">
+                <div class="alertaLogin alertaLoginRequest alert-info">
+                    <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud encara no s'ha evaluat</h2><br>
+                </div>
+            </div>
+            <div th:if="${conexionRefused == 'Rejected'}">
+                <div class="alertaLogin alertaLoginRejected alert-info">
+                    <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud s'ha rebutjat</h2><br>
                 </div>
             </div>
             <div id="loginArea">
@@ -26,7 +36,7 @@
                                 Nom d'usuari
                             </td>
                             <td>
-                                <input class="loginInput" th:errorclass="needCorrection"  type="text" th:field="*{username}"/>
+                                <input class="loginInput" th:errorclass="needCorrection"  type="text" th:field="*{username}" maxlength="30"/>
                             </td>
                         </tr>
                         <tr>
@@ -37,7 +47,7 @@
                                 Contrasenya
                             </td>
                             <td>
-                                <input class="loginInput" th:errorclass="needCorrection" type="password" th:field="*{passwd}"/>
+                                <input class="loginInput" th:errorclass="needCorrection" type="password" th:field="*{passwd}" maxlength="50"/>
                             </td>
                         </tr>
                     </table>

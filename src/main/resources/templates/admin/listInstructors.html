@@ -18,7 +18,10 @@
                 <tr>
                     <td class="tdListIzquierda tdListArriba tdListAbajo"><img class="profileFoto" th:src="@{*{instructor.photo}}"></td>
                     <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTextoName"><b th:text="${instructor.name}"></b></td>
-                    <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto">
+                    <td th:if="${#lists.isEmpty(instructor.activities)}" class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto tdSinCertificado">
+                        <b>No té cap activitat assignada</b>
+                    </td>
+                    <td th:unless="${#lists.isEmpty(instructor.activities)}" class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto">
                         <table class="tdListTableActivity">
                             <tr>
                                 <td class="">
@@ -30,7 +33,7 @@
                             </tr>
                         </table>
                         <div class="listCertificados">
-                            <div th:each="activityType: ${instructor.activities}">
+                            <div th:each="activityType: ${#lists.sort(instructor.activities)}">
                                 <table class="tdListTableActivity">
                                     <tr>
                                         <td>

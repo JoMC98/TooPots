@@ -393,6 +393,7 @@ footer {
     background-color: #EEEEEE;
     resize: none;
     margin: 5px 10px;
+    padding: 10px 10px;
 }
 .inputPdf {
     margin: 0px 5px 20px 10px;
@@ -403,13 +404,21 @@ footer {
 
 /*Excepciones y alertas*/
 .alertaLogin {
-    width: 700px;
     margin: auto;
     margin-bottom: 40px;
 }
 .alertaLoginText {
     padding: 20px 0px 0px 0px;
     margin: 0px;
+}
+.alertaLoginRequest {
+    width: 950px;
+}
+.alertaLoginRejected {
+    width: 850px;
+}
+.alertaLoginError {
+    width: 700px;
 }
 
 /*Validator*/
@@ -578,18 +587,19 @@ footer {
     margin-left: 15px;
 }
 
-/*Update instructor*/
-.tdUpdateInstructorTableActivity {
-    width: 650px;
-}
-.updateCertificados {
-    width: 700px;
-    height: 200px;
-    margin-top: 20px;
-    overflow:scroll;
+/*Sin despripcion */
+.sinDescripcion {
+    color: #A2A097;
 }
 
-.tdBotonBorrarCertificado {
-    padding-left: 20px;
-    width: 100px;
+/*Instructor update*/
+.tdUpdateInstructor {
+    padding: 20px;
+    padding-top: 10px;
+}
+
+/*Sin certificado o actividad*/
+.tdSinCertificado {
+    width: 320px;
+    height: 243px;
 }

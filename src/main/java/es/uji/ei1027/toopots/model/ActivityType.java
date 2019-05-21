@@ -75,10 +75,13 @@ public class ActivityType implements Comparable<ActivityType> {
     }
 
     public int compareTo(ActivityType altre) {
-        if (this.getName().equals(altre.getName())) {
+        String actualName = this.getName().toLowerCase();
+        String otherName = altre.getName().toLowerCase();
+
+        if (actualName.equals(otherName)) {
             return this.getLevel().compareTo(altre.getLevel());
         } else {
-            return this.getName().compareTo(altre.getName());
+            return actualName.compareTo(otherName);
         }
     }
 

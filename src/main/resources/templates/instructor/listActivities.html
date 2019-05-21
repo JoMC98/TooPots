@@ -26,61 +26,70 @@
                         <label th:if="${estat} == opened"> obertes</label>
                         <label th:if="${estat} == closed"> tancades</label>
                         <label th:if="${estat} == done"> realitzades</label>
-                        <label th:if="${estat} == canceled"> cancelades</label>
+                        <label th:if="${estat} == canceled"> cancel·lades</label>
                     </h1>
                 </td>
                 <td class="tdBotonAddLista"><a th:href="@{/activity/add}" class="btn btn-success" role="button">Crear Activitat</a></td>
             </tr>
         </table>
         <br>
-        <table class="table_bordered" th:each="activity: ${activities}">
-            <tr>
-                <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
-                    <div class="activityFoto">
-                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
-                    </div>
-                </td>
-                <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
-                <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroAbajo tdListArriba tdListBotones">
-                    <a th:href="@{/activity/update/{id}(id=${activity.id})}" class="btn btn-warning listBoton" >Editar</a>
-                </td>
-                <td th:if="${estat} == canceled" rowspan="4" class="tdListArriba tdListAbajo tdListCancelation tdListIzquierda">
-                    <b>Motiu: </b>
-                    <label th:text="${activity.cancelationReason}"></label><br><br>
-                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
-                </td>
-                <td th:if="${estat} == done" rowspan="4" class="tdListArriba tdListAbajo tdListIzquierda tdListBotones">
-                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${activity.place}"></label>
-                </td>
-                <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroArribaAbajo tdListBotones">
-                    <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListTexto">
-                    <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
-                </td>
-                <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroArribaAbajo tdListBotones">
-                    <a th:if="${estat} == closed" th:href="@{/activity/open/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Obrir</a>
-                    <a th:if="${estat} == opened" th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Tancar</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
-                    <label>Ocupació: </label>
-                    <label th:text="${activity.ocupation}"></label>
-                    <label> %</label>
-                </td>
-                <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroArriba tdListAbajo tdListBotones">
-                    <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Cancel·lar</a>
-                </td>
-            </tr>
-        </table>
+        <div th:if="${#lists.isEmpty(activities)}">
+            No hi ha cap activitat
+            <label th:if="${estat} == opened"> oberta</label>
+            <label th:if="${estat} == closed"> tancada</label>
+            <label th:if="${estat} == done"> realitzada</label>
+            <label th:if="${estat} == canceled"> cancel·lada</label>
+        </div>
+        <div th:unless="${#lists.isEmpty(activities)}">
+            <table class="table_bordered" th:each="activity: ${#lists.sort(activities)}">
+                <tr>
+                    <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
+                        <div class="activityFoto">
+                            <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
+                        </div>
+                    </td>
+                    <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
+                    <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroAbajo tdListArriba tdListBotones">
+                        <a th:href="@{/activity/update/{id}(id=${activity.id})}" class="btn btn-warning listBoton" >Editar</a>
+                    </td>
+                    <td th:if="${estat} == canceled" rowspan="4" class="tdListArriba tdListAbajo tdListCancelation tdListIzquierda">
+                        <b>Motiu: </b>
+                        <label th:text="${activity.cancelationReason}"></label><br><br>
+                        <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
+                    </td>
+                    <td th:if="${estat} == done" rowspan="4" class="tdListArriba tdListAbajo tdListIzquierda tdListBotones">
+                        <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdListCentroArriba tdListTexto">
+                        <label th:text="${activity.place}"></label>
+                    </td>
+                    <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroArribaAbajo tdListBotones">
+                        <a th:href="@{/activity/listReservations/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">Reserves</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdListCentroArriba tdListTexto">
+                        <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
+                    </td>
+                    <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroArribaAbajo tdListBotones">
+                        <a th:if="${estat} == closed" th:href="@{/activity/open/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Obrir</a>
+                        <a th:if="${estat} == opened" th:href="@{/activity/close/{id}(id=${activity.id})}" class="btn btn-success listBoton" role="button">Tancar</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                        <label>Ocupació: </label>
+                        <label th:text="${activity.ocupation}"></label>
+                        <label> %</label>
+                    </td>
+                    <td th:if="${estat} == opened or ${estat} == closed" class="tdListCentroArriba tdListAbajo tdListBotones">
+                        <a th:href="@{/activity/cancel/{id}(id=${activity.id})}" class="btn btn-danger listBoton" role="button">Cancel·lar</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <br>
     </body>
 </html>

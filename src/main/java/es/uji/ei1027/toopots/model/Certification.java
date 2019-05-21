@@ -1,6 +1,6 @@
 package es.uji.ei1027.toopots.model;
 
-public class Certification {
+public class Certification implements Comparable<Certification> {
 
     //Atributos
 
@@ -65,5 +65,13 @@ public class Certification {
                 ", idInstructor=" + idInstructor +
                 '}';
     }
+
+    public int compareTo(Certification altre) {
+        String actualCertificate = this.getCertificate().toLowerCase();
+        String otherCertificate = altre.getCertificate().toLowerCase();
+
+        return actualCertificate.compareTo(otherCertificate);
+    }
+
 
 }

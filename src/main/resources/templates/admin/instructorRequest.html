@@ -41,14 +41,19 @@
         </table>
         <table class="marginAuto">
             <tr>
-                <td colspan="2">
+                <td th:if="${#lists.isEmpty(instructor.certifications)}" class="tdGrupos" colspan="2">
+                </td>
+                <td th:unless="${#lists.isEmpty(instructor.certifications)}" class="tdGrupos" colspan="2">
                     <br><b>Certificats</b><br>
                 </td>
             </tr>
             <tr>
-                <td colspan="2" class="tdGrupos">
+                <td th:if="${#lists.isEmpty(instructor.certifications)}" class="tdGrupos" colspan="2">
+                    <br><b>No té cap certificat</b><br>
+                </td>
+                <td th:unless="${#lists.isEmpty(instructor.certifications)}" class="tdGrupos" colspan="2">
                     <div class="requestCertificados">
-                        <div th:each="certification: ${instructor.certifications}">
+                        <div th:each="certification: ${#lists.sort(instructor.certifications)}">
                             <table class="tdRequestTableActivity">
                                 <tr>
                                     <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>

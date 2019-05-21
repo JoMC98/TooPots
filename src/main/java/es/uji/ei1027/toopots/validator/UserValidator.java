@@ -15,8 +15,6 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object obj, Errors errors) {
-
-        System.out.println(obj);
         Users user = (Users) obj;
 
         if (user.getName().trim().equals(""))

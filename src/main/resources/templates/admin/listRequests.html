@@ -18,10 +18,13 @@
                 <tr>
                     <td class="tdListIzquierda tdListArriba tdListAbajo"><img class="profileFoto" th:src="@{*{instructor.photo}}"></td>
                     <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTextoName"><b th:text="${instructor.name}"></b></td>
-                    <td class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto">
+                    <td th:if="${#lists.isEmpty(instructor.certifications)}" class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto tdSinCertificado">
+                        <b>No té cap certificat</b>
+                    </td>
+                    <td th:unless="${#lists.isEmpty(instructor.certifications)}" class="tdListArriba tdListAbajo tdListCentroDerechaIzquierda tdListTexto">
                         <b>Certificats</b>
                         <div class="listCertificados">
-                            <div th:each="certification: ${instructor.certifications}">
+                            <div th:each="certification: ${#lists.sort(instructor.certifications)}">
                                 <label th:text="${certification.certificate}"></label>
                                 <hr />
                             </div>

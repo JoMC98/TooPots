@@ -7,7 +7,9 @@ import java.util.Comparator;
 public class NameComparator implements Comparator<Activity> {
     @Override
     public int compare(Activity a, Activity b) {
-        return a.getName().compareTo(b.getName());
+        String aName = a.getName().toLowerCase();
+        String bName = b.getName().toLowerCase();
+        return aName.compareTo(bName);
     }
 }
 

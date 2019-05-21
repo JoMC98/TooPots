@@ -115,7 +115,6 @@ public class ActivityController {
     //Filtrar activitats
     @RequestMapping(value="/offer", method=RequestMethod.POST)
     public String filtro(Model model, @ModelAttribute("filtroYorden") FiltradoYOrden filtro, BindingResult bindingResult) {
-        System.out.println("post");
         List<Activity> activities = new ArrayList<Activity>();
         switch (filtro.getFiltroCriteri()) {
             case "all":
@@ -277,7 +276,7 @@ public class ActivityController {
             activityRatesDao.addActivityRates(tarifa);
         }
 
-        return "redirect:/instructor/listActivities/opened";
+        return "redirect:/";
     }
 
     private void saveFoto(MultipartFile foto, Activity activity, int idFoto) {
@@ -413,7 +412,7 @@ public class ActivityController {
         }
 
         activityDao.updateActivity(activity);
-        return "redirect:/instructor/listActivities";
+        return "redirect:/";
     }
 
     //Esborra una activitat

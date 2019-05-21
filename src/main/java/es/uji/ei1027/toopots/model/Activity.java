@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Activity {
+public class Activity implements Comparable<Activity> {
 
     //Atributos
     private int id;
@@ -289,6 +289,11 @@ public class Activity {
                 ", idInstructor=" + idInstructor +
                 ", cancellationReason=" + cancelationReason +
                 '}';
+    }
+
+
+    public int compareTo(Activity altre) {
+        return this.getDates().compareTo(altre.getDates());
     }
 
 }

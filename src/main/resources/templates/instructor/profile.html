@@ -41,17 +41,24 @@
         </table>
         <table class="marginAuto">
             <tr>
-                <td>
+                <td class="tdGrupos" th:if="${#lists.isEmpty(instructor.certifications)}">
+                </td>
+                <td class="tdGrupos" th:unless="${#lists.isEmpty(instructor.certifications)}">
                     <br><b>Certificats</b><br>
                 </td>
-                <td>
+                <td class="tdGrupos" th:if="${#lists.isEmpty(instructor.activities)}">
+                </td>
+                <td class="tdGrupos" th:unless="${#lists.isEmpty(instructor.activities)}">
                     <br><b>Activitats assignades</b><br>
                 </td>
             </tr>
             <tr>
-                <td class="tdGrupos">
+                <td class="tdGrupos" th:if="${#lists.isEmpty(instructor.certifications)}">
+                    <br><b>No té cap certificat</b><br>
+                </td>
+                <td class="tdGrupos" th:unless="${#lists.isEmpty(instructor.certifications)}">
                     <div class="requestCertificados">
-                        <div th:each="certification: ${instructor.certifications}">
+                        <div th:each="certification: ${#lists.sort(instructor.certifications)}">
                             <table class="tdRequestTableActivity">
                                 <tr>
                                     <td class="tdListCertificadosSolicitud" th:text="${certification.certificate}"></td>
@@ -64,9 +71,12 @@
                         </div>
                     </div>
                 </td>
-                <td class="tdGrupos">
+                <td class="tdGrupos" th:if="${#lists.isEmpty(instructor.activities)}">
+                    <br><b>No té cap activitat assignada</b><br>
+                </td>
+                <td class="tdGrupos" th:unless="${#lists.isEmpty(instructor.activities)}">
                     <div class="profileCertificados">
-                        <div th:each="activityType: ${instructor.activities}">
+                        <div th:each="activityType: ${#lists.sort(instructor.activities)}">
                             <table class="tdProfileTableActivity">
                                 <tr>
                                     <td>

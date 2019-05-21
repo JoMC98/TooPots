@@ -27,7 +27,7 @@ public class LoginController {
     }
 
     @RequestMapping(value="/login", method=RequestMethod.POST)
-    public String checkLogin(@ModelAttribute("user") Users user,
+    public String checkLogin(Model model, @ModelAttribute("user") Users user,
                              BindingResult bindingResult, HttpSession session) {
         LoginValidator loginValidator = new LoginValidator();
         loginValidator.validate(user, bindingResult);
@@ -52,8 +52,10 @@ public class LoginController {
         }
 
         // Autenticats correctament.
-        if (user.getRol().equals("Request") || (user.getRol().equals("Rejected"))) {
-            return "redirect:/login";
+        if (user.getRol().equals("Request") || user.getRol().equals("Rejected")) {
+            model.addAttribute("user", new Users());
+            model.addAttribute("conexionRefused", user.getRol());
+            return "login";
         } else {
             // Guardem les dades de l'usuari autenticat a la sessió
             session.setAttribute("user", user);

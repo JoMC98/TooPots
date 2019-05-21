@@ -100,6 +100,9 @@ public class Instructor implements Comparable<Instructor>  {
     }
 
     public int compareTo(Instructor altre) {
-        return this.getName().compareTo(altre.getName());
+        String actualName = this.getName().toLowerCase();
+        String otherName = altre.getName().toLowerCase();
+
+        return actualName.compareTo(otherName);
     }
 }

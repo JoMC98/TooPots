@@ -229,12 +229,14 @@ public class InstructorController {
 
     //Processa la informació del update
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(Model model, HttpSession session, @ModelAttribute("user") Users newUser, BindingResult bindingResultUser,
+    public String processUpdateSubmit(Model model, HttpSession session, @ModelAttribute("user") Users user, BindingResult bindingResultUser,
                                       @ModelAttribute("instructor") Instructor instructor, BindingResult bindingResultInstructor,
                                       @ModelAttribute("certificationNames") CertificationNames certificationNames, BindingResult bindingResultNames,
                                       @RequestParam("foto") MultipartFile foto, @RequestParam("cert") MultipartFile cert) {
 
-        Users user = (Users) session.getAttribute("user");
+        Users viejo = (Users) session.getAttribute("user");
+        user.setId(viejo.getId());
+
         CertificationNamesValidator certificationNamesValidator = new CertificationNamesValidator();
         if (!cert.isEmpty()) {
             certificationNamesValidator.setNumbFiles(1);
@@ -254,6 +256,9 @@ public class InstructorController {
         if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors() || bindingResultNames.hasErrors()) {
             instructor.setPhoto(instructorDao.getInstructor(user.getId()).getPhoto());
             model.addAttribute("certifications", certificationDao.getCertifications(user.getId()));
+            System.out.println(bindingResultInstructor.toString());
+            System.out.println(bindingResultUser.toString());
+            System.out.println(bindingResultNames.toString());
             return "instructor/update";
         }
 
@@ -275,17 +280,15 @@ public class InstructorController {
         }
 
         if (!cert.isEmpty()) {
-            System.out.println(user.getId());
             List<Certification> certifications= certificationDao.getCertifications(user.getId());
-            System.out.println(certifications);
             saveCertificate(cert, user.getId(), certificationNames.getCertificate1(), certifications.size() + 1);
         }
 
-        newUser.setId(user.getId());
+
         instructor.setId(user.getId());
-        userDao.updateUser(newUser);
+        userDao.updateUser(user);
         instructorDao.updateInstructor(instructor);
-        return "redirect:/instructor/update";
+        return "redirect:/";
     }
 
     //Processa la informació del nou certificat

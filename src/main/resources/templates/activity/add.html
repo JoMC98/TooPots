@@ -10,100 +10,110 @@
     </head>
     <body layout:fragment="content">
         <br><h1>Crear activitat</h1><br>
-        <form action="#" th:action="@{/activity/add}" method="post" enctype="multipart/form-data">
-            <table class="marginAuto" th:object="${activity}">
-                <tr>
-                    <td colspan="3"><label class="inputLabel">Fotos (mínim 1 i màxim 4)</label></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <input th:if="${errorFoto}" class="inputAdjunto needCorrection" name="foto" type="file" accept="image/*" multiple>
-                        <input th:unless="${errorFoto}" class="inputAdjunto" name="foto" type="file" accept="image/*" multiple>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label class="inputLabel inputPequeño">Nom</label></td>
-                    <td><label class="inputLabel inputPequeño">Data</label></td>
-                    <td><label class="inputLabel inputPequeño">Ubicació</label></td>
-                </tr>
-                <tr>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{name}" maxlength="40"/></td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="date" th:field="*{dates}"/></td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{place}" maxlength="30"/></td>
-                </tr>
-                <tr>
-                    <td><label class="inputLabel inputPequeño">Tipus d'Activitat</label></td>
-                    <td><label class="inputLabel inputPequeño">Mínim de persones (OPCIONAL)</label></td>
-                    <td><label class="inputLabel inputPequeño">Màxim de persones</label></td>
-                </tr>
-                <tr>
-                    <td>
-                        <select class="input inputPequeño" th:errorclass="needCorrection" th:field="*{activityType}">
-                            <option value="0"></option>
-                            <option th:each="aut : ${#lists.sort(instructor.activities)}" th:value="${aut.id}" th:text="|${aut.name} Nivell ${aut.level}|"></option>
-                        </select>
-                    </td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="*{minNumberPeople}" min="0" /></td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="*{maxNumberPeople}" min="1" /></td>
-                </tr>
-                <tr>
-                    <td><label class="inputLabel inputPequeño">Preu estándar per persona</label></td>
-                    <td><label class="inputLabel inputPequeño">Punt de trobada</label></td>
-                    <td><label class="inputLabel inputPequeño">Hora de trobada</label></td>
-                </tr>
-                <tr>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{pricePerPerson}"/></td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{meetingPoint}" maxlength="30"/></td>
-                    <td><input class="input inputPequeño" th:errorclass="needCorrection" type="time" th:field="*{meetingTime}"/></td>
-                </tr>
-                <tr>
-                    <td colspan="3"><label class="inputLabel inputTriple">Descripció</label></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <textarea class="input inputTriple inputAlto" th:errorclass="needCorrection" rows="2" cols="50" th:field="*{description}" maxlength="100"></textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3"><br><label class="inputLabel"><b>Indica el preu en les tarifes a anyadir i les que no deixa-les en 0</b></label></td>
-                </tr>
-            </table>
-            <table class="marginAuto">
-                <tr th:object="${activity.tarifaMenores}">
-                    <td>
-                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
-                    </td>
-                    <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
-                    </td>
-                </tr>
-                <tr th:object="${activity.tarifaEstudiantes}">
-                    <td>
-                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
-                    </td>
-                    <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
-                    </td>
-                </tr>
-                <tr th:object="${activity.tarifaMayores}">
-                    <td>
-                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
-                    </td>
-                    <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
-                    </td>
-                </tr>
-                <tr th:object="${activity.tarifaGrupos}">
-                    <td>
-                        <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
-                    </td>
-                    <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <input class="btn btn-success" type="submit" value="Crear activitat" />
-        </form>
+        <div th:if="${#lists.isEmpty(instructor.activities)}">
+            <br><br>
+            <b>No es pot crear una activitat ja que no tens cap activitat assignada</b>
+            <br><br>
+            <label>Prova a afegir nous certificats</label>
+            <br><br><br>
+            <a th:href="@{/instructor/update}" class="btn btn-warning" role="button">Afegir certificats</a>
+        </div>
+        <div th:unless="${#lists.isEmpty(instructor.activities)}">
+            <form action="#" th:action="@{/activity/add}" method="post" enctype="multipart/form-data">
+                <table class="marginAuto" th:object="${activity}">
+                    <tr>
+                        <td colspan="3"><label class="inputLabel">Fotos (mínim 1 i màxim 4)</label></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <input th:if="${errorFoto}" class="inputAdjunto needCorrection" name="foto" type="file" accept="image/*" multiple>
+                            <input th:unless="${errorFoto}" class="inputAdjunto" name="foto" type="file" accept="image/*" multiple>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="inputLabel inputPequeño">Nom</label></td>
+                        <td><label class="inputLabel inputPequeño">Data</label></td>
+                        <td><label class="inputLabel inputPequeño">Ubicació</label></td>
+                    </tr>
+                    <tr>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{name}" maxlength="40"/></td>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="date" th:field="*{dates}"/></td>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{place}" maxlength="30"/></td>
+                    </tr>
+                    <tr>
+                        <td><label class="inputLabel inputPequeño">Tipus d'Activitat</label></td>
+                        <td><label class="inputLabel inputPequeño">Mínim de persones (OPCIONAL)</label></td>
+                        <td><label class="inputLabel inputPequeño">Màxim de persones</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="input inputPequeño" th:errorclass="needCorrection" th:field="*{activityType}">
+                                <option value="0"></option>
+                                <option th:each="aut : ${#lists.sort(instructor.activities)}" th:value="${aut.id}" th:text="|${aut.name} Nivell ${aut.level}|"></option>
+                            </select>
+                        </td>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="*{minNumberPeople}" min="0" /></td>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="*{maxNumberPeople}" min="1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label class="inputLabel inputPequeño">Preu estándar per persona</label></td>
+                        <td><label class="inputLabel inputPequeño">Punt de trobada</label></td>
+                        <td><label class="inputLabel inputPequeño">Hora de trobada</label></td>
+                    </tr>
+                    <tr>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{pricePerPerson}"/></td>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="text" th:field="*{meetingPoint}" maxlength="30"/></td>
+                        <td><input class="input inputPequeño" th:errorclass="needCorrection" type="time" th:field="*{meetingTime}"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><label class="inputLabel inputTriple">Descripció</label></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <textarea class="input inputTriple inputAlto" th:errorclass="needCorrection" rows="2" cols="50" th:field="*{description}" maxlength="100"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><br><label class="inputLabel"><b>Indica el preu en les tarifes a anyadir i les que no deixa-les en 0</b></label></td>
+                    </tr>
+                </table>
+                <table class="marginAuto">
+                    <tr th:object="${activity.tarifaMenores}">
+                        <td>
+                            <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                        </td>
+                        <td>
+                            <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
+                        </td>
+                    </tr>
+                    <tr th:object="${activity.tarifaEstudiantes}">
+                        <td>
+                            <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                        </td>
+                        <td>
+                            <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
+                        </td>
+                    </tr>
+                    <tr th:object="${activity.tarifaMayores}">
+                        <td>
+                            <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                        </td>
+                        <td>
+                            <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
+                        </td>
+                    </tr>
+                    <tr th:object="${activity.tarifaGrupos}">
+                        <td>
+                            <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
+                        </td>
+                        <td>
+                            <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <input class="btn btn-success" type="submit" value="Crear activitat" />
+            </form>
+        </div>
     </body>
 </html>

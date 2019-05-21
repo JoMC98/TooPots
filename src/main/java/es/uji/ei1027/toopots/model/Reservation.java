@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
-public class Reservation {
+public class Reservation implements Comparable<Reservation> {
 
     //Atributos
 
@@ -152,5 +152,12 @@ public class Reservation {
                 ", idCustomer=" + idCustomer +
                 ", state='" + state + '\'' +
                 '}';
+    }
+
+    public int compareTo(Reservation altre) {
+        String actualName = this.getNameCustomer().toLowerCase();
+        String otherName = altre.getNameCustomer().toLowerCase();
+
+        return actualName.compareTo(otherName);
     }
 }

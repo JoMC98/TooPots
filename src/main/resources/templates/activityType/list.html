@@ -30,6 +30,10 @@
                         </div>
                     </td>
                     <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListText"><b th:text="${activityType.name}"></b></td>
+                    <td th:unless="${activityType.description} == ''" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto"><b> Descripció</b></td>
+                    <td rowspan="2" th:if="${activityType.description} == ''" class="tdListAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto">
+                        <label class="sinDescripcion">Sense descripció</label>
+                    </td>
                     <td class="tdListCentroAbajo tdListArriba tdListBotones">
                         <a th:href="@{/activityType/update/{id}(id=${activityType.id})}" class="btn btn-warning listBoton" role="button">Edita</a>
                     </td>
@@ -38,6 +42,9 @@
                     <td class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
                         <b>Nivell: </b>
                         <label th:text="${activityType.level}"></label>
+                    </td>
+                    <td th:unless="${activityType.description} == ''" class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
+                        <label th:text="${activityType.description}"></label>
                     </td>
                     <td class="tdListCentroArriba tdListAbajo tdListBotones">
                         <a th:href="@{/activityType/delete/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Esborra</a>

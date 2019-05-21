@@ -9,7 +9,7 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <h2>Editar activitat</h2>
+        <br><h2>Editar activitat</h2>
         <form action="#" th:action="@{/activity/update/{id}(id=${activity.id})}" method="post">
             <label class="inputLabel">Fotos</label><br>
             <table class="marginAuto">
@@ -75,7 +75,7 @@
                         <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
                     </td>
                     <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                        <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
                     </td>
                 </tr>
                 <tr th:object="${activity.tarifaEstudiantes}">
@@ -83,7 +83,7 @@
                         <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
                     </td>
                     <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                        <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
                     </td>
                 </tr>
                 <tr th:object="${activity.tarifaMayores}">
@@ -91,7 +91,7 @@
                         <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
                     </td>
                     <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                        <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
                     </td>
                 </tr>
                 <tr th:object="${activity.tarifaGrupos}">
@@ -99,7 +99,7 @@
                         <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
                     </td>
                     <td>
-                        <input class="input inputTarifa" type="text" th:field="*{price}"/>
+                        <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
                     </td>
                 </tr>
             </table>
