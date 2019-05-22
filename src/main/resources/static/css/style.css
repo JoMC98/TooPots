@@ -286,6 +286,9 @@ footer {
 .listBoton {
     width: 150px;
 }
+.listBotonSubscribir {
+    width: 190px;
+}
 .listCertificados {
     width: 300px;
     margin-top: 20px;

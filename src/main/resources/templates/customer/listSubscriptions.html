@@ -33,8 +33,8 @@
                         <label class="sinDescripcion">Sense descripció</label>
                     </td>
                     <td rowspan="2" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
-                        <a th:if="${activityType.subscribe}" th:href="@{/customer/unsubscribe/{id}(id=${activityType.id})}" class="btn btn-danger listBoton" role="button">Desubscriures</a>
-                        <a th:unless="${activityType.subscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-success listBoton" role="button">Subscriures</a>
+                        <a th:if="${activityType.subscribe}" th:href="@{/customer/unsubscribe/{id}(id=${activityType.id})}" class="btn btn-danger listBotonSubscribir" role="button">Cancel·lar subscripció</a>
+                        <a th:unless="${activityType.subscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-success listBotonSubscribir" role="button">Subscriure's</a>
                     </td>
                 </tr>
                 <tr>

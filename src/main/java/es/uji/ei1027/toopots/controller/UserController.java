@@ -84,7 +84,7 @@ public class UserController {
         }
         Users user = (Users) session.getAttribute("user");
         String rol = user.getRol();
-        if (rol.equals("Instructor") || rol.equals("Customer")) {
+        if (rol.equals("Instructor") || rol.equals("Customer") || rol.equals("Admin")) {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;

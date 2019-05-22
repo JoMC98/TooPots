@@ -78,22 +78,8 @@ public class InstructorController {
     @Autowired
     public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
-    //Esborra un instructor
-    @RequestMapping(value="/delete/{id}")
-    public String processDelete(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Admin");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/instructor/delete/" + id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            userDao.deleteUser(id);
-            instructorDao.deleteInstructor(id);
-            return "redirect:../list";
-        } else {
-            return "redirect:/";
-        }
-    }
+
+    /*Part utilitzada pel instructor*/
 
     //Afegir un nou instructor
     @RequestMapping("/add")
@@ -180,28 +166,6 @@ public class InstructorController {
             saveCertificate(file, newUser.getId(), names.get(i), i+1);
         }
         return "redirect:../";
-    }
-
-    private void saveCertificate(MultipartFile cert, int id, String name, int number) {
-        try {
-            // Obtener el fichero y guardarlo
-            byte[] bytes = cert.getBytes();
-
-            String direccion = "certificates/" + id + "_" + number + ".pdf";
-
-            Path path = Paths.get(uploadDirectory + direccion);
-
-            Certification certification = new Certification();
-            certification.setCertificate(name);
-            certification.setDoc("/" + direccion);
-            certification.setIdInstructor(id);
-
-            certificationDao.addCertification(certification);
-
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     //Actualitzar un instructor
@@ -291,16 +255,6 @@ public class InstructorController {
         return "redirect:/";
     }
 
-    //Processa la informació del nou certificat
-    @RequestMapping(value="/addCertification", method= RequestMethod.POST)
-    public String processAddCertificationSubmit(Model model, HttpSession session,
-                                   BindingResult bindingResult, @RequestParam("cert") MultipartFile cert) {
-
-
-
-        return "redirect:/instructor/update";
-    }
-
     //Llistat de totes les activitats del monitor per a ell
     @RequestMapping("/listActivities/{state}")
     public String listActivities(Model model, HttpSession session, @PathVariable String state) {
@@ -344,39 +298,47 @@ public class InstructorController {
         }
     }
 
+
+
+
+    /*Part utilitzada pels clients*/
+
     //Llistat de totes les activitats del monitor per als clients
     @RequestMapping("/showActivities/{state}/{id}")
     public String activityListForCustomers(Model model, @PathVariable int id, @PathVariable String state) {
         Users user = userDao.getUser(id);
 
-        if (!state.equals("opened") && !state.equals("closed") && !state.equals("done")) {
+        if (user.getRol().equals("Instructor")) {
+            if (!state.equals("opened") && !state.equals("closed") && !state.equals("done")) {
+                return "redirect:/";
+            }
+            List<Activity> activities = activityDao.getActivities(user.getId(), state);
+
+            List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+            for (Activity ac : activities) {
+                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
+                ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+
+                List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+                float total = 0;
+                for (Reservation res : reservations) {
+                    total += res.getNumPeople();
+                }
+
+                total = (total / ac.getMaxNumberPeople()) * 100;
+                total = (float) Math.floor(total);
+                int ocupation = (int) total;
+                ac.setOcupation(ocupation);
+
+                activitiesWithOcupation.add(ac);
+            }
+            model.addAttribute("user", user);
+            model.addAttribute("activities", activitiesWithOcupation);
+            model.addAttribute("estat", state);
+            return "instructor/showActivities";
+        } else {
             return "redirect:/";
         }
-        List<Activity> activities = activityDao.getActivities(user.getId(), state);
-
-        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
-        for (Activity ac: activities) {
-            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
-            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
-
-            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
-            float total = 0;
-            for (Reservation res: reservations) {
-                total += res.getNumPeople();
-            }
-
-            total = (total/ac.getMaxNumberPeople())*100;
-            total = (float) Math.floor(total);
-            int ocupation = (int) total;
-            ac.setOcupation(ocupation);
-
-            activitiesWithOcupation.add(ac);
-        }
-        model.addAttribute("user", user);
-        model.addAttribute("activities", activitiesWithOcupation);
-        model.addAttribute("estat", state);
-        return "instructor/showActivities";
-
     }
 
     //Veure perfil monitor
@@ -395,6 +357,27 @@ public class InstructorController {
         }
     }
 
+    private void saveCertificate(MultipartFile cert, int id, String name, int number) {
+        try {
+            // Obtener el fichero y guardarlo
+            byte[] bytes = cert.getBytes();
+
+            String direccion = "certificates/" + id + "_" + number + ".pdf";
+
+            Path path = Paths.get(uploadDirectory + direccion);
+
+            Certification certification = new Certification();
+            certification.setCertificate(name);
+            certification.setDoc("/" + direccion);
+            certification.setIdInstructor(id);
+
+            certificationDao.addCertification(certification);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private int controlarAcceso(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {

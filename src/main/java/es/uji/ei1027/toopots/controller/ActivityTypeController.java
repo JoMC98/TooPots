@@ -41,7 +41,7 @@ public class ActivityTypeController {
     //Llistar tots els tipus de activitat
     @RequestMapping("/list")
     public String listActivityTypes(HttpSession session, Model model) {
-        int acceso = controlarAccesoAdmin(session);
+        int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "activityType/list");
@@ -57,7 +57,7 @@ public class ActivityTypeController {
     //Afegir un nou tipus de activitat
     @RequestMapping("/add")
     public String addActivityType(HttpSession session, Model model) {
-        int acceso = controlarAccesoAdmin(session);
+        int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "activityType/add");
@@ -116,7 +116,7 @@ public class ActivityTypeController {
     //Actualitzar un tipus de activitat
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
     public String editActivityType(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAccesoAdmin(session);
+        int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/activityType/update/" + id);
@@ -160,7 +160,7 @@ public class ActivityTypeController {
     //Esborra un tipus de activitat
     @RequestMapping(value="/delete/{id}")
     public String processDelete(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAccesoAdmin(session);
+        int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/activityType/delete");
@@ -180,12 +180,12 @@ public class ActivityTypeController {
 
     }
 
-    private int controlarAccesoAdmin(HttpSession session) {
+    private int controlarAccesoAdmin(HttpSession session, String rol) {
         if (session.getAttribute("user") == null) {
             return NOT_LOGGED;
         }
         Users user = (Users) session.getAttribute("user");
-        if (user.getRol().equals("Admin")) {
+        if (user.getRol().equals(rol)) {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;

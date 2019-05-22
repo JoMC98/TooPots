@@ -9,15 +9,11 @@
     <body>
         <ul class="navbar-nav" th:object="${session}">
             <li class="enlaceMenu">
-                <a class="black" th:href="@{/}">Inici</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
                 <a class="black" th:href="@{/activity/add}">Crear activitat</a>
                 <hr/>
             </li>
             <li class="enlaceMenu">
-                <a class="black" th:href="@{/instructor/listActivities/opened}">Gestió activitats</a>
+                <a class="black" th:href="@{/instructor/listActivities/opened}">Gestió d'activitats</a>
                 <hr/>
             </li>
             <li class="enlaceMenu">
@@ -26,6 +22,7 @@
             </li>
             <li class="enlaceMenu">
                 <a class="black" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
+                <hr/>
             </li>
         </ul>
     </body>

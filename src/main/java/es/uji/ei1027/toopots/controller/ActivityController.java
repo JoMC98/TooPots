@@ -82,6 +82,9 @@ public class ActivityController {
         this.usersDao = userDao;
     }
 
+
+    /*Part utilitzada pel instructor*/
+
     //Llistar totes les activitats del monitor
     @RequestMapping("/offer")
     public String listActivities(Model model) {
@@ -304,39 +307,43 @@ public class ActivityController {
     //Actualitzar una activitat
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
     public String editActivity(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Instructor");
+        Activity activity = activityDao.getActivity(id);
+        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/activity/update/"+id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Users user = (Users) session.getAttribute("user");
-            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
-            List<ActivityRates> tarifas = activityRatesDao.getActivityRates(id);
+            if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
+                Users user = (Users) session.getAttribute("user");
+                List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+                List<ActivityRates> tarifas = activityRatesDao.getActivityRates(id);
 
-            Instructor instructor = instructorDao.getInstructor(user.getId());
-            instructor.setActivities(asignadas);
-            Activity activity = activityDao.getActivity(id);
-            List<ActivityPhotos> photos = activityPhotosDao.getPhotos(id);
+                Instructor instructor = instructorDao.getInstructor(user.getId());
+                instructor.setActivities(asignadas);
+                List<ActivityPhotos> photos = activityPhotosDao.getPhotos(id);
 
-            for (ActivityRates tarifa: tarifas) {
-                if(tarifa.getRateName().equals("Menors de 16 anys")) {
-                    activity.setTarifaMenores(tarifa);
+                for (ActivityRates tarifa: tarifas) {
+                    if(tarifa.getRateName().equals("Menors de 16 anys")) {
+                        activity.setTarifaMenores(tarifa);
+                    }
+                    else if(tarifa.getRateName().equals("Estudiants")) {
+                        activity.setTarifaEstudiantes(tarifa);
+                    }
+                    else if(tarifa.getRateName().equals("Majors de 60 anys")) {
+                        activity.setTarifaMayores(tarifa);
+                    } else {
+                        activity.setTarifaGrupos(tarifa);
+                    }
                 }
-                else if(tarifa.getRateName().equals("Estudiants")) {
-                    activity.setTarifaEstudiantes(tarifa);
-                }
-                else if(tarifa.getRateName().equals("Majors de 60 anys")) {
-                    activity.setTarifaMayores(tarifa);
-                } else {
-                    activity.setTarifaGrupos(tarifa);
-                }
+
+                model.addAttribute("activity", activity);
+                model.addAttribute("photos", photos);
+                model.addAttribute("instructor", instructor);
+                return "activity/update";
+            } else {
+                return "redirect:/";
             }
-
-            model.addAttribute("activity", activity);
-            model.addAttribute("photos", photos);
-            model.addAttribute("instructor", instructor);
-            return "activity/update";
         } else {
             return "redirect:/";
         }
@@ -415,12 +422,113 @@ public class ActivityController {
         return "redirect:/";
     }
 
-    //Esborra una activitat
-    @RequestMapping(value="/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        activityDao.deleteActivity(id);
-        return "redirect:../list";
+    //Controlar una cancelacio
+    @RequestMapping("/cancel/{id}")
+    public String cancelActivity(HttpSession session, Model model, @PathVariable int id) {
+        Activity activity = activityDao.getActivity(id);
+        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/cancel/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
+                model.addAttribute("activity", activity);
+                return "activity/cancel";
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+
     }
+
+    //Processa la informació de la cancelació
+    @RequestMapping(value="/cancel/{id}", method = RequestMethod.POST)
+    public String processCancelSubmit(Model model, @PathVariable int id, @ModelAttribute("activity") Activity activity,
+                                      BindingResult bindingResult) {
+
+        ActivityCancelationValidator cancelationValidator = new ActivityCancelationValidator();
+        cancelationValidator.validate(activity, bindingResult);
+        if (bindingResult.hasErrors()) {
+            System.out.println(bindingResult.toString());
+            return "activity/cancel";
+        }
+        activity.setState("Cancelada");
+        activityDao.cancelActivity(activity);
+        return "redirect:/home";
+    }
+
+    //Tancar una activitat
+    @RequestMapping("/close/{id}")
+    public String closeActivity(HttpSession session, Model model, @PathVariable int id) {
+        Activity activity = activityDao.getActivity(id);
+        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/close/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
+                activity.setState("Tancada");
+                activityDao.updateActivityState(activity);
+                return "redirect:/home";
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Obrir una activitat
+    @RequestMapping("/open/{id}")
+    public String openActivity(HttpSession session, Model model, @PathVariable int id) {
+        Activity activity = activityDao.getActivity(id);
+        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/open/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
+                activity.setState("Oberta");
+                activityDao.updateActivityState(activity);
+                return "redirect:/home";
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Llistar totes les reserves d'una activitat
+    @RequestMapping(value="/listReservations/{id}", method = RequestMethod.GET)
+    public String listReservesActivity(HttpSession session, Model model, @PathVariable int id) {
+        Activity activity = activityDao.getActivity(id);
+        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "activity/listReservations/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            List<Reservation> reserves = reservationDao.getReserves(id);
+            for (Reservation reserve: reserves){
+                Users user = usersDao.getUser(reserve.getIdCustomer());
+                reserve.setNameCustomer(user.getName());
+            }
+            model.addAttribute("reserves", reserves);
+            return "activity/listReservations";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+
+
+    /*Part utilitzada pels clients*/
 
     //Reservar una activitat
     @RequestMapping("/book/{id}")
@@ -558,101 +666,24 @@ public class ActivityController {
     //Veure dades activitat
     @RequestMapping(value="/view/{id}", method = RequestMethod.GET)
     public String dataViewActivity(Model model, @PathVariable int id) {
-        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
         Activity activity = activityDao.getActivity(id);
-        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
-        if (imatges.size() == 1) {
-            activity.setPhotoPrincipal(imatges.get(0).getPhoto());
-        }
 
-        model.addAttribute("imatges", imatges);
-        model.addAttribute("totalFotos", imatges.size());
-        model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
-        model.addAttribute("activity", activity);
-        model.addAttribute("rates", rates);
-        return "activity/view";
-    }
+        if (!activity.getState().equals("Cancelada")) {
+            List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
+            if (imatges.size() == 1) {
+                activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+            }
 
-    //Controlar una cancelacio
-    @RequestMapping("/cancel/{id}")
-    public String cancelActivity(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Instructor");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "activity/cancel/"+id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            model.addAttribute("activity", activityDao.getActivity(id));
-            return "activity/cancel";
+            model.addAttribute("imatges", imatges);
+            model.addAttribute("totalFotos", imatges.size());
+            model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
+            model.addAttribute("activity", activity);
+            model.addAttribute("rates", rates);
+            return "activity/view";
         } else {
             return "redirect:/";
         }
-
-    }
-
-    //Processa la informació de la cancelació
-    @RequestMapping(value="/cancel/{id}", method = RequestMethod.POST)
-    public String processCancelSubmit(Model model, @PathVariable int id, @ModelAttribute("activity") Activity activity,
-                                      BindingResult bindingResult) {
-
-        ActivityCancelationValidator cancelationValidator = new ActivityCancelationValidator();
-        cancelationValidator.validate(activity, bindingResult);
-        if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.toString());
-            return "activity/cancel";
-        }
-        activity.setState("Cancelada");
-        activityDao.cancelActivity(activity);
-        return "redirect:/home";
-    }
-
-    //Tancar una activitat
-    @RequestMapping("/close/{id}")
-    public String closeActivity(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Instructor");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "activity/close/"+id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Activity activity = activityDao.getActivity(id);
-            activity.setState("Tancada");
-            activityDao.updateActivityState(activity);
-            return "redirect:/home";
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Obrir una activitat
-    @RequestMapping("/open/{id}")
-    public String openActivity(HttpSession session, Model model, @PathVariable int id) {
-        int acceso = controlarAcceso(session, "Instructor");
-        if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "activity/open/"+id);
-            return "login";
-        } else if (acceso == USER_AUTHORIZED) {
-            Activity activity = activityDao.getActivity(id);
-            activity.setState("Oberta");
-            activityDao.updateActivityState(activity);
-            return "redirect:/home";
-        } else {
-            return "redirect:/";
-        }
-    }
-
-    //Llistar totes les reserves d'una activitat
-    @RequestMapping(value="/listReservations/{id}", method = RequestMethod.GET)
-    public String listReservesActivity(Model model, @PathVariable int id) {
-        List<Reservation> reserves = reservationDao.getReserves(id);
-        for (Reservation reserve: reserves){
-            Users user = usersDao.getUser(reserve.getIdCustomer());
-            reserve.setNameCustomer(user.getName());
-        }
-
-        model.addAttribute("reserves", reserves);
-        return "activity/listReservations";
     }
 
     private int controlarAcceso(HttpSession session, String rol) {
@@ -661,6 +692,18 @@ public class ActivityController {
         }
         Users user = (Users) session.getAttribute("user");
         if (user.getRol().equals(rol)) {
+            return USER_AUTHORIZED;
+        } else {
+            return USER_NOT_AUTHORIZED;
+        }
+    }
+
+    private int controlarAccesoYId(HttpSession session, String rol, int id) {
+        if (session.getAttribute("user") == null) {
+            return NOT_LOGGED;
+        }
+        Users user = (Users) session.getAttribute("user");
+        if (user.getRol().equals(rol) && user.getId() == id) {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;

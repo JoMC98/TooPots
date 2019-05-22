@@ -52,7 +52,6 @@ public class AdminController {
     @Autowired
     public void setActivityCertificationDao(ActivityCertificationDao activityCertificationDao){this.activityCertificationDao=activityCertificationDao;}
 
-
     //Admin home
     @RequestMapping("/home")
     public String home(HttpSession session, Model model) {

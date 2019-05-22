@@ -79,14 +79,6 @@ public class CustomerController {
     }
 
 
-    //Llistar tots els clients
-    @RequestMapping("/list")
-    public String listCustomers(Model model) {
-        model.addAttribute("users", userDao.getCustomers());
-        model.addAttribute("customers", customerDao.getCustomers());
-        return "customer/list";
-    }
-
     //Afegir un nou client
     @RequestMapping("/add")
     public String addCustomer(Model model) {
@@ -162,14 +154,6 @@ public class CustomerController {
         userDao.updateUser(user);
         customerDao.updateCustomer(customer);
         return "redirect:/";
-    }
-
-    //Esborra un client
-    @RequestMapping(value="/delete/{id}")
-    public String processDelete(@PathVariable int id) {
-        userDao.deleteUser(id);
-        customerDao.deleteCustomer(id);
-        return "redirect:../list";
     }
 
     //Llistar tots els clients
@@ -288,40 +272,62 @@ public class CustomerController {
 
     //Veure dades reserves
     @RequestMapping(value="/viewReservation/{id}", method = RequestMethod.GET)
-    public String dataViewReservation(Model model, @PathVariable int id) {
+    public String dataViewReservation(HttpSession session, Model model, @PathVariable int id) {
         Reservation reservation = reservationDao.getReservation(id);
-        List<ActivityRates> rates = activityRatesDao.getActivityRates(reservation.getIdActivity());
-        Activity activity = activityDao.getActivity(reservation.getIdActivity());
+        int acceso = controlarAccesoYId(session, "Customer", reservation.getIdCustomer());
 
-        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(reservation.getIdActivity());
-        if (imatges.size() == 1) {
-            activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "customer/viewReservation/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+
+            List<ActivityRates> rates = activityRatesDao.getActivityRates(reservation.getIdActivity());
+            Activity activity = activityDao.getActivity(reservation.getIdActivity());
+
+            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(reservation.getIdActivity());
+            if (imatges.size() == 1) {
+                activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+            }
+
+            boolean pagada = false;
+            if (reservation.getState().equals("Pagada")) {
+                pagada = true;
+            }
+
+            model.addAttribute("imatges", imatges);
+            model.addAttribute("pagada", pagada);
+            model.addAttribute("totalFotos", imatges.size());
+            model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
+            model.addAttribute("activity", activity);
+            model.addAttribute("reservation", reservation);
+            model.addAttribute("rates", rates);
+            return "customer/viewReservation";
+        } else {
+            return "redirect:/";
         }
-
-        boolean pagada = false;
-        if (reservation.getState().equals("Pagada")) {
-            pagada = true;
-        }
-
-        model.addAttribute("imatges", imatges);
-        model.addAttribute("pagada", pagada);
-        model.addAttribute("totalFotos", imatges.size());
-        model.addAttribute("activityType", activityTypeDao.getActivityType(activity.getActivityType()));
-        model.addAttribute("activity", activity);
-        model.addAttribute("reservation", reservation);
-        model.addAttribute("rates", rates);
-        return "customer/viewReservation";
     }
 
     //Cancelar reserva si es posible
     @RequestMapping(value="/cancelReservation/{id}", method = RequestMethod.GET)
-    public String cancelReservation(Model model, @PathVariable int id) {
+    public String cancelReservation(HttpSession session, Model model, @PathVariable int id) {
         Reservation reservation = reservationDao.getReservation(id);
+        int acceso = controlarAccesoYId(session, "Customer", reservation.getIdCustomer());
 
-        if (reservation.getState().equals("Pendent")) {
-            reservationDao.deleteReservation(reservation.getId());
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "customer/cancelReservation/"+id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (reservation.getState().equals("Pendent")) {
+                reservationDao.deleteReservation(reservation.getId());
+            }
+            return "redirect:/customer/listReservations";
+        } else {
+            return "redirect:/";
         }
-        return "redirect:/customer/listReservations";
+
+
 }
 
     private int controlarAcceso(HttpSession session, String rol) {
@@ -330,6 +336,18 @@ public class CustomerController {
         }
         Users user = (Users) session.getAttribute("user");
         if (user.getRol().equals(rol)) {
+            return USER_AUTHORIZED;
+        } else {
+            return USER_NOT_AUTHORIZED;
+        }
+    }
+
+    private int controlarAccesoYId(HttpSession session, String rol, int id) {
+        if (session.getAttribute("user") == null) {
+            return NOT_LOGGED;
+        }
+        Users user = (Users) session.getAttribute("user");
+        if (user.getRol().equals(rol) && user.getId() == id) {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;
