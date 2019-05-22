@@ -9,7 +9,7 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><br><h1>Editar la Descripció i la Foto</h1><br>
+        <h1>Editar la Descripció i la Foto</h1><br>
         <form action="#" th:action="@{/activityType/update/{id}(id=${activityType.id})}" method="post" enctype="multipart/form-data">
             <table class="marginAuto" th:object="${activityType}">
                 <tr>

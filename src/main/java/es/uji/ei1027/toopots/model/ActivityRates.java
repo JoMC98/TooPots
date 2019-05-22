@@ -3,7 +3,7 @@ package es.uji.ei1027.toopots.model;
 import java.util.Date;
 import java.util.Objects;
 
-public class ActivityRates {
+public class ActivityRates implements Comparable<ActivityRates> {
     private int idActivity;
     private String rateName;
     private float price;
@@ -61,5 +61,9 @@ public class ActivityRates {
         if (o == null || getClass() != o.getClass()) return false;
         ActivityRates that = (ActivityRates) o;
         return Float.compare(that.price, price) == 0;
+    }
+
+    public int compareTo(ActivityRates altre) {
+        return Float.compare(this.getPrice(), altre.getPrice()) * -1;
     }
 }

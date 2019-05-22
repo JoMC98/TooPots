@@ -9,7 +9,7 @@
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
 </head>
     <body layout:fragment="content">
-        <br><table class="marginAuto">
+        <table class="marginAuto">
             <tr>
                 <td><a th:href="@{/instructor/showActivities/opened/{id}(id=${user.id})}" class="btn btn-outline-success botonListaActividades" role="button">Activitats obertes</a></td>
                 <td><a th:href="@{/instructor/showActivities/closed/{id}(id=${user.id})}" class="btn btn-outline-info botonListaActividades" role="button">Activitats tancades</a></td>

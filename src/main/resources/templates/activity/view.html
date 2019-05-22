@@ -7,12 +7,10 @@
         <meta charset="UTF-8" />
     </head>
     <body layout:fragment="content">
-    <br><br>
-
     <table class="marginAuto">
         <tr>
             <td rowspan="3" class="tdFotoActividad">
-                <div th:unless="${totalFotos} == 1" id="miCarrusel" class="carousel slide" data-ride="carousel">
+                <div th:unless="${totalFotos} == 1" id="miCarrusel" class="carousel carouselVista slide" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li th:each="imatge,iterstat: ${imatges}"
                             data-target="#miCarrusel"

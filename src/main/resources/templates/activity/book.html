@@ -7,84 +7,108 @@
         <meta charset="UTF-8"/>
     </head>
     <body layout:fragment="content">
-        <div class="divInicioTarifas">
-            <table class="marginAuto">
-                <tr>
-                    <td rowspan="2" class="tdActivityFotoReserva">
-                        <img th:src="@{*{activity.photoPrincipal}}" class="activityFotoReserva">
-                    </td>
-                    <td class="tdTarifasReserva">
-                        <h1 class="actividadNameReserva" th:text="${activity.name}"></h1>
-                    </td>
-                    <td rowspan="2" class="tdRelleno"></td>
-                </tr>
-                <!--<div th:each="pais: ${classificacions.keySet()}">-->
-                <tr>
-                    <td class="tdTarifasReserva">
-                        <table class="tablaTarifas">
-                            <tr>
-                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
-                                <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
-                            </tr>
-                            <tr class="tdPaddingLeftRight">
-                                <td class="tarifaName tdPaddingLeftRight">Adults</td>
-                                <td class="tdPaddingLeftRight" th:text="${activity.pricePerPerson}"></td>
-                            </tr>
-                            <tr class="tdPaddingLeftRight" th:each="rate: ${rates}">
-                                <td class="tarifaName tdPaddingLeftRight" th:text="${rate.rateName}"></td>
-                                <td class="tdPaddingLeftRight" th:text="${rate.price}"></td>
-                            </tr>
-                            <tr>
-                                <td class="tdPaddingBottom"></td>
-                                <td class="tdPaddingBottom"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
+        <div class="contentPaddingBook">
+            <div class="divInicioTarifas">
+                <table class="marginAuto">
+                    <tr>
+                        <td rowspan="2" class="tdActivityFotoReserva">
+                            <div th:unless="${totalFotos} == 1" id="miCarrusel" class="carousel carouselReserva slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li th:each="imatge,iterstat: ${imatges}"
+                                        data-target="#miCarrusel"
+                                        th:attr="data-slide-to=${iterstat.index}"
+                                        th:class="${iterstat.index}== 0  ? 'active':''"></li>
+
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div th:each="imatge,iterstat: ${imatges}"
+                                         th:class="${iterstat.index}==0 ? 'carousel-item active':'carousel-item'">
+                                        <img th:src="@{${imatge.photo}}" class="activityFotoReserva">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#miCarrusel" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#miCarrusel" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+
+                            <img th:if="${totalFotos} == 1" th:src="@{*{activity.photoPrincipal}}" class="activityFotoReserva">
+                        </td>
+                        <td>
+                            <h1 class="reservaActivityName" th:text="${activity.name}"></h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="tablaTarifas">
+                                <tr>
+                                    <td class="tdPaddingLeftRight tdPaddingTop"><b>Tarifa</b></td>
+                                    <td class="tdPaddingLeftRight tdPaddingTop"><b>Preu per persona</b></td>
+                                </tr>
+                                <tr class="tdPaddingLeftRight">
+                                    <td class="tdPaddingLeftRight">Adults</td>
+                                    <td class="tdPaddingLeftRight" th:text="${activity.pricePerPerson}"></td>
+                                </tr>
+                                <tr class="tdPaddingLeftRight" th:each="rate: ${#lists.sort(rates)}">
+                                    <td class="tdPaddingLeftRight" th:text="${rate.rateName}"></td>
+                                    <td class="tdPaddingLeftRight" th:text="${rate.price}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdPaddingBottom"></td>
+                                    <td class="tdPaddingBottom"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <br>
+            <form action="#" th:action="@{/activity/summary/{id}(id=${activity.id})}" method="post">
+                <table class="tablaNumeroPersonas">
+                    <tr>
+                        <td>
+                            <label class="inputLabel inputPequeño">Nombre d'adults</label>
+                        </td>
+                        <td>
+                            <label class="inputLabel inputPequeño">Nombre de menors de 16 anys</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numAdults}" min="0"/>
+                        </td>
+                        <td>
+                            <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numUnder16}" min="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="inputLabel inputPequeño">Nombre d'estudiants</label>
+                        </td>
+                        <td>
+                            <label class="inputLabel inputPequeño">Nombre de majors de 60 anys</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numStudents}" min="0"/>
+                        </td>
+                        <td>
+                            <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numOver60}" min="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <br>
+                            <input class="btn btn-success" type="submit" value="Reservar" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
         </div>
-        <br><br>
-        <form action="#" th:action="@{/activity/summary/{id}(id=${activity.id})}" method="post">
-            <table class="tablaNumeroPersonas">
-                <tr>
-                    <td>
-                        <label class="inputLabel inputPequeño">Nombre d'adults</label>
-                    </td>
-                    <td>
-                        <label class="inputLabel inputPequeño">Nombre de menors de 16 anys</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numAdults}" min="0"/>
-                    </td>
-                    <td>
-                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numUnder16}" min="0"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label class="inputLabel inputPequeño">Nombre d'estudiants</label>
-                    </td>
-                    <td>
-                        <label class="inputLabel inputPequeño">Nombre de majors de 60 anys</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numStudents}" min="0"/>
-                    </td>
-                    <td>
-                        <input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="${reservation.numOver60}" min="0"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <br>
-                        <input class="btn btn-success" type="submit" value="Reservar" />
-                    </td>
-                </tr>
-            </table>
-        </form>
     </body>
 </html>

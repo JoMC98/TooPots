@@ -9,49 +9,51 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><br><h1>Crear Tipus d'Activitat</h1><br>
-        <form action="#" th:action="@{/activityType/add}" method="post" enctype="multipart/form-data">
-            <table class="marginAuto" th:object="${activityType}">
-                <tr>
-                    <td colspan="2">
-                        <label class="inputLabel">Foto de perfil</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input th:if="${errorFoto}" class="inputAdjunto needCorrection" name="foto" type="file" accept="image/*">
-                        <input th:unless="${errorFoto}" class="inputAdjunto" name="foto" type="file" accept="image/*">
-                    </td>
-                </tr>
-                <tr>
-                    <td><label class="inputLabel inputPequeño">Nom</label></td>
-                    <td><label class="inputLabel inputPequeño">Nivell</label></td>
+        <div class="contentPadding40">
+            <h1>Crear Tipus d'Activitat</h1><br>
+            <form action="#" th:action="@{/activityType/add}" method="post" enctype="multipart/form-data">
+                <table class="marginAuto" th:object="${activityType}">
+                    <tr>
+                        <td colspan="2">
+                            <label class="inputLabel">Foto de perfil</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input th:if="${errorFoto}" class="inputAdjunto needCorrection" name="foto" type="file" accept="image/*">
+                            <input th:unless="${errorFoto}" class="inputAdjunto" name="foto" type="file" accept="image/*">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="inputLabel inputPequeño">Nom</label></td>
+                        <td><label class="inputLabel inputPequeño">Nivell</label></td>
 
-                </tr>
-                <tr>
-                    <td><input type="text" class="input inputPequeño" th:errorclass="needCorrection" th:field="*{name}" maxlength="40"/></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="input inputPequeño" th:errorclass="needCorrection" th:field="*{name}" maxlength="40"/></td>
 
-                    <td>
-                        <select class = "input inputPequeño"  th:errorclass="needCorrection" type = "text"  th:field = "*{level}"  >
-                            <option value = "No seleccionat" ></option>
-                            <option value = "Baix" > Baix </option>
-                            <option value = "Mitja" > Mitja </option>
-                            <option value = "Alt" > Alt </option>
-                            <option value = "Extrem" > Extrem </option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2"><label class="inputLabel inputDoble">Descripció (OPCIONAL)</label></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <textarea class="input inputDoble inputAlto" rows="2" cols="50" th:field="*{description}" maxlength="100"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <input class="btn btn-success" type="submit" value="Crear actividad" />
-        </form>
+                        <td>
+                            <select class = "input inputPequeño"  th:errorclass="needCorrection" type = "text"  th:field = "*{level}"  >
+                                <option value = "No seleccionat" ></option>
+                                <option value = "Baix" > Baix </option>
+                                <option value = "Mitja" > Mitja </option>
+                                <option value = "Alt" > Alt </option>
+                                <option value = "Extrem" > Extrem </option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><label class="inputLabel inputDoble">Descripció (OPCIONAL)</label></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea class="input inputDoble inputAlto" rows="2" cols="50" th:field="*{description}" maxlength="100"></textarea>
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <input class="btn btn-success" type="submit" value="Crear actividad" />
+            </form>
+        </div>
     </body>
 </html>

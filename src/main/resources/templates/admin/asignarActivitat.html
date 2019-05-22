@@ -9,39 +9,41 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <br><br><h1>Assignar activitat a</h1><br>
-        <h1 th:text="${instructor.name}"></h1><br><br><br>
-        <div th:if="${#lists.isEmpty(instructor.certifications)} or ${#lists.isEmpty(instructor.activities)}">
-            <b th:if="${#lists.isEmpty(instructor.certifications)}">No es poden assignar activitats al monitor perque no té cap certificat</b>
-            <b th:unless="${#lists.isEmpty(instructor.certifications)}">Aquest monitor ja té totes les activitats assignades</b>
-            <br><br><br>
-            <a th:href="@{/admin/instructorProfile/{id}(id=${instructor.id})}" class="btn btn-success" role="button">Tornar al perfil</a>
-        </div>
-        <div th:unless="${#lists.isEmpty(instructor.certifications)} or ${#lists.isEmpty(instructor.activities)}">
-            <form action="#" th:action="@{/admin/asignarActivitat/{id}(id=${instructor.id})}" method="post">
-                <table class="marginAuto">
-                    <tr>
-                        <td class="tdAsignacio"><label>Certificats</label></td>
-                        <td class="tdAsignacio"><label>Activitats</label></td>
-                    </tr>
-                    <tr>
-                        <td class="tdAsignacio">
-                            <select class="selectAsignacio"  th:errorclass="needCorrection" th:field="${authorization.idCertification}">
-                                <option value="0"></option>
-                                <option th:each="certificate : ${#lists.sort(instructor.certifications)}" th:value="*{certificate.id}" th:text="*{certificate.certificate}"></option>
-                            </select>
-                        </td>
-                        <td class="tdAsignacio">
-                            <select class="selectAsignacio"  th:errorclass="needCorrection" th:field="${authorization.activityType}">
-                                <option value="0"></option>
-                                <option th:each="activity : ${#lists.sort(instructor.activities)}" th:value="*{activity.id} " th:text="|*{activity.name} Nivell *{activity.level}|"></option>
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <br><br>
-                <input class="btn btn-success" type="submit" value="Assignar activitat" />
-            </form>
+        <div class="contentPadding60">
+            <h1>Assignar activitat a</h1><br>
+            <h1 th:text="${instructor.name}"></h1><br><br><br>
+            <div th:if="${#lists.isEmpty(instructor.certifications)} or ${#lists.isEmpty(instructor.activities)}">
+                <b th:if="${#lists.isEmpty(instructor.certifications)}">No es poden assignar activitats al monitor perque no té cap certificat</b>
+                <b th:unless="${#lists.isEmpty(instructor.certifications)}">Aquest monitor ja té totes les activitats assignades</b>
+                <br><br><br>
+                <a th:href="@{/admin/instructorProfile/{id}(id=${instructor.id})}" class="btn btn-success" role="button">Tornar al perfil</a>
+            </div>
+            <div th:unless="${#lists.isEmpty(instructor.certifications)} or ${#lists.isEmpty(instructor.activities)}">
+                <form action="#" th:action="@{/admin/asignarActivitat/{id}(id=${instructor.id})}" method="post">
+                    <table class="marginAuto">
+                        <tr>
+                            <td class="tdAsignacio"><label>Certificats</label></td>
+                            <td class="tdAsignacio"><label>Activitats</label></td>
+                        </tr>
+                        <tr>
+                            <td class="tdAsignacio">
+                                <select class="selectAsignacio"  th:errorclass="needCorrection" th:field="${authorization.idCertification}">
+                                    <option value="0"></option>
+                                    <option th:each="certificate : ${#lists.sort(instructor.certifications)}" th:value="*{certificate.id}" th:text="*{certificate.certificate}"></option>
+                                </select>
+                            </td>
+                            <td class="tdAsignacio">
+                                <select class="selectAsignacio"  th:errorclass="needCorrection" th:field="${authorization.activityType}">
+                                    <option value="0"></option>
+                                    <option th:each="activity : ${#lists.sort(instructor.activities)}" th:value="*{activity.id} " th:text="|*{activity.name} Nivell *{activity.level}|"></option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <br><br>
+                    <input class="btn btn-success" type="submit" value="Assignar activitat" />
+                </form>
+            </div>
         </div>
     </body>
 </html>
