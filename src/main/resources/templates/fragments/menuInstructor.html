@@ -7,23 +7,25 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body>
-        <ul class="navbar-nav" th:object="${session}">
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/activity/add}">Crear activitat</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/instructor/listActivities/opened}">Gestió d'activitats</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/instructor/update}">Modificar perfil</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
-                <hr/>
-            </li>
-        </ul>
+        <nav class="navbar navbar-expand-lg">
+            <div class="navbar-collapse collapse">
+                <table class="center navTable">
+                    <tr>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/activity/add}">Crear activitat</a>
+                        </td>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/instructor/listActivities/opened}">Gestió d'activitats</a>
+                        </td>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/instructor/update}">Modificar perfil</a>
+                        </td>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </nav>
     </body>
 </html>

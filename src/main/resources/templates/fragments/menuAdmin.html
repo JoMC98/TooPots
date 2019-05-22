@@ -7,23 +7,25 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body>
-        <ul class="navbar-nav">
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/admin/listRequests}">Sol·licituds pendents</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/admin/listInstructors}">Llista de monitors</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/activityType/list}">Tipus d'activitats</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
-                <hr/>
-            </li>
-        </ul>
+        <nav class="navbar navbar-expand-lg">
+            <div class="navbar-collapse collapse">
+                <table class="center navTable">
+                    <tr>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/admin/listRequests}">Sol·licituds pendents</a>
+                        </td>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/admin/listInstructors}">Llista de monitors</a>
+                        </td>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/activityType/list}">Tipus d'activitats</a>
+                        </td>
+                        <td class="navbar4">
+                            <a class="white" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </nav>
     </body>
 </html>

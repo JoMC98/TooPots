@@ -47,30 +47,28 @@
                 </tr>
             </table>
         </header>
-        <div th:replace="fragments/nav"></div>
-        <table id="contentTable">
-            <tr>
-                <td class="menu" th:object="${session}">
-                    <div th:if="*{user == null}">
-                        <div th:replace="fragments/menuNormal"></div>
-                    </div>
-                    <div th:unless="*{user == null}">
-                        <div th:if="*{user.rol} == Customer">
-                            <div th:replace="fragments/menuCustomer"></div>
-                        </div>
-                        <div th:if="*{user.rol} == Admin">
-                            <div th:replace="fragments/menuAdmin"></div>
-                        </div>
-                        <div th:if="*{user.rol} == Instructor">
-                            <div th:replace="fragments/menuInstructor"></div>
-                        </div>
-                    </div>
-                </td>
-                <td class="bodyVerticalTop" id="celdaContenido">
-                    <div layout:fragment="content"></div>
-                </td>
-            </tr>
-        </table>
+
+        <div th:object="${session}">
+            <div th:if="*{user == null}">
+                <div th:replace="fragments/menuNormal"></div>
+            </div>
+            <div th:unless="*{user == null}">
+                <div th:if="*{user.rol} == Customer">
+                    <div th:replace="fragments/menuCustomer"></div>
+                </div>
+                <div th:if="*{user.rol} == Admin">
+                    <div th:replace="fragments/menuAdmin"></div>
+                </div>
+                <div th:if="*{user.rol} == Instructor">
+                    <div th:replace="fragments/menuInstructor"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bodyVerticalTop" id="contentTable">
+            <div layout:fragment="content"></div>
+        </div>
+
         <footer>
             <hr>
             <p class="text-muted center">2019 - All rights reserved to Manuel Vermell</p>

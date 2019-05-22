@@ -72,6 +72,12 @@ footer {
     background-color: #2D8E0B;
     border: 1px black solid;
 }
+.navbar4 {
+    width: 25%;
+}
+.navbar5 {
+    width: 20%;
+}
 
 /*Color blanco*/
 .white, .white:hover  {
@@ -83,22 +89,8 @@ footer {
     color: black;
 }
 
-/*Menu*/
-.menu {
-    vertical-align: top;
-    padding: 30px;
-    width: 22.5%;
-    background-color: #CCCCCC;
-    border: 1px black solid;
-}
-.enlaceMenu {
-    padding: 40px 0px;
-    color: black;
-    text-align: center;
-}
 #contentTable {
     width: 100%;
-    height: 700px;
 }
 
 /*Login*/

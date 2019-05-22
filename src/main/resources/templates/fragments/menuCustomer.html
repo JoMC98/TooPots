@@ -7,27 +7,28 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body>
-        <ul class="navbar-nav">
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/activity/offer}">Oferta d'activitats</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/customer/listSubscriptions}">Tipus d'activitats ofertades</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/customer/listReservations}">Llista de reserves</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/customer/update}">Modificar perfil</a>
-                <hr/>
-            </li>
-            <li class="enlaceMenu">
-                <a class="black" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
-                <hr/>
-            </li>
-        </ul>
+        <nav class="navbar navbar-expand-lg">
+            <div class="navbar-collapse collapse">
+                <table class="center navTable">
+                    <tr>
+                        <td class="navbar5">
+                            <a class="white" th:href="@{/activity/offer}">Oferta d'activitats</a>
+                        </td>
+                        <td class="navbar5">
+                            <a class="white" th:href="@{/customer/listSubscriptions}">Tipus d'activitats ofertades</a>
+                        </td>
+                        <td class="navbar5">
+                            <a class="white" th:href="@{/customer/listReservations}">Llista de reserves</a>
+                        </td>
+                        <td class="navbar5">
+                            <a class="white" th:href="@{/customer/update}">Modificar perfil</a>
+                        </td>
+                        <td class="navbar5">
+                            <a class="white" th:href="@{/user/updatePasswd}">Modificar contrasenya</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </nav>
     </body>
 </html>
