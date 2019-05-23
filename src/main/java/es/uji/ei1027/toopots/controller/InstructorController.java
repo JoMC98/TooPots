@@ -307,6 +307,9 @@ public class InstructorController {
     @RequestMapping("/showActivities/{state}/{id}")
     public String activityListForCustomers(Model model, @PathVariable int id, @PathVariable String state) {
         Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
 
         if (user.getRol().equals("Instructor")) {
             if (!state.equals("opened") && !state.equals("closed") && !state.equals("done")) {
@@ -345,6 +348,10 @@ public class InstructorController {
     @RequestMapping("/profile/{id}")
     public String seeInstructor(Model model, @PathVariable int id) {
         Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
+
         if (user.getRol().equals("Instructor")) {
             Instructor ins = instructorDao.getInstructor(id);
             ins.setCertifications(certificationDao.getCertifications(id));

@@ -116,13 +116,17 @@ public class ActivityTypeController {
     //Actualitzar un tipus de activitat
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
     public String editActivityType(HttpSession session, Model model, @PathVariable int id) {
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (activityType == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/activityType/update/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            model.addAttribute("activityType", activityTypeDao.getActivityType(id));
+            model.addAttribute("activityType", activityType);
             return "activityType/update";
         } else {
             return "redirect:/";
@@ -160,13 +164,17 @@ public class ActivityTypeController {
     //Esborra un tipus de activitat
     @RequestMapping(value="/delete/{id}")
     public String processDelete(HttpSession session, Model model, @PathVariable int id) {
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (activityType == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/activityType/delete");
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Path path = Paths.get(uploadDirectory + activityTypeDao.getActivityType(id).getPhoto());
+            Path path = Paths.get(uploadDirectory + activityType.getPhoto());
             try {
                 Files.delete(path);
             } catch (IOException e) {

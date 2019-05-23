@@ -120,13 +120,16 @@ public class AdminController {
     //Acceptar solicitud monitor
     @RequestMapping("/accept/{id}")
     public String acceptInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/admin/accept/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
             if (user.getRol().equals("Request")) {
                 userDao.updateRole(id, "Instructor");
                 return "redirect:/admin/listRequests";
@@ -141,13 +144,16 @@ public class AdminController {
     //Rebutjar solicitud monitor
     @RequestMapping("/reject/{id}")
     public String rejectInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/admin/reject/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
             if (user.getRol().equals("Request")) {
                 userDao.updateRole(id, "Rejected");
                 return "redirect:/admin/listRequests";
@@ -162,13 +168,16 @@ public class AdminController {
     //Assignar activitat a monitor
     @RequestMapping(value="/asignarActivitat/{id}", method= RequestMethod.GET)
     public String asignarActivitats(HttpSession session, Model model, @PathVariable int id){
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/admin/asignarActivitat/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
             if (user.getRol().equals("Instructor")) {
                 List<Certification> certifications = certificationDao.getCertifications(id);
                 List<ActivityType> todas = activityTypeDao.getActivityTypes();
@@ -222,13 +231,16 @@ public class AdminController {
     //Veure perfil monitor
     @RequestMapping("/instructorProfile/{id}")
     public String seeInstructor(HttpSession session, Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/admin/instructorProfile/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
             if (user.getRol().equals("Instructor")) {
                 Instructor ins = instructorDao.getInstructor(id);
                 ins.setCertifications(certificationDao.getCertifications(id));
@@ -247,13 +259,16 @@ public class AdminController {
     //Veure solicitud monitor
     @RequestMapping("/instructorRequest/{id}")
     public String seeInstructorRequest(HttpSession session, Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "/admin/instructorRequest/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Users user = userDao.getUser(id);
             if (user.getRol().equals("Request")) {
                 Instructor ins = instructorDao.getInstructor(id);
                 ins.setCertifications(certificationDao.getCertifications(id));

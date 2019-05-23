@@ -200,6 +200,9 @@ public class ActivityController {
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
     public String editActivity(HttpSession session, Model model, @PathVariable int id) {
         Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -318,6 +321,9 @@ public class ActivityController {
     @RequestMapping("/cancel/{id}")
     public String cancelActivity(HttpSession session, Model model, @PathVariable int id) {
         Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -356,6 +362,9 @@ public class ActivityController {
     @RequestMapping("/close/{id}")
     public String closeActivity(HttpSession session, Model model, @PathVariable int id) {
         Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -378,6 +387,9 @@ public class ActivityController {
     @RequestMapping("/open/{id}")
     public String openActivity(HttpSession session, Model model, @PathVariable int id) {
         Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -400,6 +412,9 @@ public class ActivityController {
     @RequestMapping(value="/listReservations/{id}", method = RequestMethod.GET)
     public String listReservesActivity(HttpSession session, Model model, @PathVariable int id) {
         Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -533,26 +548,34 @@ public class ActivityController {
     //Reservar una activitat
     @RequestMapping("/book/{id}")
     public String bookActivity(HttpSession session, Model model, @PathVariable int id) {
+        Activity activity = activityDao.getActivity(id);
+        if (activity == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "activity/book/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
-            Activity activity = activityDao.getActivity(id);
+            if (activity.getState().equals("Oberta")) {
+                List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
 
-            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
-            if (imatges.size() == 1) {
-                activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+
+                List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
+                if (imatges.size() == 1) {
+                    activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+                }
+
+                model.addAttribute("imatges", imatges);
+                model.addAttribute("totalFotos", imatges.size());
+                model.addAttribute("reservation", new Reservation());
+                model.addAttribute("activity", activity);
+                model.addAttribute("rates", rates);
+                return "activity/book";
+            } else {
+                return "redirect:/";
             }
-
-            model.addAttribute("imatges", imatges);
-            model.addAttribute("totalFotos", imatges.size());
-            model.addAttribute("reservation", new Reservation());
-            model.addAttribute("activity", activity);
-            model.addAttribute("rates", rates);
-            return "activity/book";
         } else {
             return "redirect:/";
         }
@@ -679,7 +702,9 @@ public class ActivityController {
     @RequestMapping(value="/view/{id}", method = RequestMethod.GET)
     public String dataViewActivity(Model model, @PathVariable int id) {
         Activity activity = activityDao.getActivity(id);
-
+        if (activity == null) {
+            return "redirect:/";
+        }
         if (!activity.getState().equals("Cancelada")) {
             List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
             List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);

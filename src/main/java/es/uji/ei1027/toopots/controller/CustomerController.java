@@ -234,6 +234,10 @@ public class CustomerController {
     //Desubscriures a una activitat
     @RequestMapping("/subscribe/{id}")
     public String subscribeActivityType(HttpSession session, Model model, @PathVariable int id) {
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (activityType == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -241,7 +245,6 @@ public class CustomerController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
-
             boolean isSuscribed = subscriptionDao.isSuscribed(user.getId(), id);
             if (!isSuscribed) {
                 subscriptionDao.addSubscription(id, user.getId());
@@ -255,6 +258,10 @@ public class CustomerController {
     //Desubscriures a una activitat
     @RequestMapping("/unsubscribe/{id}")
     public String unsubscribeActivityType(HttpSession session, Model model, @PathVariable int id) {
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (activityType == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
@@ -274,6 +281,9 @@ public class CustomerController {
     @RequestMapping(value="/viewReservation/{id}", method = RequestMethod.GET)
     public String dataViewReservation(HttpSession session, Model model, @PathVariable int id) {
         Reservation reservation = reservationDao.getReservation(id);
+        if (reservation == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Customer", reservation.getIdCustomer());
 
         if(acceso == NOT_LOGGED) {
@@ -312,6 +322,9 @@ public class CustomerController {
     @RequestMapping(value="/cancelReservation/{id}", method = RequestMethod.GET)
     public String cancelReservation(HttpSession session, Model model, @PathVariable int id) {
         Reservation reservation = reservationDao.getReservation(id);
+        if (reservation == null) {
+            return "redirect:/";
+        }
         int acceso = controlarAccesoYId(session, "Customer", reservation.getIdCustomer());
 
         if(acceso == NOT_LOGGED) {
