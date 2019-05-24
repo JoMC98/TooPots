@@ -312,7 +312,7 @@ public class Activity implements Comparable<Activity> {
 
     //Para comparar actividades (por fecha)
     public int compareTo(Activity altre) {
-        return this.getDates().compareTo(altre.getDates());
+        return this.getDates().compareTo(altre.getDates()) * -1;
     }
 
 }

@@ -6,7 +6,7 @@ public class TooPotsException extends RuntimeException {
     String messageSecundari;
     String name;
 
-    public TooPotsException(String messagePrincipal, String messageSecundari, String name)
+    public TooPotsException(String message, String messageSecundari, String name)
     {
         this.message=message;
         this.messageSecundari=messageSecundari;

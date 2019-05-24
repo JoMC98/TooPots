@@ -504,7 +504,7 @@ public class ActivityController {
         List<Activity> activities = new ArrayList<Activity>();
         switch (filtro.getFiltroCriteri()) {
             case "all":
-                activities = activityDao.getActivities();
+                activities = activityDao.getActivities("Oberta");
                 break;
             case "name":
                 activities = activityDao.getActivitiesByName(filtro.getFiltroPatro());

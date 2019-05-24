@@ -118,11 +118,19 @@ public class ActivityDao {
         }
     }
 
+    public List<Activity> getAllActivitiesByActivityType(int idActivityType) {
+        try {
+            return jdbcTemplate.query("SELECT * from Activity where activityType=?", new ActivityRowMapper(), idActivityType);
+        }
+        catch(EmptyResultDataAccessException e) {
+            return new ArrayList<Activity>();
+        }
+    }
 
     /* Obté totes les activitats amb ixe tipus d'activitat */
     public List<Activity> getActivitiesByActivityType(int idActivityType) {
         try {
-            return jdbcTemplate.query("SELECT * from Activity where activityType=?", new ActivityRowMapper(), idActivityType);
+            return jdbcTemplate.query("SELECT * from Activity where activityType=? and state='Oberta'", new ActivityRowMapper(), idActivityType);
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();
@@ -132,7 +140,7 @@ public class ActivityDao {
     /* Obté totes les activitats amb de ixa ubicacio */
     public List<Activity> getActivitiesByPlace(String place) {
         try {
-            return jdbcTemplate.query("SELECT * from Activity where UPPER(place) LIKE UPPER(?)", new ActivityRowMapper(), "%" + place + "%");
+            return jdbcTemplate.query("SELECT * from Activity where UPPER(place) LIKE UPPER(?) and state='Oberta'", new ActivityRowMapper(), "%" + place + "%");
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();
@@ -142,7 +150,7 @@ public class ActivityDao {
     /* Obté totes les activitats amb aquesta paraula en el nom */
     public List<Activity> getActivitiesByName(String name) {
         try {
-            return jdbcTemplate.query("SELECT * from Activity where UPPER(name) LIKE UPPER(?)", new ActivityRowMapper(), "%" + name + "%");
+            return jdbcTemplate.query("SELECT * from Activity where UPPER(name) LIKE UPPER(?) and state='Oberta'", new ActivityRowMapper(), "%" + name + "%");
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();

@@ -1,7 +1,9 @@
 package es.uji.ei1027.toopots.controller;
 
+import es.uji.ei1027.toopots.daos.ActivityDao;
 import es.uji.ei1027.toopots.daos.ActivityTypeDao;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
+import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.model.Users;
 import es.uji.ei1027.toopots.validator.ActivityTypeValidator;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @Controller
 @RequestMapping("/activityType")
@@ -30,6 +33,7 @@ public class ActivityTypeController {
     private final static int USER_NOT_AUTHORIZED = 3;
 
     private ActivityTypeDao activityTypeDao;
+    private ActivityDao activityDao;
 
     @Value("${upload.file.directory}")
     private String uploadDirectory;
@@ -37,6 +41,11 @@ public class ActivityTypeController {
     @Autowired
     public void setActivityTypeDao(ActivityTypeDao activityTypeDao) {
         this.activityTypeDao=activityTypeDao;
+    }
+
+    @Autowired
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao=activityDao;
     }
 
     //Llistar tots els tipus de activitat
@@ -176,17 +185,24 @@ public class ActivityTypeController {
         int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
-            session.setAttribute("nextUrl", "/activityType/delete");
+            session.setAttribute("nextUrl", "/activityType/delete/" + id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            Path path = Paths.get(uploadDirectory + activityType.getPhoto());
-            try {
-                Files.delete(path);
-            } catch (IOException e) {
-                e.printStackTrace();
+            List<Activity> activities = activityDao.getAllActivitiesByActivityType(id);
+            if (activities.size() == 0) {
+                Path path = Paths.get(uploadDirectory + activityType.getPhoto());
+                try {
+                    Files.delete(path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                activityTypeDao.deleteActivityType(id);
+                return "redirect:../list";
+            } else {
+                throw new TooPotsException(
+                        "No es pot borrar aquest tipus d'activitat", "perque té activitats creades",
+                        "NoEsPossibleBorrar");
             }
-            activityTypeDao.deleteActivityType(id);
-            return "redirect:../list";
         } else {
             return "redirect:/";
         }
