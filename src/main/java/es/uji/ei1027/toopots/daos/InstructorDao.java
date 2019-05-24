@@ -29,10 +29,6 @@ public class InstructorDao {
                 id, instructor.getPhoto(), instructor.getResidence(), instructor.getAccountNumber());
     }
 
-    /* Esborra el Instructor de la base de dades */
-    public void deleteInstructor(int id) {
-        jdbcTemplate.update("DELETE from Instructor where idInstructor=?", id);
-    }
 
     /* Actualitza els atributs del Instructor
        (excepte el id, que és la clau primària) */
@@ -49,16 +45,6 @@ public class InstructorDao {
         }
         catch(EmptyResultDataAccessException e) {
             return null;
-        }
-    }
-
-    /* Obté tots els instructors. Torna una llista buida si no n'hi ha cap. */
-    public List<Instructor> getInstructors() {
-        try {
-            return jdbcTemplate.query("SELECT * from Instructor", new InstructorRowMapper());
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Instructor>();
         }
     }
 

@@ -12,7 +12,7 @@ public class TooPotsControllerAdvice {
     public ModelAndView handleClubException(TooPotsException ex){
 
         ModelAndView mav = new ModelAndView("error/exceptionError");
-        mav.addObject("messagePrincipal", ex.getMessagePrincipal());
+        mav.addObject("messagePrincipal", ex.getMessage());
         mav.addObject("messageSecundari", ex.getMessageSecundari());
         mav.addObject("name", ex.getName());
         return mav;

@@ -31,14 +31,9 @@ public class ActivityDao {
                 activity.getIdInstructor());
     }
 
-    /* Esborra l'Activitat de la base de dades */
-    public void deleteActivity(int id) {
-        jdbcTemplate.update("DELETE from Activity where idActivity=?", id);
-    }
-
 
     /* Actualitza els atributs de l'Activitat
-       (excepte el id, que és la clau primària) */
+       (excepte el id, que és la clau primària, ni el state) */
     public void updateActivity(Activity activity) {
         jdbcTemplate.update("UPDATE Activity SET name=?, place=?, description=?, dates=?, pricePerPerson=?, maxNumberPeople=?, minNumberPeople=?," +
                         "meetingPoint=?, meetingTime=?, activityType=? where idActivity=?",
@@ -47,18 +42,17 @@ public class ActivityDao {
                 activity.getActivityType(), activity.getId());
     }
 
-    /* Actualitza el estat de l'activitat*/
+    /* Actualitza l'estat de l'activitat*/
     public void updateActivityState(Activity activity) {
         jdbcTemplate.update("UPDATE Activity SET state=? where idActivity=?",
                 activity.getState(), activity.getId());
     }
 
-    /* Motiu cancelació l'activitat*/
+    /* Afegeix el motiu de cancelació l'activitat i canvia l'estat*/
     public void cancelActivity(Activity activity) {
         jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
                 activity.getCancelationReason(), activity.getState(), activity.getId());
     }
-
 
     /* Obté l'Activitat amb el id donat. Torna null si no existeix. */
     public Activity getActivity(int id) {
@@ -71,6 +65,7 @@ public class ActivityDao {
         }
     }
 
+    /* Obté l'Activitat d'aquest instructor per a eixa data (clau alternativa). Torna null si no existeix. */
     public Activity getActivity(LocalDate dates, int idInstructor) {
         try {
             return jdbcTemplate.queryForObject("SELECT * from Activity WHERE dates=? AND idInstructor=?",
@@ -101,7 +96,7 @@ public class ActivityDao {
         }
     }
 
-    /* Obté totes les activitats d'un monitor. Torna una llista buida si no n'hi ha cap. */
+    /* Obté totes les activitats d'un monitor amb eixe estat. Torna una llista buida si no n'hi ha cap. */
     public List<Activity> getActivities(int id, String state) {
         try {
             String estat = "";
@@ -118,7 +113,6 @@ public class ActivityDao {
             }
             return jdbcTemplate.query("SELECT * from Activity where idInstructor = ? and state=?", new ActivityRowMapper(), id, estat);
         }
-
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Activity>();
         }
@@ -165,7 +159,7 @@ public class ActivityDao {
         }
     }
 
-    /* Obté totes les activitats cuya fecha ja ha passat i no s'ha cambiat el estat */
+    /* Obté totes les activitats la data de les quals ja ha passat i no s'ha cambiat l'estat */
     public List<Activity> getActivitiesDone() {
         try {
             Date d = new Date();

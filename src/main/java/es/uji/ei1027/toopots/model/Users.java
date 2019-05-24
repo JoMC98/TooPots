@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 public class Users {
+
+    //ATRIBUTOS
     private int id;
     private String username;
     private String passwd;

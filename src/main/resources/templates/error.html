@@ -4,18 +4,24 @@
       layout:decorate="~{fragments/base}">
     <head>
         <meta charset="UTF-8" />
-        <title>TooPots</title>
+        <title>Error</title>
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
+
         <div th:if="${status == 404}">
             <h1>No existeix la pàgina a la que vols accedir</h1><br>
             <img src="/images/error/notfound.gif" width="400" height="400" alt="Not Found"><br><br>
         </div>
         <div th:unless="${status == 404}">
             <h1>S'ha produit un error</h1><br>
-            <h4 th:text="${message}"></h4><br>
+            <h4 th:if="${#strings.contains(message, 'JDBC Connection')}">No es pot accedir a la Base de Dades</h4>
+            <h4 th:if="${#strings.contains(message, 'during template')}">Error al carregar la pàgina web</h4>
+            <h4 th:if="${#strings.contains(message, 'bad SQL grammar')}">Error en la sentencia SQL</h4>
+            <h4 th:unless="${#strings.contains(message, 'JDBC Connection')} or
+                           ${#strings.contains(message, 'during template')} or
+                           ${#strings.contains(message, 'bad SQL grammar')}" th:text="${message}"></h4><br>
             <img src="/images/error/error.gif" width="592" height="334" alt="Error"><br><br>
         </div>
         <a href="/" class="btn btn-success" role="button">Ir a la página principal</a>

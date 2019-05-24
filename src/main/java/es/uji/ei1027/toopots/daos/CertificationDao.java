@@ -33,26 +33,7 @@ public class CertificationDao {
                 certification.getCertificate(), certification.getDoc(),certification.getIdInstructor());
     }
 
-
-    /* Actualitza els atributs del certificat
-       (excepte el id, que és la clau primària) */
-    public void updateCertification(Certification certification) {
-        jdbcTemplate.update("UPDATE Certification SET certificate=?, doc=?, idInstructor=? where idCertification=?",
-                certification.getCertificate(), certification.getDoc(), certification.getIdInstructor(), certification.getId());
-    }
-
-    /* Obté el certificat amb el id donat. Torna null si no existeix. */
-    public Certification getCertification(int id) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT * from Certification WHERE idCertification=?",
-                    new CertificationRowMapper(), id);
-        }
-        catch(EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    /* Obté els certificats del instructor. Torna null si no existeix. */
+    /* Obté els certificats de l'instructor. Torna null si no existeix. */
     public List<Certification> getCertifications(int idInstructor) {
         try {
             return jdbcTemplate.query("SELECT * from Certification WHERE idInstructor=?",
@@ -63,16 +44,4 @@ public class CertificationDao {
         }
     }
 
-
-
-
-    /* Obté tots els certificats. Torna una llista buida si no n'hi ha cap. */
-    public List<Certification> getCertifications() {
-        try {
-            return jdbcTemplate.query("SELECT * from Certification", new CertificationRowMapper());
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Certification>();
-        }
-    }
 }

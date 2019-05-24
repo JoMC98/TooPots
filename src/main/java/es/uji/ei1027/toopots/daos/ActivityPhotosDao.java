@@ -28,13 +28,18 @@ public class ActivityPhotosDao {
                 activityPhotos.getIdActivity(), activityPhotos.getPhotoNumber(), activityPhotos.getPhoto());
     }
 
+    /* Actualitza el nom de la foto */
+    public void updateActivityPhotos(ActivityPhotos activityPhotos) {
+        jdbcTemplate.update("UPDATE Activity_Photos SET photo=? where idActivity=? AND photoNumber=?",
+                activityPhotos.getPhoto(), activityPhotos.getIdActivity(), activityPhotos.getPhotoNumber());
+    }
+
     /* Esborra la foto de la base de dades */
     public void deleteActivityPhotos(int id, int photoNumber) {
         jdbcTemplate.update("DELETE from Activity_Photos where idActivity=? AND photoNumber=?", id, photoNumber);
     }
 
-
-    /* Obté la foto amb el id donat. Torna null si no existeix. */
+    /* Obté la foto amb el id donat i amb el número corresponent. Torna null si no existeix. */
     public ActivityPhotos getActivityPhotos(int id, int photoNumber) {
         try {
             return jdbcTemplate.queryForObject("SELECT * from Activity_Photos WHERE idActivity=? AND photoNumber=?",
@@ -44,14 +49,6 @@ public class ActivityPhotosDao {
         }
     }
 
-    /* Obté totes les fotos. Torna una llista buida si no n'hi ha cap. */
-    public List<ActivityPhotos> getActivities() {
-        try {
-            return jdbcTemplate.query("SELECT * from Activity_Photos", new ActivityPhotosRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<ActivityPhotos>();
-        }
-    }
 
     /* Obté totes les fotos d'una activitat. Torna una llista buida si no n'hi ha cap. */
     public List<ActivityPhotos> getPhotos(int id) {
@@ -60,20 +57,5 @@ public class ActivityPhotosDao {
         } catch (EmptyResultDataAccessException e) {
             return new ArrayList<ActivityPhotos>();
         }
-    }
-
-    /* Obté la foto principal d'una activitat. Torna una llista buida si no n'hi ha cap. */
-    public ActivityPhotos getPhotoPrincipal(int id) {
-        try {
-            List<ActivityPhotos> lista = getPhotos(id);
-            for (ActivityPhotos ph: lista) {
-                if (ph.getPhotoNumber() == 1) {
-                    return ph;
-                }
-            }
-        } catch (EmptyResultDataAccessException e) {
-            return new ActivityPhotos();
-        }
-        return null;
     }
 }

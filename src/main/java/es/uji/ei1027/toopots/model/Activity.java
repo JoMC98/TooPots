@@ -41,6 +41,8 @@ public class Activity implements Comparable<Activity> {
     //Para usar en listado de actividades del monitor
     private int ocupation;
     private String photoPrincipal;
+    private List<ActivityPhotos> images;
+    private int totalImages;
 
     //Para usar en oferta de actividades
     private String activityTypeName;
@@ -169,6 +171,15 @@ public class Activity implements Comparable<Activity> {
         return idReservation;
     }
 
+    public List<ActivityPhotos> getImages() {
+        return images;
+    }
+
+    public int getTotalImages() {
+        return totalImages;
+    }
+
+
     //Setters
 
     public void setId(int id) {
@@ -269,10 +280,18 @@ public class Activity implements Comparable<Activity> {
         this.idReservation = idReservation;
     }
 
+    public void setTotalImages(int totalImages) {
+        this.totalImages = totalImages;
+    }
+
+    public void setImages(List<ActivityPhotos> images) {
+        this.images = images;
+    }
+
     //To String
     @Override
     public String toString() {
-        return "Activity{" +
+        return "Activity2{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", place='" + place + '\'' +
@@ -291,7 +310,7 @@ public class Activity implements Comparable<Activity> {
                 '}';
     }
 
-
+    //Para comparar actividades (por fecha)
     public int compareTo(Activity altre) {
         return this.getDates().compareTo(altre.getDates());
     }

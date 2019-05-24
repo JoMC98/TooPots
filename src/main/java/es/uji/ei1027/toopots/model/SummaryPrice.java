@@ -1,17 +1,15 @@
 package es.uji.ei1027.toopots.model;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 public class SummaryPrice {
+
+    //ATRIBUTOS
     String rateName;
     int cantidad;
     float basePrice;
     float totalPrice;
     boolean grupo;
 
-    //CONSTRUCTOR
+    //CONSTRUCTORES
     public SummaryPrice() {
     }
 

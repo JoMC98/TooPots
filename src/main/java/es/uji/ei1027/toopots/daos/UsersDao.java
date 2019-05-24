@@ -49,12 +49,6 @@ public class UsersDao implements UserDao {
                 user.getUsername(), user.getPasswd(), user.getRol(), user.getNif(), user.getName(), user.getMail());
     }
 
-    /* Esborra el Usuari de la base de dades */
-    public void deleteUser(int id) {
-        jdbcTemplate.update("DELETE from Users where idUser=?", id);
-    }
-
-
     /* Actualitza els atributs del Usuari
        (excepte el id, que és la clau primària) */
     public void updateUser(Users user) {
@@ -62,17 +56,18 @@ public class UsersDao implements UserDao {
                 user.getUsername(), user.getNif(), user.getName(), user.getMail(), user.getId());
     }
 
+    /* Actualitza el rol de l'usuari */
     public void updateRole(int idUser, String role) {
         jdbcTemplate.update("UPDATE Users SET rol=? where idUser=?", role, idUser);
     }
 
-    /* Actualitza la contrasenya */
+    /* Actualitza la contrasenya de l'ussuari */
     public void updatePassword(Users user) {
         jdbcTemplate.update("UPDATE Users SET passwd=? where idUser=?",
                 user.getPasswd(), user.getId());
     }
 
-    /* Obté el client amb el id donat. Torna null si no existeix. */
+    /* Obté l'usuari amb el id donat. Torna null si no existeix. */
     public Users getUser(int id) {
         try {
             return jdbcTemplate.queryForObject("SELECT * from Users WHERE idUser=?",
@@ -83,7 +78,7 @@ public class UsersDao implements UserDao {
         }
     }
 
-    /* Obté el client amb el username donat. Torna null si no existeix. */
+    /* Obté l'usuari amb el username donat. Torna null si no existeix. */
     public Users getUser(String username) {
         try {
             return jdbcTemplate.queryForObject("SELECT * from Users WHERE username=?", new UsersRowMapper(), username);
@@ -112,27 +107,4 @@ public class UsersDao implements UserDao {
             return new ArrayList<Users>();
         }
     }
-
-    /* Obté tots els clients. Torna una llista buida si no n'hi ha cap. */
-    public List<Users> getCustomers() {
-        try {
-            return jdbcTemplate.query("SELECT * from Users where rol='Customer'", new UsersRowMapper());
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Users>();
-        }
-    }
-
-    /* Obté totes les sol·licituds  Torna una llista buida si no n'hi ha cap. */
-    /*
-    public List<Users> getRequest() {
-        try {
-            return jdbcTemplate.query("SELECT * from Users where rol='Request'", new UsersRowMapper());
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Users>();
-        }
-    }*/
-
-
 }

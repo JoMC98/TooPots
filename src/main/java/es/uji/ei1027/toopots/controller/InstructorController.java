@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -235,6 +236,8 @@ public class InstructorController {
                 String direccion = "images/instructorProfiles/" + user.getId() + "." + extension;
 
                 Path path = Paths.get(uploadDirectory + direccion);
+
+                borrarFotoActualizada(uploadDirectory + instructor.getPhoto());
                 instructor.setPhoto("/" + direccion);
 
                 Files.write(path, bytes);
@@ -274,10 +277,16 @@ public class InstructorController {
 
             List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
             for (Activity ac: activities) {
-                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
-                ac.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-                List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+                List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(ac.getId());
+                if (imatges.size() == 1) {
+                    ac.setPhotoPrincipal(imatges.get(0).getPhoto());
+                } else {
+                    ac.setImages(imatges);
+                }
+                ac.setTotalImages(imatges.size());
+
+                List<Reservation> reservations = reservationDao.getReservesFromActivity(ac.getId());
                 float total = 0;
                 for (Reservation res: reservations) {
                     total += res.getNumPeople();
@@ -319,10 +328,16 @@ public class InstructorController {
 
             List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
             for (Activity ac : activities) {
-                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
-                ac.setPhotoPrincipal(photoPrincipal.getPhoto());
 
-                List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+                List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(ac.getId());
+                if (imatges.size() == 1) {
+                    ac.setPhotoPrincipal(imatges.get(0).getPhoto());
+                } else {
+                    ac.setImages(imatges);
+                }
+                ac.setTotalImages(imatges.size());
+
+                List<Reservation> reservations = reservationDao.getReservesFromActivity(ac.getId());
                 float total = 0;
                 for (Reservation res : reservations) {
                     total += res.getNumPeople();
@@ -395,6 +410,13 @@ public class InstructorController {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;
+        }
+    }
+
+    private void borrarFotoActualizada(String nombre) {
+        File fichero = new File(nombre);
+        if (fichero.exists()) {
+            fichero.delete();
         }
     }
 }

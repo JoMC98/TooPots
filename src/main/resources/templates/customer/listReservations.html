@@ -3,11 +3,24 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Veure Reserves</title>
+        <title>Reserves client</title>
         <meta charset="UTF-8" />
     </head>
     <body layout:fragment="content">
-        <h1>Llista de reserves</h1><br>
+        <table class="marginAuto">
+            <tr>
+                <td><a th:href="@{/customer/listReservations/all}" class="btn btn-outline-success botonListaActividades" role="button">Totes les reserves</a></td>
+                <td><a th:href="@{/customer/listReservations/future}" class="btn btn-outline-info botonListaActividades" role="button">Reserves futures</a></td>
+                <td><a th:href="@{/customer/listReservations/past}" class="btn btn-outline-secondary botonListaActividades" role="button">Reserves passades</a></td>
+                <td><a th:href="@{/customer/listReservations/canceled}" class="btn btn-outline-danger botonListaActividades" role="button">Reserves cancel·lades</a></td>
+            </tr>
+        </table>
+        <br>
+        <h1 th:if="${estat} == all">Llista de totes les reserves</h1>
+        <h1 th:if="${estat} == future">Llista de les reserves futures</h1>
+        <h1 th:if="${estat} == past">Llista de les reserves passades</h1>
+        <h1 th:if="${estat} == canceled">Llista de les reserves cancel·lades</h1>
+        <br>
         <div th:if="${#lists.isEmpty(activities)}">
             No s'ha fet ninguna reserva
         </div>
@@ -15,8 +28,32 @@
             <table class="table_bordered" th:each="activity: ${#lists.sort(activities)}">
                 <tr>
                     <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
-                        <div class="activityFoto">
-                            <img th:src="@{*{activity.photoPrincipal}}" class="activityFoto"/>
+                        <div>
+                            <div th:unless="*{activity.totalImages} == 1" id="miCarrusel" class="carousel carouselList slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li th:each="imatge,iterstat: ${imatges}"
+                                        data-target="#miCarrusel"
+                                        th:attr="data-slide-to=${iterstat.index}"
+                                        th:class="${iterstat.index}== 0  ? 'active':''"></li>
+
+                                </ol>
+                                <div class="carousel-inner">
+                                    <div th:each="imatge,iterstat: *{activity.images}"
+                                         th:class="${iterstat.index}==0 ? 'carousel-item active':'carousel-item'">
+                                        <img th:src="@{${imatge.photo}}" class="activityFoto">
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#miCarrusel" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#miCarrusel" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </div>
+
+                            <img th:if="*{activity.totalImages} == 1" th:src="@{*{activity.photoPrincipal}}" class="activityFoto">
                         </div>
                     </td>
                     <td colspan="2" class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>

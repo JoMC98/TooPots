@@ -2,24 +2,24 @@ package es.uji.ei1027.toopots.exceptions;
 
 public class TooPotsException extends RuntimeException {
 
-    String messagePrincipal;
+    String message;
     String messageSecundari;
     String name;
 
     public TooPotsException(String messagePrincipal, String messageSecundari, String name)
     {
-        this.messagePrincipal=messagePrincipal;
+        this.message=message;
         this.messageSecundari=messageSecundari;
         this.name=name;
     }
 
-    public String getMessagePrincipal() {
+    public String getMessage() {
 
-        return messagePrincipal;
+        return message;
     }
 
-    public void setMessagePrincipal(String messagePrincipal) {
-        this.messagePrincipal = messagePrincipal;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getMessageSecundari() {

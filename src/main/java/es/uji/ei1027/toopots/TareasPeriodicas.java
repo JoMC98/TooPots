@@ -34,13 +34,13 @@ public class TareasPeriodicas {
         this.reservationDao = reservationDao;
     }
 
-    //Se ejecuta todos los dias a las 00:00 y actualiza el estado de las Actividades que esten a menos de 10 de realizarse cambiando el estado
+    //Se executa tots els dies cada 15 min i actualitza l'estat de les Reserves d'Activitats que es realitzaran en menys de 10 dies ("Pagada")
     @Scheduled(cron = "0 0/15 * ? * * ")
     public void pagarActividades() {
         System.out.println("S'estan pagant les activitats automáticament --> " + new Date());
         List<Activity> activities = activityDao.getActivitiesToPay();
         for (Activity activity: activities) {
-            List<Reservation> reservations = reservationDao.getReserves(activity.getId());
+            List<Reservation> reservations = reservationDao.getReservesFromActivity(activity.getId());
 
             //Si l'activitat té reserves
             if (reservations.size() > 0) {
@@ -53,6 +53,7 @@ public class TareasPeriodicas {
         }
     }
 
+    //Se executa tots els dies cada 15 min i actualitza l'estat de les Activitats que ja s'han realitzat
     @Scheduled(cron = "0 0/15 * ? * * ")
     public void finalitzarActividades() {
         System.out.println("Es cambia l'estat de les activitats automáticament --> " + new Date());

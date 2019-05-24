@@ -1,12 +1,8 @@
 package es.uji.ei1027.toopots.validator;
 
 import es.uji.ei1027.toopots.model.Activity;
-import es.uji.ei1027.toopots.model.ActivityType;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ActivityValidator implements Validator {
     @Override

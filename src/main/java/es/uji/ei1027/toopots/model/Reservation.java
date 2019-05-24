@@ -154,10 +154,8 @@ public class Reservation implements Comparable<Reservation> {
                 '}';
     }
 
+    //Para comparar (por precio)
     public int compareTo(Reservation altre) {
-        String actualName = this.getNameCustomer().toLowerCase();
-        String otherName = altre.getNameCustomer().toLowerCase();
-
-        return actualName.compareTo(otherName);
+        return Float.compare(this.getTotalPrice(),altre.getTotalPrice());
     }
 }

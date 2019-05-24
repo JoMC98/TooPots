@@ -1,6 +1,5 @@
 package es.uji.ei1027.toopots.validator;
 
-import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.CertificationNames;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

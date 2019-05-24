@@ -41,15 +41,6 @@ public class ActivityRatesDao {
                 activityRates.getPrice(), activityRates.getIdActivity(), activityRates.getRateName());
     }
 
-    /* Obté la tarifa amb el id donat. Torna null si no existeix. */
-    public ActivityRates getActivityRate(int id) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT * from Activity_rates WHERE idActivity=? AND rateName=?",
-                    new ActivityRatesRowMapper(), id);
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
 
     /* Obté les tarifes de la activitat. Torna null si no existeix. */
     public List<ActivityRates> getActivityRates(int id) {

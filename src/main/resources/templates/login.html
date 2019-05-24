@@ -10,21 +10,25 @@
     </head>
     <body layout:fragment="content">
         <div class="center contentPaddingLogin">
-            <div th:if="${#strings.equals(name,'LoginException')}">
-                <div class="alertaLogin alertaLoginError alert-info">
-                    <h2 class="alertaLoginText" th:text="${message}"></h2><br>
-                </div>
+            <div th:if="${#strings.equals(name,'LoginException')}" class="alertaLogin alertaLoginError alert alert-primary alert-dismissible fade show" role="alert">
+                <h2 class="alertaLoginText" th:text="${message}"></h2>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div th:if="${conexionRefused == 'Request'}">
-                <div class="alertaLogin alertaLoginRequest alert-info">
-                    <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud encara no s'ha evaluat</h2><br>
-                </div>
+            <div th:if="${conexionRefused == 'Request'}" class="alertaLogin alertaLoginRequest alert alert-dark alert-dismissible fade show">
+                <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud encara no s'ha evaluat</h2>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div th:if="${conexionRefused == 'Rejected'}">
-                <div class="alertaLogin alertaLoginRejected alert-info">
-                    <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud s'ha rebutjat</h2><br>
-                </div>
+            <div th:if="${conexionRefused == 'Rejected'}" class="alertaLogin alertaLoginRejected alert alert-danger alert-dismissible fade show">
+                <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud s'ha rebutjat</h2>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+
             <div id="loginArea">
                 <br><br>
                 <h1 id="loginTitle">Login</h1><br><br>

@@ -1,13 +1,10 @@
 package es.uji.ei1027.toopots.daos;
 
 
-import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Customer;
 import es.uji.ei1027.toopots.model.Reservation;
-import es.uji.ei1027.toopots.rowMapper.ActivityRowMapper;
 import es.uji.ei1027.toopots.rowMapper.CustomerRowMapper;
 import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
-import es.uji.ei1027.toopots.rowMapper.SubscriptionRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,12 +31,6 @@ public class CustomerDao {
                 id, customer.getSex(), customer.getBirthDate());
     }
 
-    /* Esborra el Client de la base de dades */
-    public void deleteCustomer(int id) {
-        jdbcTemplate.update("DELETE from Customer where idCustomer=?", id);
-    }
-
-
     /* Actualitza els atributs del Client
        (excepte el id, que és la clau primària) */
     public void updateCustomer(Customer customer) {
@@ -58,23 +49,7 @@ public class CustomerDao {
         }
     }
 
-    /* Obté tots els clients. Torna una llista buida si no n'hi ha cap. */
-    public List<Customer> getCustomers() {
-        try {
-            return jdbcTemplate.query("SELECT * from Customer", new CustomerRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            return new ArrayList<Customer>();
-        }
-    }
-    /* Obté tots els clients. Torna una llista buida si no n'hi ha cap. */
-    public List<Reservation> getReservations(int id) {
-        try {
-            return jdbcTemplate.query("SELECT * from Reservation WHERE idcustomer=?", new ReservationRowMapper(), id);
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Reservation>();
-        }
-    }
+
 
 
 }

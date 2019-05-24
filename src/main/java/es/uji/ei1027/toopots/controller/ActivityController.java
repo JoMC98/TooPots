@@ -4,7 +4,6 @@ import es.uji.ei1027.toopots.comparator.*;
 import es.uji.ei1027.toopots.daos.*;
 import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
-import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.validator.ActivityCancelationValidator;
 import es.uji.ei1027.toopots.validator.ActivityValidator;
 import es.uji.ei1027.toopots.validator.ReservationValidator;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -174,27 +174,6 @@ public class ActivityController {
         return "redirect:/";
     }
 
-    private void saveFoto(MultipartFile foto, Activity activity, int idFoto) {
-        try {
-            // Obtener el fichero y guardarlo
-            byte[] bytes = foto.getBytes();
-
-            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
-            String direccion = "images/activities/" + activity.getId()  + "_" + idFoto + "." + extension;
-
-            Path path = Paths.get(uploadDirectory + direccion);
-
-            ActivityPhotos aph = new ActivityPhotos();
-            aph.setIdActivity(activity.getId());
-            aph.setPhotoNumber(idFoto);
-            aph.setPhoto("/" + direccion);
-            activityPhotosDao.addActivityPhotos(aph);
-
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     //Actualitzar una activitat
     @RequestMapping(value="/update/{id}", method = RequestMethod.GET)
@@ -217,6 +196,10 @@ public class ActivityController {
                 Instructor instructor = instructorDao.getInstructor(user.getId());
                 instructor.setActivities(asignadas);
                 List<ActivityPhotos> photos = activityPhotosDao.getPhotos(id);
+
+                for (int i = photos.size(); i<4; i++) {
+                    photos.add(null);
+                }
 
                 for (ActivityRates tarifa: tarifas) {
                     if(tarifa.getRateName().equals("Menors de 16 anys")) {
@@ -247,6 +230,8 @@ public class ActivityController {
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
     public String processUpdateSubmit(Model model, HttpSession session, @PathVariable int id, @ModelAttribute("activity") Activity activity,
+                                      @RequestParam("foto0") MultipartFile foto0, @RequestParam("foto1") MultipartFile foto1,
+                                      @RequestParam("foto2") MultipartFile foto2, @RequestParam("foto3") MultipartFile foto3,
                                       BindingResult bindingResult) {
 
         ActivityValidator activityValidator = new ActivityValidator();
@@ -313,9 +298,48 @@ public class ActivityController {
             }
         }
 
+        List<ActivityPhotos> photos = activityPhotosDao.getPhotos(activity.getId());
+
+        MultipartFile[] inputFotos = {foto0, foto1, foto2, foto3};
+
+        for (int i=0; i<4; i++) {
+            int photoNumber = i + 1;
+            if (!inputFotos[i].isEmpty()) {
+                try {
+                    // Obtener el fichero y guardarlo
+                    byte[] bytes = inputFotos[i].getBytes();
+
+                    String extension = FilenameUtils.getExtension(inputFotos[i].getOriginalFilename());
+                    String direccion = "images/activities/" + activity.getId() + "_" + photoNumber + "." + extension;
+
+                    Path path = Paths.get(uploadDirectory + direccion);
+
+
+                    //TODO BORRAR VIEJA
+                    ActivityPhotos photo = activityPhotosDao.getActivityPhotos(activity.getId(), photoNumber);
+                    if (photo == null) {
+                        ActivityPhotos activityPhotos = new ActivityPhotos();
+                        activityPhotos.setIdActivity(activity.getId());
+                        activityPhotos.setPhotoNumber(photoNumber);
+                        activityPhotos.setPhoto("/" + direccion);
+                        activityPhotosDao.addActivityPhotos(activityPhotos);
+                    } else {
+                        borrarFotoActualizada(uploadDirectory + photo.getPhoto());
+                        photo.setPhoto("/" + direccion);
+                        activityPhotosDao.updateActivityPhotos(photo);
+                    }
+                    Files.write(path, bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
         activityDao.updateActivity(activity);
         return "redirect:/";
     }
+
+
 
     //Controlar una cancelacio
     @RequestMapping("/cancel/{id}")
@@ -421,7 +445,7 @@ public class ActivityController {
             session.setAttribute("nextUrl", "activity/listReservations/"+id);
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            List<Reservation> reserves = reservationDao.getReserves(id);
+            List<Reservation> reserves = reservationDao.getReservesFromActivity(id);
             for (Reservation reserve: reserves){
                 Users user = usersDao.getUser(reserve.getIdCustomer());
                 reserve.setNameCustomer(user.getName());
@@ -443,8 +467,7 @@ public class ActivityController {
         List<Activity> activities = activityDao.getActivities("Oberta");
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
-            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
-            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            List<Reservation> reservations = reservationDao.getReservesFromActivity(ac.getId());
             ActivityType activityType = activityTypeDao.getActivityType(ac.getActivityType());
             ac.setActivityTypeName(activityType.getName());
             ac.setActivityTypeLevel(activityType.getLevel());
@@ -458,7 +481,15 @@ public class ActivityController {
             int ocupation = (int) total;
             ac.setOcupation(ocupation);
 
-            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(ac.getId());
+            if (imatges.size() == 1) {
+                ac.setPhotoPrincipal(imatges.get(0).getPhoto());
+            } else {
+                ac.setImages(imatges);
+            }
+            ac.setTotalImages(imatges.size());
+
+
             activitiesWithOcupation.add(ac);
         }
         model.addAttribute("activities", activitiesWithOcupation);
@@ -503,8 +534,7 @@ public class ActivityController {
 
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
-            ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(ac.getId());
-            List<Reservation> reservations = reservationDao.getReserves(ac.getId());
+            List<Reservation> reservations = reservationDao.getReservesFromActivity(ac.getId());
             ActivityType activityType = activityTypeDao.getActivityType(ac.getActivityType());
             ac.setActivityTypeName(activityType.getName());
             ac.setActivityTypeLevel(activityType.getLevel());
@@ -518,7 +548,14 @@ public class ActivityController {
             int ocupation = (int) total;
             ac.setOcupation(ocupation);
 
-            ac.setPhotoPrincipal(photoPrincipal.getPhoto());
+            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(ac.getId());
+            if (imatges.size() == 1) {
+                ac.setPhotoPrincipal(imatges.get(0).getPhoto());
+            } else {
+                ac.setImages(imatges);
+            }
+            ac.setTotalImages(imatges.size());
+
             activitiesWithOcupation.add(ac);
         }
 
@@ -599,12 +636,13 @@ public class ActivityController {
         return "activity/book";
     }
 
+    //Mostrar resum reserva
     @RequestMapping(value="/summary/{id}")
     public String summaryBooking(@PathVariable int id) {
         return "redirect:/home";
     }
 
-    //Mostrar resum reserva
+    //Métode get per a que no falle
     @RequestMapping(value="/summary/{id}", method = RequestMethod.POST)
     public String processSummaryBooking(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
         int acceso = controlarAcceso(session, "Customer");
@@ -664,12 +702,13 @@ public class ActivityController {
         }
     }
 
+    //Confirmar reserva
     @RequestMapping(value="/bookConfirmation/{id}")
     public String confirmBooking(@PathVariable int id) {
         return "redirect:/home";
     }
 
-    //Confirmar reserva
+    //Métode get per a que no falle
     @RequestMapping(value="/bookConfirmation/{id}", method = RequestMethod.POST)
     public String processConfirmBooking(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
         int acceso = controlarAcceso(session, "Customer");
@@ -744,6 +783,35 @@ public class ActivityController {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;
+        }
+    }
+
+    private void borrarFotoActualizada(String nombre) {
+        File fichero = new File(nombre);
+        if (fichero.exists()) {
+            fichero.delete();
+        }
+    }
+
+    private void saveFoto(MultipartFile foto, Activity activity, int idFoto) {
+        try {
+            // Obtener el fichero y guardarlo
+            byte[] bytes = foto.getBytes();
+
+            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+            String direccion = "images/activities/" + activity.getId()  + "_" + idFoto + "." + extension;
+
+            Path path = Paths.get(uploadDirectory + direccion);
+
+            ActivityPhotos aph = new ActivityPhotos();
+            aph.setIdActivity(activity.getId());
+            aph.setPhotoNumber(idFoto);
+            aph.setPhoto("/" + direccion);
+            activityPhotosDao.addActivityPhotos(aph);
+
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -17,7 +17,6 @@ public class Certification implements Comparable<Certification> {
 
     //Getters
 
-
     public int getId() {
         return id;
     }
@@ -66,6 +65,8 @@ public class Certification implements Comparable<Certification> {
                 '}';
     }
 
+
+    //Comparador (por nombre del certificado)
     public int compareTo(Certification altre) {
         String actualCertificate = this.getCertificate().toLowerCase();
         String otherCertificate = altre.getCertificate().toLowerCase();

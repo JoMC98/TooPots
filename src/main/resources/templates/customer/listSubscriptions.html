@@ -3,17 +3,32 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/base}">
     <head>
-        <title>Subscripció a les activitats</title>
+        <title>Subscripcions</title>
         <meta charset="UTF-8" />
         <link rel="stylesheet"
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <table class="marginAuto">
-            <tr>
-                <td><h1>Tipus d'Activitats</h1></td>
-            </tr>
-        </table>
+        <div th:if="${logged}">
+            <table class="marginAuto">
+                <tr>
+                    <td><a th:href="@{/customer/listSubscriptions/all}" class="btn btn-outline-success botonListaActividades" role="button">Tots els tipus</a></td>
+                    <td><a th:href="@{/customer/listSubscriptions/subscribed}" class="btn btn-outline-info botonListaActividades" role="button">Tipus subscrits</a></td>
+                    <td><a th:href="@{/customer/listSubscriptions/unsubscribed}" class="btn btn-outline-secondary botonListaActividades" role="button">Tipus no subscrits</a></td>
+                </tr>
+            </table>
+            <br>
+            <table class="marginAuto">
+                <tr>
+                    <h1 th:if="${estat} == all">Tots els tipus d'activitats</h1>
+                    <h1 th:if="${estat} == subscribed">Subscripcions actives</h1>
+                    <h1 th:if="${estat} == unsubscribed">Tipus d'activitats sense subscripció</h1>
+                </tr>
+            </table>
+        </div>
+        <div th:unless="${logged}">
+            <h1>Tots els tipus d'activitats</h1>
+        </div>
         <br>
         <div th:if="${#lists.isEmpty(activityTypes)}">
             No hi cap tipus d'activitat per subscriures

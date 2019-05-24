@@ -37,23 +37,8 @@ public class ActivityCertificationDao {
                 activityCertification.getIdCertification(), activityCertification.getActivityType());
     }
 
-    /* Esborra la Autoritzacio de la base de dades */
-    public void deleteCertification(int idCertification, int activityType) {
-        jdbcTemplate.update("DELETE from Activity_Certification where idCertification=? and activityType=?", idCertification, activityType);
-    }
 
-    /* Obté la Autoritzacio amb el id donat. Torna null si no existeix. */
-    public ActivityCertification getCertification(int idCertification, int activityType) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT * from Activity_Certification where idCertification=? and activityType=?", new ActivityCertificationRowMapper(),
-                    idCertification, activityType);
-        }
-        catch(EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    /* Obté les activitats assignades al instructor. Torna null si no existeix. */
+    /* Obté les activitats assignades al instructor. Torna null si no té cap */
     public List<ActivityType> getAuthorizations(int idInstructor) {
         try {
             List<Certification> certificados = certificationDao.getCertifications(idInstructor);
@@ -70,6 +55,5 @@ public class ActivityCertificationDao {
             return null;
         }
     }
-
 
 }

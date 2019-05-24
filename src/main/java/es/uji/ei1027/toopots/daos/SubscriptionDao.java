@@ -21,16 +21,17 @@ public class SubscriptionDao {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    /* Obté tots les subscripcions dels clients. Torna una llista buida si no n'hi ha cap. */
-    public List<Integer> getSubscriptions(int id) {
+    /* Obté tots les subscripcions del client. Torna una llista buida si no n'hi ha cap. */
+    public List<Integer> getSubscriptions(int idCustomer) {
         try {
-            return jdbcTemplate.query("SELECT activityType from Subscription WHERE idcustomer=?", new SubscriptionRowMapper(), id);
+            return jdbcTemplate.query("SELECT activityType from Subscription WHERE idcustomer=?", new SubscriptionRowMapper(), idCustomer);
         }
         catch(EmptyResultDataAccessException e) {
             return new ArrayList<Integer>();
         }
     }
 
+    /* Informa si el client está subscrit a eixa activitat */
     public boolean isSuscribed(int idCustomer, int idActivityType) {
         try {
             List<Integer> lista = jdbcTemplate.query("SELECT activityType from Subscription WHERE idcustomer=? AND activityType=?",
@@ -44,10 +45,12 @@ public class SubscriptionDao {
         }
     }
 
+    /* Esborra la subscripció */
     public void deleteSubscription(int id, int idCustomer) {
         jdbcTemplate.update("DELETE from Subscription WHERE idcustomer=? AND activityType=?",idCustomer, id);
     }
 
+    /* Afegeix una nova subscripció */
     public void addSubscription(int id, int idCustomer) {
         jdbcTemplate.update("INSERT INTO Subscription VALUES(?, ?)",idCustomer, id);
     }

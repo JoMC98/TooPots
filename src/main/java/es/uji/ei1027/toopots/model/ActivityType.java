@@ -8,6 +8,8 @@ public class ActivityType implements Comparable<ActivityType> {
     private String level;
     private String description;
     private String photo;
+
+    //Para usar en la lista de subscripciones
     private boolean subscribe;
 
     //Constructor
@@ -65,26 +67,6 @@ public class ActivityType implements Comparable<ActivityType> {
     }
 
     //ToString
-
-
-
-    @Override
-    public boolean equals(Object other) {
-        ActivityType act = (ActivityType) other;
-        return id == act.getId();
-    }
-
-    public int compareTo(ActivityType altre) {
-        String actualName = this.getName().toLowerCase();
-        String otherName = altre.getName().toLowerCase();
-
-        if (actualName.equals(otherName)) {
-            return this.getLevel().compareTo(altre.getLevel());
-        } else {
-            return actualName.compareTo(otherName);
-        }
-    }
-
     @Override
     public String toString() {
         return "ActivityType{" +
@@ -96,4 +78,26 @@ public class ActivityType implements Comparable<ActivityType> {
                 ", subscribe=" + subscribe +
                 '}';
     }
+
+
+    //Metodo equals para comparar con otro Activity Type y ver si son iguales
+    @Override
+    public boolean equals(Object other) {
+        ActivityType act = (ActivityType) other;
+        return id == act.getId();
+    }
+
+    //Metodo comparador (por nombre o nivel)
+    public int compareTo(ActivityType altre) {
+        String actualName = this.getName().toLowerCase();
+        String otherName = altre.getName().toLowerCase();
+
+        if (actualName.equals(otherName)) {
+            return this.getLevel().compareTo(altre.getLevel());
+        } else {
+            return actualName.compareTo(otherName);
+        }
+    }
+
+
 }

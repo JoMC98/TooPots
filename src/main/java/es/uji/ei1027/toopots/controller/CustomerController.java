@@ -2,11 +2,13 @@ package es.uji.ei1027.toopots.controller;
 
 
 import es.uji.ei1027.toopots.daos.*;
+import es.uji.ei1027.toopots.exceptions.TooPotsException;
 import es.uji.ei1027.toopots.model.*;
 import es.uji.ei1027.toopots.validator.UserValidator;
 import es.uji.ei1027.toopots.validator.CustomerValidator;
 import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -107,7 +109,13 @@ public class CustomerController {
         user.setRol("Customer");
         user.setPasswd(passwordEncryptor.encryptPassword(user.getPasswd()));
 
-        userDao.addUser(user);
+        try {
+            userDao.addUser(user);
+        } catch (DuplicateKeyException e) {
+            throw new TooPotsException(
+                    "El nom d'usuari ja esta en ús", "Prova amb un altre",
+                    "ClauPrimariaDuplicada");
+        }
         Users newUser = userDao.getUser(user.getUsername());
 
         session.setAttribute("user", newUser);
@@ -156,9 +164,12 @@ public class CustomerController {
         return "redirect:/";
     }
 
-    //Llistar tots els clients
-    @RequestMapping(value="/listReservations", method = RequestMethod.GET)
-    public String listReservations(Model model,  HttpSession session) {
+    //Llistar totes les reserves del client
+    @RequestMapping(value= {"/listReservations", "/listReservations/{state}"}, method = RequestMethod.GET)
+    public String listReservations(Model model,  HttpSession session, @PathVariable(name="state", required=false) String state) {
+        if (state == null || !state.equals("future") && !state.equals("past") && !state.equals("canceled")) {
+            state = "all";
+        }
 
         int acceso = controlarAcceso(session, "Customer");
 
@@ -168,28 +179,55 @@ public class CustomerController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
-            List<Reservation> reserves = customerDao.getReservations(user.getId());
 
+
+            List<Reservation> reserves = reservationDao.getReservationsFromCustomer(user.getId());
             //llista que passem al controlador
             List<Activity> activities = new ArrayList<Activity>();
 
             //crear una llista de activitats mitjançant el id de activitat i anyadir els metodos de reserva
             for (Reservation reserve: reserves){
                 Activity activity = activityDao.getActivity(reserve.getIdActivity());
-                activity.setReservationPriceTotal(reserve.getTotalPrice());
 
-                //obtener el nivel
-                ActivityType activityType = activityTypeDao.getActivityType(activity.getActivityType());
-                activity.setActivityTypeLevel(activityType.getLevel());
-                activity.setActivityTypeName(activityType.getName());
+                boolean actividadValida = false;
 
-                //obtener la foto
-                ActivityPhotos photoPrincipal = activityPhotosDao.getPhotoPrincipal(activity.getId());
-                activity.setPhotoPrincipal(photoPrincipal.getPhoto());
-                activities.add(activity);
+                if (state.equals("future")) {
+                    if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
+                        actividadValida = true;
+                    }
+                } else if (state.equals("past")) {
+                    if (activity.getState().equals("Realitzada")) {
+                        actividadValida = true;
+                    }
+                } else if (state.equals("canceled")) {
+                    if (activity.getState().equals("Cancelada")) {
+                        actividadValida = true;
+                    }
+                } else {
+                    actividadValida = true;
+                }
 
-                activity.setIdReservation(reserve.getId());
+                if (actividadValida) {
+                    activity.setReservationPriceTotal(reserve.getTotalPrice());
+
+                    //obtener el nivel
+                    ActivityType activityType = activityTypeDao.getActivityType(activity.getActivityType());
+                    activity.setActivityTypeLevel(activityType.getLevel());
+                    activity.setActivityTypeName(activityType.getName());
+
+                    List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(activity.getId());
+                    if (imatges.size() == 1) {
+                        activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+                    } else {
+                        activity.setImages(imatges);
+                    }
+                    activity.setTotalImages(imatges.size());
+                    activity.setIdReservation(reserve.getId());
+
+                    activities.add(activity);
+                }
             }
+            model.addAttribute("estat", state);
             model.addAttribute("activities",activities);
             return "customer/listReservations";
         } else {
@@ -198,31 +236,62 @@ public class CustomerController {
     }
 
     //Llistar tots les subscripcions disponibles
-    @RequestMapping(value="/listSubscriptions", method = RequestMethod.GET)
-    public String listSubscriptions(Model model,  HttpSession session) {
+    @RequestMapping(value= {"/listSubscriptions", "/listSubscriptions/{state}"}, method = RequestMethod.GET)
+    public String listSubscriptions(Model model, HttpSession session, @PathVariable(name="state", required=false) String state) {
+        if (state == null || !state.equals("subscribed") && !state.equals("unsubscribed")) {
+            state = "all";
+        }
 
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             List<ActivityType> activities = activityTypeDao.getActivityTypes();
             model.addAttribute("activityTypes", activities);
+            model.addAttribute("logged", false);
             return "/customer/listSubscriptions";
 
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
-            List<ActivityType> activities = activityTypeDao.getActivityTypes();
-            List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-
             List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
-            for (ActivityType ac: activities) {
-                if(subscriptions.contains(ac.getId()))
-                    ac.setSubscribe(true);
-                else
-                    ac.setSubscribe(false);
 
-                activitiesModified.add(ac);
+            if (state.equals("subscribed")) {
+                List<ActivityType> activities = activityTypeDao.getActivityTypes();
+                List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
+
+                for (ActivityType ac: activities) {
+                    if(subscriptions.contains(ac.getId())) {
+                        ac.setSubscribe(true);
+                        activitiesModified.add(ac);
+                    }
+                }
+            } else if (state.equals("unsubscribed")) {
+                List<ActivityType> activities = activityTypeDao.getActivityTypes();
+                List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
+
+                for (ActivityType ac: activities) {
+                    if(!subscriptions.contains(ac.getId())) {
+                        ac.setSubscribe(false);
+                        activitiesModified.add(ac);
+                    }
+                }
+            } else {
+                List<ActivityType> activities = activityTypeDao.getActivityTypes();
+                List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
+
+                for (ActivityType ac: activities) {
+                    if(subscriptions.contains(ac.getId()))
+                        ac.setSubscribe(true);
+                    else
+                        ac.setSubscribe(false);
+
+                    activitiesModified.add(ac);
+                }
             }
+
             model.addAttribute("activityTypes", activitiesModified);
+            model.addAttribute("estat", state);
+            model.addAttribute("logged", true);
+
             return "customer/listSubscriptions";
 
         } else {
@@ -231,7 +300,7 @@ public class CustomerController {
 
     }
 
-    //Desubscriures a una activitat
+    //Subscriure's a una activitat
     @RequestMapping("/subscribe/{id}")
     public String subscribeActivityType(HttpSession session, Model model, @PathVariable int id) {
         ActivityType activityType = activityTypeDao.getActivityType(id);
@@ -255,7 +324,7 @@ public class CustomerController {
         }
     }
 
-    //Desubscriures a una activitat
+    //Desubscriure's a una activitat
     @RequestMapping("/unsubscribe/{id}")
     public String unsubscribeActivityType(HttpSession session, Model model, @PathVariable int id) {
         ActivityType activityType = activityTypeDao.getActivityType(id);

@@ -434,15 +434,14 @@ footer {
 
 /*Excepciones y alertas*/
 .alertaLogin {
-    margin: auto;
-    margin-bottom: 40px;
+    margin: 0px auto 40px auto !important;
 }
 .alertaLoginText {
-    padding: 20px 0px 0px 0px;
+    padding: 20px 0px 20px 0px;
     margin: 0px;
 }
 .alertaLoginRequest {
-    width: 950px;
+    width: 1000px;
 }
 .alertaLoginRejected {
     width: 850px;
@@ -609,4 +608,21 @@ footer {
 .tdSinCertificado {
     width: 320px;
     height: 243px;
+}
+
+/*Carrusel oferta*/
+.carouselList.slide {
+     width: 250px !important;
+}
+
+/*Activity Update*/
+.activityFotoUpdate {
+    margin: 10px 15px;
+    width: 250px;
+    height: 150px;
+}
+.sinFoto {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    font-weight: bold;
 }

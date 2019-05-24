@@ -4,22 +4,17 @@ import es.uji.ei1027.toopots.model.Activity;
 import es.uji.ei1027.toopots.model.Reservation;
 import es.uji.ei1027.toopots.model.SummaryPrice;
 import es.uji.ei1027.toopots.rowMapper.ReservationRowMapper;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.chrono.ChronoPeriod;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Repository
 public class ReservationDao {
@@ -117,16 +112,6 @@ public class ReservationDao {
     }
 
 
-    /* Actualitza els atributs de la reserva
-       (excepte el id, que és la clau primària) */
-    public void updateReservation(Reservation reservation) {
-        jdbcTemplate.update("UPDATE Reservation SET numUnder16=?, numStudents=?, numAdults=?, numOver60=?, " +
-                        "totalPrice=?, transactionNumber=?, idActivity=?, idCustomer=? where idReservation=?",
-                reservation.getNumUnder16(), reservation.getNumStudents(),reservation.getNumAdults(),
-                reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
-                reservation.getIdActivity(), reservation.getIdCustomer(), reservation.getId());
-    }
-
     /* Actualitza l'estat a pagat */
     public void payReservation(Reservation reservation) {
         jdbcTemplate.update("UPDATE Reservation SET state=? where idReservation=?",
@@ -144,18 +129,9 @@ public class ReservationDao {
         }
     }
 
-    /* Obté totes les reserves. Torna una llista buida si no n'hi ha cap. */
-    public List<Reservation> getReserves() {
-        try {
-            return jdbcTemplate.query("SELECT * from Reservation", new ReservationRowMapper());
-        }
-        catch(EmptyResultDataAccessException e) {
-            return new ArrayList<Reservation>();
-        }
-    }
 
     /* Obté totes les reserves d'una activitat. Torna una llista buida si no n'hi ha cap. */
-    public List<Reservation> getReserves(int idActivity) {
+    public List<Reservation> getReservesFromActivity(int idActivity) {
         try {
             return jdbcTemplate.query("SELECT * from Reservation where idActivity=?", new ReservationRowMapper(), idActivity);
         }
@@ -163,13 +139,14 @@ public class ReservationDao {
             return new ArrayList<Reservation>();
         }
     }
-    /* Obté totes les reserves d'una activitat. Torna una llista buida si no n'hi ha cap. */
-    public Reservation getUser(int idcustomer) {
+
+    /* Obté totes les reserves d'un client. Torna una llista buida si no n'hi ha cap. */
+    public List<Reservation> getReservationsFromCustomer(int idCustomer) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * from Reservation where idcustomer=?", new ReservationRowMapper(), idcustomer);
+            return jdbcTemplate.query("SELECT * from Reservation WHERE idcustomer=?", new ReservationRowMapper(), idCustomer);
         }
         catch(EmptyResultDataAccessException e) {
-            return null;
+            return new ArrayList<Reservation>();
         }
     }
 

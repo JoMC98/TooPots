@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -148,6 +149,8 @@ public class ActivityTypeController {
                 String direccion = "images/activityTypes/" + activityTypeOld.getName() + "_" + activityTypeOld.getLevel() + "." + extension;
 
                 Path path = Paths.get(uploadDirectory + direccion);
+                borrarFotoActualizada(uploadDirectory + activityType.getPhoto());
+
                 activityType.setPhoto("/" + direccion);
 
                 Files.write(path, bytes);
@@ -160,6 +163,8 @@ public class ActivityTypeController {
 
         return "redirect:../list";
     }
+
+
 
     //Esborra un tipus de activitat
     @RequestMapping(value="/delete/{id}")
@@ -197,6 +202,13 @@ public class ActivityTypeController {
             return USER_AUTHORIZED;
         } else {
             return USER_NOT_AUTHORIZED;
+        }
+    }
+
+    private void borrarFotoActualizada(String nombre) {
+        File fichero = new File(nombre);
+        if (fichero.exists()) {
+            fichero.delete();
         }
     }
 }

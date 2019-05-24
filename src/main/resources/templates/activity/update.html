@@ -10,14 +10,18 @@
     </head>
     <body layout:fragment="content">
         <h1>Editar activitat</h1>
-        <form action="#" th:action="@{/activity/update/{id}(id=${activity.id})}" method="post">
+        <form action="#" th:action="@{/activity/update/{id}(id=${activity.id})}" method="post" enctype="multipart/form-data">
             <label class="inputLabel">Fotos</label><br>
+            <b><label class="inputLabel">Tria un nou arxiu si vols cambiar o afegir alguna imatge</label></b><br>
             <table class="marginAuto">
                 <tr>
-                    <td class="marginAuto" th:each="photo : ${photos}">
-                        <div class="activityFotoSpace activityFoto">
-                            <img th:src="@{${photo.photo}}" class="activityFoto"/>
+                    <td class="marginAuto" th:each="photo,iterstat : ${photos}">
+                        <div class="activityFotoUpdate">
+                            <label th:if="${photo == null}" class="sinFoto">Sense foto</label>
+                            <img th:unless="${photo == null}" th:src="@{${photo.photo}}" class="activityFoto"/>
                         </div>
+
+                        <input class="inputAdjunto" th:name="|foto${iterstat.index}|" type="file" accept="image/*">
                     </td>
                 </tr>
             </table>
