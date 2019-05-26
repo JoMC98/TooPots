@@ -114,7 +114,7 @@ public class CustomerController {
         } catch (DuplicateKeyException e) {
             throw new TooPotsException(
                     "El nom d'usuari ja esta en ús", "Prova amb un altre",
-                    "ClauPrimariaDuplicada");
+                    "UsernameUsed");
         }
         Users newUser = userDao.getUser(user.getUsername());
 
@@ -145,23 +145,37 @@ public class CustomerController {
 
     //Processa la informació del update
     @RequestMapping(value="/update", method = RequestMethod.POST)
-    public String processUpdateSubmit(@ModelAttribute("user") Users user, BindingResult bindingResultUser, @ModelAttribute("customer") Customer customer,
+    public String processUpdateSubmit(HttpSession session, @ModelAttribute("user") Users user, BindingResult bindingResultUser, @ModelAttribute("customer") Customer customer,
                                       BindingResult bindingResultCustomer) {
-        CustomerValidator customerValidator = new CustomerValidator();
-        customerValidator.validate(customer,bindingResultCustomer);
+        int acceso = controlarAcceso(session, "Customer");
+        if (acceso == USER_AUTHORIZED) {
+            CustomerValidator customerValidator = new CustomerValidator();
+            customerValidator.validate(customer, bindingResultCustomer);
 
-        UserValidator userValidator = new UserValidator();
-        userValidator.validate(user,bindingResultUser);
+            UserValidator userValidator = new UserValidator();
+            userValidator.validate(user, bindingResultUser);
 
-        if (bindingResultCustomer.hasErrors() || bindingResultUser.hasErrors()) {
-            System.out.println(bindingResultCustomer.toString());
-            System.out.println(bindingResultUser.toString());
-            return "customer/update";
+            if (bindingResultCustomer.hasErrors() || bindingResultUser.hasErrors()) {
+                System.out.println(bindingResultCustomer.toString());
+                System.out.println(bindingResultUser.toString());
+                return "customer/update";
+            }
+
+            Users viejo = (Users) session.getAttribute("user");
+            user.setId(viejo.getId());
+
+            try {
+                userDao.updateUser(user);
+            } catch (DuplicateKeyException e) {
+                throw new TooPotsException(
+                        "El nom d'usuari ja esta en ús", "Prova amb un altre",
+                        "UsernameUsed");
+            }
+            customerDao.updateCustomer(customer);
+            return "redirect:/";
+        } else {
+            return "redirect:/customer/update";
         }
-
-        userDao.updateUser(user);
-        customerDao.updateCustomer(customer);
-        return "redirect:/";
     }
 
     //Llistar totes les reserves del client
@@ -236,64 +250,64 @@ public class CustomerController {
     }
 
     //Llistar tots les subscripcions disponibles
-    @RequestMapping(value= {"/listSubscriptions", "/listSubscriptions/{state}"}, method = RequestMethod.GET)
-    public String listSubscriptions(Model model, HttpSession session, @PathVariable(name="state", required=false) String state) {
-        if (state == null || !state.equals("subscribed") && !state.equals("unsubscribed")) {
-            state = "all";
+    @RequestMapping(value= {"/listSubscriptions", "/listSubscriptions/{level}"}, method = RequestMethod.GET)
+    public String listSubscriptions(Model model, HttpSession session, @PathVariable(name="level", required=false) String level) {
+        if (level == null || !level.equals("subscribed") && !level.equals("Baix") && !level.equals("Mitja")
+                && !level.equals("Alt") && !level.equals("Extrem")) {
+            level = "all";
         }
 
         int acceso = controlarAcceso(session, "Customer");
         if(acceso == NOT_LOGGED) {
-            model.addAttribute("user", new Users());
-            List<ActivityType> activities = activityTypeDao.getActivityTypes();
-            model.addAttribute("activityTypes", activities);
+            List<ActivityType> lista;
+            if (level.equals("all")) {
+                lista = activityTypeDao.getActivityTypes();
+            } else if (level.equals("subscribed")) {
+                model.addAttribute("user", new Users());
+                session.setAttribute("nextUrl", "/customer/listSubscriptions/subscribed");
+                return "login";
+            } else {
+                lista = activityTypeDao.getActivityTypesByLevel(level);
+            }
+
+            List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
+            for (ActivityType ac: lista) {
+                ac.setSubscribe(false);
+                activitiesModified.add(ac);
+            }
+
+            model.addAttribute("activityTypes", lista);
+            model.addAttribute("level", level);
             model.addAttribute("logged", false);
             return "/customer/listSubscriptions";
 
         } else if (acceso == USER_AUTHORIZED) {
             Users user = (Users) session.getAttribute("user");
+
+            List<ActivityType> lista;
+            if (level.equals("all") || level.equals("subscribed")) {
+                lista = activityTypeDao.getActivityTypes();
+            } else {
+                lista = activityTypeDao.getActivityTypesByLevel(level);
+            }
+
+            List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
             List<ActivityType> activitiesModified = new ArrayList<ActivityType>();
 
-            if (state.equals("subscribed")) {
-                List<ActivityType> activities = activityTypeDao.getActivityTypes();
-                List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-
-                for (ActivityType ac: activities) {
-                    if(subscriptions.contains(ac.getId())) {
-                        ac.setSubscribe(true);
-                        activitiesModified.add(ac);
-                    }
-                }
-            } else if (state.equals("unsubscribed")) {
-                List<ActivityType> activities = activityTypeDao.getActivityTypes();
-                List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-
-                for (ActivityType ac: activities) {
-                    if(!subscriptions.contains(ac.getId())) {
-                        ac.setSubscribe(false);
-                        activitiesModified.add(ac);
-                    }
-                }
-            } else {
-                List<ActivityType> activities = activityTypeDao.getActivityTypes();
-                List<Integer> subscriptions = subscriptionDao.getSubscriptions(user.getId());
-
-                for (ActivityType ac: activities) {
-                    if(subscriptions.contains(ac.getId()))
-                        ac.setSubscribe(true);
-                    else
-                        ac.setSubscribe(false);
-
+            for (ActivityType ac: lista) {
+                if(subscriptions.contains(ac.getId())) {
+                    ac.setSubscribe(true);
+                    activitiesModified.add(ac);
+                } else if (!level.equals("subscribed")) {
+                    ac.setSubscribe(false);
                     activitiesModified.add(ac);
                 }
             }
 
             model.addAttribute("activityTypes", activitiesModified);
-            model.addAttribute("estat", state);
+            model.addAttribute("level", level);
             model.addAttribute("logged", true);
-
             return "customer/listSubscriptions";
-
         } else {
             return "redirect:/";
         }
@@ -318,7 +332,7 @@ public class CustomerController {
             if (!isSuscribed) {
                 subscriptionDao.addSubscription(id, user.getId());
             }
-            return "redirect:/customer/listSubscriptions";
+            return "redirect:/customer/listSubscriptions/subscribed";
         } else {
             return "redirect:/";
         }
@@ -340,7 +354,7 @@ public class CustomerController {
             Users user = (Users) session.getAttribute("user");
             subscriptionDao.deleteSubscription(id, user.getId());
 
-            return "redirect:/customer/listSubscriptions";
+            return "redirect:/customer/listSubscriptions/subscribed";
         } else {
             return "redirect:/";
         }

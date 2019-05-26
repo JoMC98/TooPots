@@ -12,14 +12,14 @@
                 <td><a th:href="@{/customer/listReservations/all}" class="btn btn-outline-success botonListaActividades" role="button">Totes les reserves</a></td>
                 <td><a th:href="@{/customer/listReservations/future}" class="btn btn-outline-info botonListaActividades" role="button">Reserves futures</a></td>
                 <td><a th:href="@{/customer/listReservations/past}" class="btn btn-outline-secondary botonListaActividades" role="button">Reserves passades</a></td>
-                <td><a th:href="@{/customer/listReservations/canceled}" class="btn btn-outline-danger botonListaActividades" role="button">Reserves cancel·lades</a></td>
+                <td><a th:href="@{/customer/listReservations/canceled}" class="btn btn-outline-danger botonListaActividades" role="button">Activitats cancel·lades</a></td>
             </tr>
         </table>
         <br>
         <h1 th:if="${estat} == all">Llista de totes les reserves</h1>
         <h1 th:if="${estat} == future">Llista de les reserves futures</h1>
         <h1 th:if="${estat} == past">Llista de les reserves passades</h1>
-        <h1 th:if="${estat} == canceled">Llista de les reserves cancel·lades</h1>
+        <h1 th:if="${estat} == canceled">Llista de les reserves d'activitats cancel·lades</h1>
         <br>
         <div th:if="${#lists.isEmpty(activities)}">
             No s'ha fet ninguna reserva

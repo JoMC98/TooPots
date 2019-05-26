@@ -27,6 +27,7 @@ public class AdminController {
     private InstructorDao instructorDao;
     private UsersDao userDao;
     private ActivityTypeDao activityTypeDao;
+    private ActivityDao activityDao;
     private CertificationDao certificationDao;
     private ActivityCertificationDao activityCertificationDao;
 
@@ -45,6 +46,9 @@ public class AdminController {
 
     @Autowired
     public void setActivityTypeDao(ActivityTypeDao activityTypeDao){this.activityTypeDao=activityTypeDao;}
+
+    @Autowired
+    public void setActivityDao(ActivityDao activityDao){this.activityDao=activityDao;}
 
     @Autowired
     public void setCertificationDao(CertificationDao certificationDao){this.certificationDao=certificationDao;}
@@ -202,30 +206,35 @@ public class AdminController {
 
     //Processa la informació del assignar activitat
     @RequestMapping(value="/asignarActivitat/{id}", method = RequestMethod.POST)
-    public String processAsignarSubmit(Model model, @PathVariable int id, @ModelAttribute("instructor") Instructor instructor,
+    public String processAsignarSubmit(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("instructor") Instructor instructor,
                                        @ModelAttribute("authorization") ActivityCertification authorization,
                                        BindingResult bindingResult) {
 
-        ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
-        activityCertificationValidator.validate(authorization,bindingResult);
+        int acceso = controlarAcceso(session, "Admin");
+        if (acceso == USER_AUTHORIZED) {
+            ActivityCertificationValidator activityCertificationValidator = new ActivityCertificationValidator();
+            activityCertificationValidator.validate(authorization, bindingResult);
 
-        if (bindingResult.hasErrors()) {
-            List<Certification> certifications = certificationDao.getCertifications(id);
-            List<ActivityType> todas = activityTypeDao.getActivityTypes();
-            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(id);
-            todas.removeAll(asignadas);
+            if (bindingResult.hasErrors()) {
+                List<Certification> certifications = certificationDao.getCertifications(id);
+                List<ActivityType> todas = activityTypeDao.getActivityTypes();
+                List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(id);
+                todas.removeAll(asignadas);
 
-            Users user = userDao.getUser(id);
-            instructor.setName(user.getName());
-            instructor.setCertifications(certifications);
-            instructor.setActivities(todas);
+                Users user = userDao.getUser(id);
+                instructor.setName(user.getName());
+                instructor.setCertifications(certifications);
+                instructor.setActivities(todas);
 
-            model.addAttribute("instructor", instructor);
-            return "admin/asignarActivitat";
+                model.addAttribute("instructor", instructor);
+                return "admin/asignarActivitat";
+            }
+            activityCertificationDao.addActivityCertification(authorization);
+
+            return "redirect:/admin/instructorProfile/" + id;
+        } else {
+            return "redirect:/admin/asignarActivitat/" + id;
         }
-        activityCertificationDao.addActivityCertification(authorization);
-
-        return "redirect:/admin/instructorProfile/" + id;
     }
 
     //Veure perfil monitor
@@ -275,6 +284,71 @@ public class AdminController {
                 model.addAttribute("user", userDao.getUser(id));
                 model.addAttribute("instructor", ins);
                 return "admin/instructorRequest";
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Donar de baixa monitor
+    @RequestMapping("/delete/{id}")
+    public String deleteInstructor(HttpSession session, Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
+        int acceso = controlarAcceso(session, "Admin");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/admin/delete/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (user.getRol().equals("Instructor")) {
+                List<Activity> listaObertes = activityDao.getActivities(id, "Oberta");
+                List<Activity> listaTancades = activityDao.getActivities(id, "Tancada");
+
+                if (listaObertes.size() != 0 || listaTancades.size() != 0) {
+                    model.addAttribute("instructorWithActivities", true);
+
+                } else {
+                    model.addAttribute("instructorWithoutActivities", true);
+                }
+
+                Instructor ins = instructorDao.getInstructor(id);
+                ins.setCertifications(certificationDao.getCertifications(id));
+                ins.setActivities(activityCertificationDao.getAuthorizations(id));
+                model.addAttribute("user", userDao.getUser(id));
+
+                model.addAttribute("instructor", ins);
+                return "admin/instructorProfile";
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Confirmar baixa monitor
+    @RequestMapping("/confirmDeletion/{id}")
+    public String confirmDeletionInstructor(HttpSession session, Model model, @PathVariable int id) {
+        Users user = userDao.getUser(id);
+        if (user == null) {
+            return "redirect:/";
+        }
+        int acceso = controlarAcceso(session, "Admin");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/admin/delete/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (user.getRol().equals("Instructor")) {
+                //TODO TODAS LAS ACTIVIDADES A CANCELED
+                userDao.updateRole(id, "Fired");
+                activityDao.cancelAllActivities(id);
+                return "redirect:/";
             } else {
                 return "redirect:/";
             }

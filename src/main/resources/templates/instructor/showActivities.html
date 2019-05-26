@@ -73,16 +73,16 @@
                         </div>
                     </td>
                     <td class="tdListCentroAbajo tdListCentroDerechaIzquierda tdListArriba tdListTextoName"><b th:text="${activity.name}"></b></td>
-                    <td th:if="${estat} == opened"></td>
-                    <td th:unless="${estat} == opened" rowspan="4" class="tdListArriba tdListAbajo tdListCentroIzquierda tdListBotones">
+                    <td th:unless="${botonReservar}" rowspan="4" class="tdListArriba tdListAbajo tdListCentroIzquierda tdListBotones">
                         <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>
                     </td>
+                    <td th:if="${botonReservar}"></td>
                 </tr>
                 <tr>
                     <td class="tdListCentroArriba tdListTexto">
                         <label th:text="${activity.place}"></label>
                     </td>
-                    <td th:if="${estat} == opened" class="tdListCentroAbajo tdListAbajo tdListBotones">
+                    <td th:if="${botonReservar}" class="tdListCentroAbajo tdListCentroIzquierda tdListBotones">
                         <a th:href="@{/activity/book/{id}(id=${activity.id})}" class="btn btn-success listBoton" >Reservar</a>
                     </td>
                 </tr>
@@ -90,7 +90,7 @@
                     <td class="tdListCentroArriba tdListTexto">
                         <label th:text="${#temporals.format(activity.dates, 'dd MMMM YYYY')}"></label>
                     </td>
-                    <td th:if="${estat} == opened" class="tdListCentroArriba tdListArriba tdListBotones">
+                    <td th:if="${botonReservar}" class="tdListCentroAbajo tdListCentroIzquierda tdListBotones">
                         <a th:href="@{/activity/view/{id}(id=${activity.id})}" class="btn btn-info listBoton" role="button">+ info</a>
                     </td>
                 </tr>
@@ -99,7 +99,7 @@
                         <label th:text="${activity.ocupation}"></label>
                         <label> %</label>
                     </td>
-                    <td th:if="${estat} == opened"></td>
+                    <td th:if="${botonReservar}"></td>
                 </tr>
             </table>
         </div>

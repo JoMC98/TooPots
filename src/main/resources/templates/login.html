@@ -9,26 +9,26 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
+        <div th:if="${conexionRefused}">
+            <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 style="display: block;" aria-modal="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modalTitulo">No és pot iniciar sessió</h5>
+                            <a th:href="@{/login}" class="modalBotonCerrar"><i class="icon-remove"></i></a>
+                        </div>
+                        <div class="modalBody">
+                            <label th:if="${conexionRefusedReason == 'BadPassword'}" class="modalUsuario">Nom d'usuari o contrasenya incorrecte</label>
+                            <label th:if="${conexionRefusedReason == 'Request'}" class="modalRequest">La sol·licitud encara no s'ha avaluat</label>
+                            <label th:if="${conexionRefusedReason == 'Rejected'}" class="modalRejected">La sol·licitud s'ha rebutjat</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        </div>
         <div class="center contentPaddingLogin">
-            <div th:if="${#strings.equals(name,'LoginException')}" class="alertaLogin alertaLoginError alert alert-primary alert-dismissible fade show" role="alert">
-                <h2 class="alertaLoginText" th:text="${message}"></h2>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div th:if="${conexionRefused == 'Request'}" class="alertaLogin alertaLoginRequest alert alert-dark alert-dismissible fade show">
-                <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud encara no s'ha evaluat</h2>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div th:if="${conexionRefused == 'Rejected'}" class="alertaLogin alertaLoginRejected alert alert-danger alert-dismissible fade show">
-                <h2 class="alertaLoginText">No es pot accedir ja que la sol·licitud s'ha rebutjat</h2>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
             <div id="loginArea">
                 <br><br>
                 <h1 id="loginTitle">Login</h1><br><br>

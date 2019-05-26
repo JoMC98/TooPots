@@ -11,12 +11,18 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     </head>
     <body layout:fragment="content">
-        <div class="container mensajeExcepcion">
-            <div class="alert" th:classappend= "${#strings.equals(name,'ClauPrimariaDuplicada')}? 'alert-danger' : 'alert-info'">
+        <div class="container">
+            <div th:if="${name == 'UsernameUsed'}" class="alert-info alertaExcepcion alert fade show">
                 <h2 th:text="${message}"></h2><br>
                 <h3 th:text="${messageSecundari}"></h3><br>
                 <p>Pulsa el botó per anar a l'inici o el botó del navegador per anar cap enrere</p>
             </div>
+            <div th:if="${name == 'ClauPrimariaDuplicada'}" class="alert-warning alertaExcepcion alert fade show">
+                <h2 th:text="${message}"></h2><br>
+                <h3 th:text="${messageSecundari}"></h3><br>
+                <p>Pulsa el botó per anar a l'inici o el botó del navegador per anar cap enrere</p>
+            </div>
+            <br>
             <div th:align="center" >
                 <a href="/" class="btn btn-primary" th:align="left">Inici</a>
             </div>

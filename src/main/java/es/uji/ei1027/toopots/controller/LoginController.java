@@ -1,7 +1,6 @@
 package es.uji.ei1027.toopots.controller;
 
 import es.uji.ei1027.toopots.daos.UsersDao;
-import es.uji.ei1027.toopots.exceptions.LoginException;
 import es.uji.ei1027.toopots.model.Users;
 import es.uji.ei1027.toopots.validator.LoginValidator;
 import org.springframework.beans.NotReadablePropertyException;
@@ -22,6 +21,7 @@ public class LoginController {
 
     @RequestMapping("/login")
     public String login(Model model) {
+        model.addAttribute("conexionRefused", false);
         model.addAttribute("user", new Users());
         return "login";
     }
@@ -45,16 +45,18 @@ public class LoginController {
             try {
                 bindingResult.rejectValue("password", "badpw", "Contrasenya incorrecta");
             } catch (NotReadablePropertyException e) {
-                throw new LoginException(
-                        "Nom d'usuari o contrasenya incorrecte",
-                        "LoginException");
+                model.addAttribute("user", new Users());
+                model.addAttribute("conexionRefused", true);
+                model.addAttribute("conexionRefusedReason", "BadPassword");
+                return "login";
             }
         }
 
         // Autenticats correctament.
         if (user.getRol().equals("Request") || user.getRol().equals("Rejected")) {
             model.addAttribute("user", new Users());
-            model.addAttribute("conexionRefused", user.getRol());
+            model.addAttribute("conexionRefused", true);
+            model.addAttribute("conexionRefusedReason", user.getRol());
             return "login";
         } else {
             // Guardem les dades de l'usuari autenticat a la sessió

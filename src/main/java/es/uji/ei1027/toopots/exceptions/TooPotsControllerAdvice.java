@@ -17,15 +17,4 @@ public class TooPotsControllerAdvice {
         mav.addObject("name", ex.getName());
         return mav;
     }
-
-    @ExceptionHandler(value = LoginException.class)
-    public ModelAndView handleClubException(LoginException ex){
-
-        ModelAndView mav = new ModelAndView("login");
-        mav.addObject("message", ex.getMessage());
-        mav.addObject("user", new Users());
-        mav.addObject("name", ex.getName());
-        return mav;
-    }
-
 }

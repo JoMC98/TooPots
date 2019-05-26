@@ -195,10 +195,30 @@
                     <a th:href="@{/instructor/profile/{id}(id=${activity.idInstructor})}" class="btn btn-warning">Perfil monitor</a>
                 </td>
                 <td class="tdBotonActividad">
-                    <a th:href="@{/customer/cancelReservation/{id}(id=${reservation.id})}" class="btn btn-danger">Cancelar</a>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalCancel">Cancelar</button>
                 </td>
             </tr>
 
         </table>
+        <div class="modal fade show" id="modalCancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modalBotones">
+                            <h5 class="modalTituloBorrar">Es va a cancelar la reserva</h5>
+                        </div>
+                    </div>
+                    <div class="modalBody">
+                        <label>Estás segur que vols cancelar?</label>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modalBotones">
+                            <a th:href="@{/customer/cancelReservation/{id}(id=${reservation.id})}" class="btn btn-success modalBotonSiNo">Si</a>
+                            <a th:href="@{/customer/viewReservation/{id}(id=${reservation.id})}" class="btn btn-danger modalBotonSiNo">No</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

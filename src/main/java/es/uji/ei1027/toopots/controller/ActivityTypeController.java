@@ -49,15 +49,25 @@ public class ActivityTypeController {
     }
 
     //Llistar tots els tipus de activitat
-    @RequestMapping("/list")
-    public String listActivityTypes(HttpSession session, Model model) {
+    @RequestMapping(value= {"/list", "/list/{level}"})
+    public String listActivityTypes(HttpSession session, Model model, @PathVariable(name="level", required=false) String level) {
+        if (level == null || !level.equals("Baix") && !level.equals("Mitja") && !level.equals("Alt") && !level.equals("Extrem")) {
+            level = "Totes";
+        }
         int acceso = controlarAccesoAdmin(session, "Admin");
         if(acceso == NOT_LOGGED) {
             model.addAttribute("user", new Users());
             session.setAttribute("nextUrl", "activityType/list");
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
-            model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
+            List<ActivityType> lista;
+            if (level.equals("Totes")) {
+                lista = activityTypeDao.getActivityTypes();
+            } else {
+                lista = activityTypeDao.getActivityTypesByLevel(level);
+            }
+            model.addAttribute("activityTypes", lista);
+            model.addAttribute("level", level);
             return "activityType/list";
         } else {
             return "redirect:/";
@@ -79,48 +89,50 @@ public class ActivityTypeController {
         } else {
             return "redirect:/";
         }
-
     }
 
     //Processa la informació del add
     @RequestMapping(value="/add", method=RequestMethod.POST)
-    public String processAddSubmit(Model model, @RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+    public String processAddSubmit(HttpSession session, Model model, @RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType, BindingResult bindingResult) {
+        int acceso = controlarAccesoAdmin(session, "Admin");
+        if (acceso == USER_AUTHORIZED) {
+            if (foto.isEmpty()) {
+                model.addAttribute("errorFoto", true);
+            }
 
-        if (foto.isEmpty()) {
-            model.addAttribute("errorFoto", true);
+            ActivityTypeValidator activityTypeValidator = new ActivityTypeValidator();
+            activityTypeValidator.validate(activityType, bindingResult);
+
+            if (bindingResult.hasErrors() || foto.isEmpty())
+                return "activityType/add";
+
+            try {
+                // Obtener el fichero y guardarlo
+                byte[] bytes = foto.getBytes();
+
+                String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+                String direccion = "images/activityTypes/" + activityType.getName() + "_" + activityType.getLevel() + "." + extension;
+
+                Path path = Paths.get(uploadDirectory + direccion);
+                activityType.setPhoto("/" + direccion);
+
+                try {
+                    activityTypeDao.addActivityType(activityType);
+                } catch (DuplicateKeyException e) {
+                    throw new TooPotsException(
+                            "Ja existeix el tipus d'activitat " + activityType.getName() + " amb nivell " + activityType.getLevel(),
+                            "Prova un altre nom o nivell",
+                            "ClauPrimariaDuplicada");
+                }
+
+                Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "redirect:list";
+        } else {
+            return "redirect:/activityType/add";
         }
-
-        ActivityTypeValidator activityTypeValidator = new ActivityTypeValidator();
-        activityTypeValidator.validate(activityType, bindingResult);
-
-        if (bindingResult.hasErrors() || foto.isEmpty())
-            return "activityType/add";
-
-
-        try {
-            // Obtener el fichero y guardarlo
-            byte[] bytes = foto.getBytes();
-
-            String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
-            String direccion = "images/activityTypes/" + activityType.getName() + "_" + activityType.getLevel() + "." + extension;
-
-            Path path = Paths.get(uploadDirectory + direccion);
-            activityType.setPhoto("/" + direccion);
-
-            Files.write(path, bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            activityTypeDao.addActivityType(activityType);
-        } catch (DuplicateKeyException e) {
-            throw new TooPotsException(
-                    "Ja existeix el tipus d'activitat", activityType.getName() + " amb nivell " + activityType.getLevel(),
-                    "ClauPrimariaDuplicada");
-        }
-
-        return "redirect:list";
     }
 
     //Actualitzar un tipus de activitat
@@ -145,32 +157,38 @@ public class ActivityTypeController {
 
     //Processa la informació del update
     @RequestMapping(value="/update/{id}", method = RequestMethod.POST)
-    public String processUpdateSubmit(Model model, @PathVariable int id, @RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType,
+    public String processUpdateSubmit(HttpSession session, Model model, @PathVariable int id, @RequestParam("foto") MultipartFile foto, @ModelAttribute("activityType") ActivityType activityType,
                                       BindingResult bindingResult) {
 
-        ActivityType activityTypeOld = activityTypeDao.getActivityType(id);
-        if (!foto.isEmpty()) {
-            try {
-                // Obtener el fichero y guardarlo
-                byte[] bytes = foto.getBytes();
+        int acceso = controlarAccesoAdmin(session, "Admin");
+        if (acceso == USER_AUTHORIZED) {
+            ActivityType activityTypeOld = activityTypeDao.getActivityType(id);
+            if (!foto.isEmpty()) {
+                try {
+                    // Obtener el fichero y guardarlo
+                    byte[] bytes = foto.getBytes();
 
-                String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
-                String direccion = "images/activityTypes/" + activityTypeOld.getName() + "_" + activityTypeOld.getLevel() + "." + extension;
+                    String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+                    String direccion = "images/activityTypes/" + activityTypeOld.getName() + "_" + activityTypeOld.getLevel() + "." + extension;
 
-                Path path = Paths.get(uploadDirectory + direccion);
-                borrarFotoActualizada(uploadDirectory + activityType.getPhoto());
+                    Path path = Paths.get(uploadDirectory + direccion);
+                    borrarFotoActualizada(uploadDirectory + activityType.getPhoto());
 
-                activityType.setPhoto("/" + direccion);
+                    activityType.setPhoto("/" + direccion);
 
-                Files.write(path, bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    Files.write(path, bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+            activityTypeDao.updateActivityType(activityType);
+
+            return "redirect:../list";
+        } else {
+            return "redirect:/activityType/update/" + id;
         }
 
-        activityTypeDao.updateActivityType(activityType);
-
-        return "redirect:../list";
     }
 
 
@@ -199,9 +217,9 @@ public class ActivityTypeController {
                 activityTypeDao.deleteActivityType(id);
                 return "redirect:../list";
             } else {
-                throw new TooPotsException(
-                        "No es pot borrar aquest tipus d'activitat", "perque té activitats creades",
-                        "NoEsPossibleBorrar");
+                model.addAttribute("noEsPosibleBorrar", true);
+                model.addAttribute("activityTypes", activityTypeDao.getActivityTypes());
+                return "activityType/list";
             }
         } else {
             return "redirect:/";

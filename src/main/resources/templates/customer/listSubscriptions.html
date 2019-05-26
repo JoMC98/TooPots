@@ -9,25 +9,27 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
-        <div th:if="${logged}">
+        <table class="marginAuto">
+            <tr>
+                <td><a th:href="@{/customer/listSubscriptions/Baix}" class="btn btn-outline-success botonListaActividades" role="button">Nivell Baix</a></td>
+                <td><a th:href="@{/customer/listSubscriptions/Mitja}" class="btn btn-outline-purple botonListaActividades" role="button">Nivell Mitjà</a></td>
+                <td><a th:href="@{/customer/listSubscriptions/Alt}" class="btn btn-outline-info botonListaActividades" role="button">Nivell Alt</a></td>
+                <td><a th:href="@{/customer/listSubscriptions/Extrem}" class="btn btn-outline-danger botonListaActividades" role="button">Nivell Extrem</a></td>
+                <td th:if="${logged}"><a th:href="@{/customer/listSubscriptions/subscribed}" class="btn btn-outline-secondary botonListaActividades" role="button">Subscrites</a></td>
+            </tr>
+        </table>
+        <br>
+        <div>
             <table class="marginAuto">
                 <tr>
-                    <td><a th:href="@{/customer/listSubscriptions/all}" class="btn btn-outline-success botonListaActividades" role="button">Tots els tipus</a></td>
-                    <td><a th:href="@{/customer/listSubscriptions/subscribed}" class="btn btn-outline-info botonListaActividades" role="button">Tipus subscrits</a></td>
-                    <td><a th:href="@{/customer/listSubscriptions/unsubscribed}" class="btn btn-outline-secondary botonListaActividades" role="button">Tipus no subscrits</a></td>
+                    <h1 th:if="${level} == all">Tots els tipus d'Activitats</h1>
+                    <h1 th:if="${level} == Baix">Tipus d'Activitats de Nivell Baix</h1>
+                    <h1 th:if="${level} == Mitja">Tipus d'Activitats de Nivell Mitjà</h1>
+                    <h1 th:if="${level} == Alt">Tipus d'Activitats de Nivell Alt</h1>
+                    <h1 th:if="${level} == Extrem">Tipus d'Activitats de Nivell Extrem</h1>
+                    <h1 th:if="${level} == subscribed">Subscripcions actives</h1>
                 </tr>
             </table>
-            <br>
-            <table class="marginAuto">
-                <tr>
-                    <h1 th:if="${estat} == all">Tots els tipus d'activitats</h1>
-                    <h1 th:if="${estat} == subscribed">Subscripcions actives</h1>
-                    <h1 th:if="${estat} == unsubscribed">Tipus d'activitats sense subscripció</h1>
-                </tr>
-            </table>
-        </div>
-        <div th:unless="${logged}">
-            <h1>Tots els tipus d'activitats</h1>
         </div>
         <br>
         <div th:if="${#lists.isEmpty(activityTypes)}">

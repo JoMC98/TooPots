@@ -9,10 +9,49 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
+        <div th:if="${noEsPosibleBorrar}">
+            <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 style="display: block;" aria-modal="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modalBotones">
+                                <h5 class="modalTituloBorrar">No es pot borrar aquest tipus d'activitat</h5>
+                            </div>
+                        </div>
+                        <div class="modalBody">
+                            <label>Hi ha activitats creades d'aquest tipus</label>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modalBotones">
+                                <a th:href="@{/activityType/list}" class="btn btn-success">D'acord</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        </div>
+        <table class="marginAuto">
+            <tr>
+                <td><a th:href="@{/activityType/list/Totes}" class="btn btn-outline-secondary botonListaActividades" role="button">Tots els tipus</a></td>
+                <td><a th:href="@{/activityType/list/Baix}" class="btn btn-outline-success botonListaActividades" role="button">Nivell Baix</a></td>
+                <td><a th:href="@{/activityType/list/Mitja}" class="btn btn-outline-purple botonListaActividades" role="button">Nivell Mitjà</a></td>
+                <td><a th:href="@{/activityType/list/Alt}" class="btn btn-outline-info botonListaActividades" role="button">Nivell Alt</a></td>
+                <td><a th:href="@{/activityType/list/Extrem}" class="btn btn-outline-danger botonListaActividades" role="button">Nivell Extrem</a></td>
+            </tr>
+        </table>
+        <br>
         <table class="marginAuto tableBotonAddLista">
             <tr>
                 <td class="tdBotonAddLista"></td>
-                <td><h1>Tipus d'Activitats</h1></td>
+                <td>
+                    <h1 th:if="${level} == Totes">Tots els tipus d'Activitats</h1>
+                    <h1 th:if="${level} == Baix">Tipus d'Activitats de Nivell Baix</h1>
+                    <h1 th:if="${level} == Mitja">Tipus d'Activitats de Nivell Mitjà</h1>
+                    <h1 th:if="${level} == Alt">Tipus d'Activitats de Nivell Alt</h1>
+                    <h1 th:if="${level} == Extrem">Tipus d'Activitats de Nivell Extrem</h1>
+                </td>
                 <td class="tdBotonAddLista"><a href="add" class="btn btn-success" role="button">Crear Nou Tipus</a></td>
             </tr>
         </table>

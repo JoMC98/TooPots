@@ -111,67 +111,72 @@ public class ActivityController {
     @RequestMapping(value="/add", method=RequestMethod.POST)
     public String processAddSubmit(Model model, HttpSession session, @ModelAttribute("activity") Activity activity,
                                    BindingResult bindingResult, @RequestParam("foto") MultipartFile[] foto) {
-        if (foto[0].getSize() == 0) {
-            model.addAttribute("errorFoto", true);
-        }
+        int acceso = controlarAcceso(session, "Instructor");
+        if (acceso == USER_AUTHORIZED) {
+            if (foto[0].getSize() == 0) {
+                model.addAttribute("errorFoto", true);
+            }
 
-        ActivityValidator activityValidator = new ActivityValidator();
-        activityValidator.validate(activity, bindingResult);
+            ActivityValidator activityValidator = new ActivityValidator();
+            activityValidator.validate(activity, bindingResult);
 
-        if (bindingResult.hasErrors() || foto[0].getSize() == 0) {
+            if (bindingResult.hasErrors() || foto[0].getSize() == 0) {
+                Users user = (Users) session.getAttribute("user");
+                List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+                Instructor instructor = instructorDao.getInstructor(user.getId());
+                instructor.setActivities(asignadas);
+                model.addAttribute("instructor", instructor);
+                return "activity/add";
+            }
+
             Users user = (Users) session.getAttribute("user");
-            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
-            Instructor instructor = instructorDao.getInstructor(user.getId());
-            instructor.setActivities(asignadas);
-            model.addAttribute("instructor", instructor);
-            return "activity/add";
+            activity.setIdInstructor(user.getId());
+
+            try {
+                activityDao.addActivity(activity);
+            } catch (DuplicateKeyException e) {
+                throw new TooPotsException(
+                        "Ja tens una activitat per al dia " + activity.getDates().getDayOfMonth() + " del "
+                                + activity.getDates().getMonthValue() + " de " + activity.getDates().getYear(),
+                        "Prova un altra data",
+                        "ClauPrimariaDuplicada");
+            }
+
+
+            Activity newActivity = activityDao.getActivity(activity.getDates(), activity.getIdInstructor());
+            int id = newActivity.getId();
+
+            for (int i = 0; i < foto.length; i++) {
+                MultipartFile file = foto[i];
+                saveFoto(file, newActivity, i + 1);
+            }
+
+            if (activity.getTarifaMenores().getPrice() > 0.0) {
+                ActivityRates tarifa = activity.getTarifaMenores();
+                tarifa.setIdActivity(id);
+                activityRatesDao.addActivityRates(tarifa);
+            }
+
+            if (activity.getTarifaEstudiantes().getPrice() > 0.0) {
+                ActivityRates tarifa = activity.getTarifaEstudiantes();
+                tarifa.setIdActivity(id);
+                activityRatesDao.addActivityRates(tarifa);
+            }
+            if (activity.getTarifaMayores().getPrice() > 0.0) {
+                ActivityRates tarifa = activity.getTarifaMayores();
+                tarifa.setIdActivity(id);
+                activityRatesDao.addActivityRates(tarifa);
+            }
+            if (activity.getTarifaGrupos().getPrice() > 0.0) {
+                ActivityRates tarifa = activity.getTarifaGrupos();
+                tarifa.setIdActivity(id);
+                activityRatesDao.addActivityRates(tarifa);
+            }
+
+            return "redirect:/";
+        } else {
+            return "redirect:/activity/add";
         }
-
-        Users user = (Users) session.getAttribute("user");
-        activity.setIdInstructor(user.getId());
-
-        try {
-            activityDao.addActivity(activity);
-        } catch (DuplicateKeyException e) {
-            throw new TooPotsException(
-                    "Ja tens una activitat per al dia " + activity.getDates().getDayOfMonth() + " del "
-                            + activity.getDates().getMonthValue() + " de " + activity.getDates().getYear(),
-                    "Introdueix altra data",
-                    "ClauPrimariaDuplicada");
-        }
-
-
-        Activity newActivity = activityDao.getActivity(activity.getDates(), activity.getIdInstructor());
-        int id = newActivity.getId();
-
-        for (int i=0; i<foto.length; i++) {
-            MultipartFile file = foto[i];
-            saveFoto(file, newActivity, i+1);
-        }
-
-        if (activity.getTarifaMenores().getPrice() > 0.0) {
-            ActivityRates tarifa = activity.getTarifaMenores();
-            tarifa.setIdActivity(id);
-            activityRatesDao.addActivityRates(tarifa);
-        }
-
-        if (activity.getTarifaEstudiantes().getPrice() > 0.0) {
-            ActivityRates tarifa = activity.getTarifaEstudiantes();
-            tarifa.setIdActivity(id);
-            activityRatesDao.addActivityRates(tarifa);
-        }
-        if (activity.getTarifaMayores().getPrice() > 0.0) {
-            ActivityRates tarifa = activity.getTarifaMayores();
-            tarifa.setIdActivity(id);
-            activityRatesDao.addActivityRates(tarifa);
-        }
-        if (activity.getTarifaGrupos().getPrice() > 0.0) {
-            ActivityRates tarifa = activity.getTarifaGrupos();
-            tarifa.setIdActivity(id);
-            activityRatesDao.addActivityRates(tarifa);
-        }
-
-        return "redirect:/";
     }
 
 
@@ -234,109 +239,121 @@ public class ActivityController {
                                       @RequestParam("foto2") MultipartFile foto2, @RequestParam("foto3") MultipartFile foto3,
                                       BindingResult bindingResult) {
 
-        ActivityValidator activityValidator = new ActivityValidator();
-        activityValidator.validate(activity, bindingResult);
+        int acceso = controlarAcceso(session, "Instructor");
+        if (acceso == USER_AUTHORIZED) {
+            ActivityValidator activityValidator = new ActivityValidator();
+            activityValidator.validate(activity, bindingResult);
 
-        if (bindingResult.hasErrors()) {
+            if (bindingResult.hasErrors()) {
+                Users user = (Users) session.getAttribute("user");
+                List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
+                Instructor instructor = instructorDao.getInstructor(user.getId());
+                instructor.setActivities(asignadas);
+                model.addAttribute("instructor", instructor);
+                return "activity/update";
+            }
+
             Users user = (Users) session.getAttribute("user");
-            List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
-            Instructor instructor = instructorDao.getInstructor(user.getId());
-            instructor.setActivities(asignadas);
-            model.addAttribute("instructor", instructor);
-            return "activity/update";
-        }
+            activity.setIdInstructor(user.getId());
 
-        Users user = (Users) session.getAttribute("user");
-        activity.setIdInstructor(user.getId());
+            List<ActivityRates> tarifasOld = activityRatesDao.getActivityRates(id);
+            Activity activityOld = activityDao.getActivity(id);
 
-        List<ActivityRates> tarifasOld = activityRatesDao.getActivityRates(id);
-        Activity activityOld = activityDao.getActivity(id);
-
-        for (ActivityRates tarifa: tarifasOld) {
-            if (tarifa.getRateName().equals("Menors de 16 anys")) {
-                activityOld.setTarifaMenores(tarifa);
-            } else if (tarifa.getRateName().equals("Estudiants")) {
-                activityOld.setTarifaEstudiantes(tarifa);
-            } else if (tarifa.getRateName().equals("Majors de 60 anys")) {
-                activityOld.setTarifaMayores(tarifa);
-            } else {
-                activityOld.setTarifaGrupos(tarifa);
-            }
-        }
-
-        List<ActivityRates> vieja = new LinkedList<ActivityRates>();
-        vieja.add(activityOld.getTarifaMenores());
-        vieja.add(activityOld.getTarifaEstudiantes());
-        vieja.add(activityOld.getTarifaMayores());
-        vieja.add(activityOld.getTarifaGrupos());
-
-        List<ActivityRates> nueva = new LinkedList<ActivityRates>();
-        nueva.add(activity.getTarifaMenores());
-        nueva.add(activity.getTarifaEstudiantes());
-        nueva.add(activity.getTarifaMayores());
-        nueva.add(activity.getTarifaGrupos());
-
-        for (int i=0; i<4; i++) {
-            ActivityRates tarifaNueva = nueva.get(i);
-            ActivityRates tarifaVieja = vieja.get(i);
-            tarifaNueva.setIdActivity(id);
-
-            //Si la tarifa cambia
-            if (! tarifaNueva.equals(tarifaVieja)) {
-                //Si ahora es 0, eliminar
-                if (tarifaNueva.getPrice() == 0) {
-                    activityRatesDao.deleteActivityRates(tarifaNueva);
-                }
-                //Si la de antes era 0, añadir
-                else if (tarifaVieja.getPrice() == 0) {
-                    activityRatesDao.addActivityRates(tarifaNueva);
-                }
-                //Sino modificar
-                else {
-                    activityRatesDao.updateActivityRates(tarifaNueva);
+            for (ActivityRates tarifa: tarifasOld) {
+                if (tarifa.getRateName().equals("Menors de 16 anys")) {
+                    activityOld.setTarifaMenores(tarifa);
+                } else if (tarifa.getRateName().equals("Estudiants")) {
+                    activityOld.setTarifaEstudiantes(tarifa);
+                } else if (tarifa.getRateName().equals("Majors de 60 anys")) {
+                    activityOld.setTarifaMayores(tarifa);
+                } else {
+                    activityOld.setTarifaGrupos(tarifa);
                 }
             }
-        }
 
-        List<ActivityPhotos> photos = activityPhotosDao.getPhotos(activity.getId());
+            List<ActivityRates> vieja = new LinkedList<ActivityRates>();
+            vieja.add(activityOld.getTarifaMenores());
+            vieja.add(activityOld.getTarifaEstudiantes());
+            vieja.add(activityOld.getTarifaMayores());
+            vieja.add(activityOld.getTarifaGrupos());
 
-        MultipartFile[] inputFotos = {foto0, foto1, foto2, foto3};
+            List<ActivityRates> nueva = new LinkedList<ActivityRates>();
+            nueva.add(activity.getTarifaMenores());
+            nueva.add(activity.getTarifaEstudiantes());
+            nueva.add(activity.getTarifaMayores());
+            nueva.add(activity.getTarifaGrupos());
 
-        for (int i=0; i<4; i++) {
-            int photoNumber = i + 1;
-            if (!inputFotos[i].isEmpty()) {
-                try {
-                    // Obtener el fichero y guardarlo
-                    byte[] bytes = inputFotos[i].getBytes();
+            for (int i=0; i<4; i++) {
+                ActivityRates tarifaNueva = nueva.get(i);
+                ActivityRates tarifaVieja = vieja.get(i);
+                tarifaNueva.setIdActivity(id);
 
-                    String extension = FilenameUtils.getExtension(inputFotos[i].getOriginalFilename());
-                    String direccion = "images/activities/" + activity.getId() + "_" + photoNumber + "." + extension;
-
-                    Path path = Paths.get(uploadDirectory + direccion);
-
-
-                    //TODO BORRAR VIEJA
-                    ActivityPhotos photo = activityPhotosDao.getActivityPhotos(activity.getId(), photoNumber);
-                    if (photo == null) {
-                        ActivityPhotos activityPhotos = new ActivityPhotos();
-                        activityPhotos.setIdActivity(activity.getId());
-                        activityPhotos.setPhotoNumber(photoNumber);
-                        activityPhotos.setPhoto("/" + direccion);
-                        activityPhotosDao.addActivityPhotos(activityPhotos);
-                    } else {
-                        borrarFotoActualizada(uploadDirectory + photo.getPhoto());
-                        photo.setPhoto("/" + direccion);
-                        activityPhotosDao.updateActivityPhotos(photo);
+                //Si la tarifa cambia
+                if (! tarifaNueva.equals(tarifaVieja)) {
+                    //Si ahora es 0, eliminar
+                    if (tarifaNueva.getPrice() == 0) {
+                        activityRatesDao.deleteActivityRates(tarifaNueva);
                     }
-                    Files.write(path, bytes);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    //Si la de antes era 0, añadir
+                    else if (tarifaVieja.getPrice() == 0) {
+                        activityRatesDao.addActivityRates(tarifaNueva);
+                    }
+                    //Sino modificar
+                    else {
+                        activityRatesDao.updateActivityRates(tarifaNueva);
+                    }
                 }
             }
-        }
 
-        activityDao.updateActivity(activity);
-        return "redirect:/";
+            List<ActivityPhotos> photos = activityPhotosDao.getPhotos(activity.getId());
+
+            MultipartFile[] inputFotos = {foto0, foto1, foto2, foto3};
+
+            for (int i=0; i<4; i++) {
+                int photoNumber = i + 1;
+                if (!inputFotos[i].isEmpty()) {
+                    try {
+                        // Obtener el fichero y guardarlo
+                        byte[] bytes = inputFotos[i].getBytes();
+
+                        String extension = FilenameUtils.getExtension(inputFotos[i].getOriginalFilename());
+                        String direccion = "images/activities/" + activity.getId() + "_" + photoNumber + "." + extension;
+
+                        Path path = Paths.get(uploadDirectory + direccion);
+
+
+                        //TODO BORRAR VIEJA
+                        ActivityPhotos photo = activityPhotosDao.getActivityPhotos(activity.getId(), photoNumber);
+                        if (photo == null) {
+                            ActivityPhotos activityPhotos = new ActivityPhotos();
+                            activityPhotos.setIdActivity(activity.getId());
+                            activityPhotos.setPhotoNumber(photoNumber);
+                            activityPhotos.setPhoto("/" + direccion);
+                            activityPhotosDao.addActivityPhotos(activityPhotos);
+                        } else {
+                            borrarFotoActualizada(uploadDirectory + photo.getPhoto());
+                            photo.setPhoto("/" + direccion);
+                            activityPhotosDao.updateActivityPhotos(photo);
+                        }
+                        Files.write(path, bytes);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            try {
+                activityDao.updateActivity(activity);
+            } catch (DuplicateKeyException e) {
+                throw new TooPotsException(
+                        "Ja tens una activitat per al dia " + activity.getDates().getDayOfMonth() + " del "
+                                + activity.getDates().getMonthValue() + " de " + activity.getDates().getYear(),
+                        "Prova un altra data",
+                        "ClauPrimariaDuplicada");
+            }
+            return "redirect:/";
+        } else {
+            return "redirect:/activity/update/" + id;
+        }
     }
 
 
@@ -368,18 +385,22 @@ public class ActivityController {
 
     //Processa la informació de la cancelació
     @RequestMapping(value="/cancel/{id}", method = RequestMethod.POST)
-    public String processCancelSubmit(Model model, @PathVariable int id, @ModelAttribute("activity") Activity activity,
+    public String processCancelSubmit(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("activity") Activity activity,
                                       BindingResult bindingResult) {
-
-        ActivityCancelationValidator cancelationValidator = new ActivityCancelationValidator();
-        cancelationValidator.validate(activity, bindingResult);
-        if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult.toString());
-            return "activity/cancel";
+        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
+        if (acceso == USER_AUTHORIZED) {
+            ActivityCancelationValidator cancelationValidator = new ActivityCancelationValidator();
+            cancelationValidator.validate(activity, bindingResult);
+            if (bindingResult.hasErrors()) {
+                System.out.println(bindingResult.toString());
+                return "activity/cancel";
+            }
+            activity.setState("Cancelada");
+            activityDao.cancelActivity(activity);
+            return "redirect:/home";
+        } else {
+            return "redirect:/activity/cancel/" + id;
         }
-        activity.setState("Cancelada");
-        activityDao.cancelActivity(activity);
-        return "redirect:/home";
     }
 
     //Tancar una activitat
@@ -620,20 +641,25 @@ public class ActivityController {
 
     //Modificar dades reserva
     @RequestMapping(value="/book/{id}", method = RequestMethod.POST)
-    public String dataBookModification(Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
-        List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
-        Activity activity = activityDao.getActivity(id);
-        List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
-        if (imatges.size() == 1) {
-            activity.setPhotoPrincipal(imatges.get(0).getPhoto());
-        }
+    public String dataBookModification(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
+        int acceso = controlarAcceso(session, "Customer");
+        if (acceso == USER_AUTHORIZED) {
+            List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
+            Activity activity = activityDao.getActivity(id);
+            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
+            if (imatges.size() == 1) {
+                activity.setPhotoPrincipal(imatges.get(0).getPhoto());
+            }
 
-        model.addAttribute("imatges", imatges);
-        model.addAttribute("totalFotos", imatges.size());
-        model.addAttribute("reservation", reservation);
-        model.addAttribute("activity", activity);
-        model.addAttribute("rates", rates);
-        return "activity/book";
+            model.addAttribute("imatges", imatges);
+            model.addAttribute("totalFotos", imatges.size());
+            model.addAttribute("reservation", reservation);
+            model.addAttribute("activity", activity);
+            model.addAttribute("rates", rates);
+            return "activity/book";
+        } else {
+            return "redirect:/activity/book/" + id;
+        }
     }
 
     //Mostrar resum reserva

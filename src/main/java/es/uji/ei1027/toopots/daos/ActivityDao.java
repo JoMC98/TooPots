@@ -54,6 +54,20 @@ public class ActivityDao {
                 activity.getCancelationReason(), activity.getState(), activity.getId());
     }
 
+    /* Cancela totes les activitats del monitor */
+    public void cancelAllActivities(int id) {
+        List<Activity> activities = getActivities(id, "Oberta");
+        for (Activity ac: activities) {
+            jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
+                    "Monitor donat de baixa", "Cancelada", ac.getId());
+        }
+        activities = getActivities(id, "Tancada");
+        for (Activity ac: activities) {
+            jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
+                    "Monitor donat de baixa", "Cancelada", ac.getId());
+        }
+    }
+
     /* Obté l'Activitat amb el id donat. Torna null si no existeix. */
     public Activity getActivity(int id) {
         try {

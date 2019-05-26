@@ -135,7 +135,7 @@ public class InstructorController {
         } catch (DuplicateKeyException e) {
             throw new TooPotsException(
                     "El nom d'usuari ja esta en ús", "Prova amb un altre",
-                    "ClauPrimariaDuplicada");
+                    "UsernameUsed");
         }
         Users newUser = userDao.getUser(user.getUsername());
 
@@ -199,63 +199,76 @@ public class InstructorController {
                                       @ModelAttribute("certificationNames") CertificationNames certificationNames, BindingResult bindingResultNames,
                                       @RequestParam("foto") MultipartFile foto, @RequestParam("cert") MultipartFile cert) {
 
-        Users viejo = (Users) session.getAttribute("user");
-        user.setId(viejo.getId());
+        int acceso = controlarAcceso(session, "Instructor");
+        if (acceso == USER_AUTHORIZED) {
 
-        CertificationNamesValidator certificationNamesValidator = new CertificationNamesValidator();
-        if (!cert.isEmpty()) {
-            certificationNamesValidator.setNumbFiles(1);
-            certificationNamesValidator.validate(certificationNames, bindingResultNames);
-        }
+            Users viejo = (Users) session.getAttribute("user");
+            user.setId(viejo.getId());
 
-        InstructorValidator instructorValidator = new InstructorValidator();
-        instructorValidator.validate(instructor, bindingResultInstructor);
-
-        UserValidator userValidator = new UserValidator();
-        userValidator.validate(user,bindingResultUser);
-
-        if (bindingResultNames.hasErrors()) {
-            model.addAttribute("errorCert", true);
-        }
-
-        if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors() || bindingResultNames.hasErrors()) {
-            instructor.setPhoto(instructorDao.getInstructor(user.getId()).getPhoto());
-            model.addAttribute("certifications", certificationDao.getCertifications(user.getId()));
-            System.out.println(bindingResultInstructor.toString());
-            System.out.println(bindingResultUser.toString());
-            System.out.println(bindingResultNames.toString());
-            return "instructor/update";
-        }
-
-        if (!foto.isEmpty()) {
-            try {
-                // Obtener el fichero y guardarlo
-                byte[] bytes = foto.getBytes();
-
-                String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
-                String direccion = "images/instructorProfiles/" + user.getId() + "." + extension;
-
-                Path path = Paths.get(uploadDirectory + direccion);
-
-                borrarFotoActualizada(uploadDirectory + instructor.getPhoto());
-                instructor.setPhoto("/" + direccion);
-
-                Files.write(path, bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
+            CertificationNamesValidator certificationNamesValidator = new CertificationNamesValidator();
+            if (!cert.isEmpty()) {
+                certificationNamesValidator.setNumbFiles(1);
+                certificationNamesValidator.validate(certificationNames, bindingResultNames);
             }
+
+            InstructorValidator instructorValidator = new InstructorValidator();
+            instructorValidator.validate(instructor, bindingResultInstructor);
+
+            UserValidator userValidator = new UserValidator();
+            userValidator.validate(user, bindingResultUser);
+
+            if (bindingResultNames.hasErrors()) {
+                model.addAttribute("errorCert", true);
+            }
+
+            if (bindingResultInstructor.hasErrors() || bindingResultUser.hasErrors() || bindingResultNames.hasErrors()) {
+                instructor.setPhoto(instructorDao.getInstructor(user.getId()).getPhoto());
+                model.addAttribute("certifications", certificationDao.getCertifications(user.getId()));
+                System.out.println(bindingResultInstructor.toString());
+                System.out.println(bindingResultUser.toString());
+                System.out.println(bindingResultNames.toString());
+                return "instructor/update";
+            }
+
+            if (!foto.isEmpty()) {
+                try {
+                    // Obtener el fichero y guardarlo
+                    byte[] bytes = foto.getBytes();
+
+                    String extension = FilenameUtils.getExtension(foto.getOriginalFilename());
+                    String direccion = "images/instructorProfiles/" + user.getId() + "." + extension;
+
+                    Path path = Paths.get(uploadDirectory + direccion);
+
+                    borrarFotoActualizada(uploadDirectory + instructor.getPhoto());
+                    instructor.setPhoto("/" + direccion);
+
+                    Files.write(path, bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (!cert.isEmpty()) {
+                List<Certification> certifications = certificationDao.getCertifications(user.getId());
+                saveCertificate(cert, user.getId(), certificationNames.getCertificate1(), certifications.size() + 1);
+            }
+
+
+            instructor.setId(user.getId());
+            try {
+                userDao.updateUser(user);
+            } catch (DuplicateKeyException e) {
+                throw new TooPotsException(
+                        "El nom d'usuari ja esta en ús", "Prova amb un altre",
+                        "UsernameUsed");
+            }
+
+            instructorDao.updateInstructor(instructor);
+            return "redirect:/";
+        } else {
+            return "redirect:/instructor/update";
         }
-
-        if (!cert.isEmpty()) {
-            List<Certification> certifications= certificationDao.getCertifications(user.getId());
-            saveCertificate(cert, user.getId(), certificationNames.getCertificate1(), certifications.size() + 1);
-        }
-
-
-        instructor.setId(user.getId());
-        userDao.updateUser(user);
-        instructorDao.updateInstructor(instructor);
-        return "redirect:/";
     }
 
     //Llistat de totes les activitats del monitor per a ell
@@ -314,7 +327,7 @@ public class InstructorController {
 
     //Llistat de totes les activitats del monitor per als clients
     @RequestMapping("/showActivities/{state}/{id}")
-    public String activityListForCustomers(Model model, @PathVariable int id, @PathVariable String state) {
+    public String activityListForCustomers(Model model, HttpSession session, @PathVariable int id, @PathVariable String state) {
         Users user = userDao.getUser(id);
         if (user == null) {
             return "redirect:/";
@@ -350,6 +363,14 @@ public class InstructorController {
 
                 activitiesWithOcupation.add(ac);
             }
+
+            Users userSession = (Users) session.getAttribute("user");
+            if ((userSession == null || userSession.getRol().equals("Customer")) && state.equals("opened")) {
+                model.addAttribute("botonReservar", true);
+            } else {
+                model.addAttribute("botonReservar", false);
+            }
+
             model.addAttribute("user", user);
             model.addAttribute("activities", activitiesWithOcupation);
             model.addAttribute("estat", state);

@@ -94,14 +94,56 @@
             </tr>
             <tr>
                 <td>
-                    <br><br><a th:href="@{/admin/reject/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
+                    <br><br><a th:href="@{/admin/delete/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
                 </td>
                 <td>
                     <br><br><a th:href="@{/admin/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a>
                 </td>
             </tr>
         </table>
-        <br>
+        <div th:if="${noEsPosibleBorrar}">
+            <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 style="display: block;" aria-modal="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modalTituloBorrar">No es pot borrar aquest tipus d'activitat</h5>
+                            <a th:href="@{/activityType/list}" class="modalBotonCerrar"><i class="icon-remove"></i></a>
+                        </div>
+                        <div class="modalBody">
+                            <label>Hi ha activitats creades</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        </div>
+        <div th:if="${instructorWithActivities} or ${instructorWithoutActivities}">
+            <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 style="display: block;" aria-modal="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modalBotones">
+                                <h5 th:if="${instructorWithActivities}" class="modalTituloBorrar">Aquest instructor té activitats pendents de realitzar</h5>
+                                <h5 th:if="${instructorWithoutActivities}" class="modalTituloBorrar">Aquest monitor no té cap activitat pendent</h5>
+                            </div>
+                        </div>
+                        <div class="modalBody">
+                            <label th:if="${instructorWithActivities}">Vols cancelarles totes i donar-lo de baixa?</label>
+                            <label th:if="${instructorWithoutActivities}">Estàs segur que vols donar-lo de baixa?</label>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modalBotones">
+                                <a th:href="@{/admin/confirmDeletion/{id}(id=${instructor.id})}" class="btn btn-success modalBotonSiNo">Si</a>
+                                <a th:href="@{/admin/instructorProfile/{id}(id=${instructor.id})}" class="btn btn-danger modalBotonSiNo">No</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        </div>
     </body>
 </html>
 
