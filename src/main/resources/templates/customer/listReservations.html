@@ -25,11 +25,11 @@
             No s'ha fet ninguna reserva
         </div>
         <div th:unless="${#lists.isEmpty(activities)}">
-            <table class="table_bordered" th:each="activity: ${#lists.sort(activities)}">
+            <table class="table_bordered" th:each="activity,iter: ${#lists.sort(activities)}">
                 <tr>
                     <td rowspan="4" class="tdListIzquierda tdListArriba tdListAbajo">
                         <div>
-                            <div th:unless="*{activity.totalImages} == 1" id="miCarrusel" class="carousel carouselList slide" data-ride="carousel">
+                            <div th:unless="*{activity.totalImages} == 1" th:id="|miCarrusel${iter.index}|" class="carousel carouselList slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
                                     <li th:each="imatge,iterstat: ${imatges}"
                                         data-target="#miCarrusel"
@@ -43,11 +43,11 @@
                                         <img th:src="@{${imatge.photo}}" class="activityFoto">
                                     </div>
                                 </div>
-                                <a class="carousel-control-prev" href="#miCarrusel" role="button" data-slide="prev">
+                                <a class="carousel-control-prev" th:href="|#miCarrusel${iter.index}|" role="button" data-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Previous</span>
                                 </a>
-                                <a class="carousel-control-next" href="#miCarrusel" role="button" data-slide="next">
+                                <a class="carousel-control-next" th:href="|#miCarrusel${iter.index}|" role="button" data-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span>
                                 </a>

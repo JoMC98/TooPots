@@ -387,7 +387,9 @@ public class ActivityController {
     @RequestMapping(value="/cancel/{id}", method = RequestMethod.POST)
     public String processCancelSubmit(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("activity") Activity activity,
                                       BindingResult bindingResult) {
-        int acceso = controlarAccesoYId(session, "Instructor", activity.getIdInstructor());
+
+        Activity oldActivity = activityDao.getActivity(id);
+        int acceso = controlarAccesoYId(session, "Instructor", oldActivity.getIdInstructor());
         if (acceso == USER_AUTHORIZED) {
             ActivityCancelationValidator cancelationValidator = new ActivityCancelationValidator();
             cancelationValidator.validate(activity, bindingResult);
@@ -845,6 +847,7 @@ public class ActivityController {
         if (session.getAttribute("user") == null) {
             return NOT_LOGGED;
         }
+
         Users user = (Users) session.getAttribute("user");
         if (user.getRol().equals(rol) && user.getId() == id) {
             return USER_AUTHORIZED;

@@ -171,6 +171,7 @@ public class CustomerController {
                         "El nom d'usuari ja esta en ús", "Prova amb un altre",
                         "UsernameUsed");
             }
+            customer.setId(viejo.getId());
             customerDao.updateCustomer(customer);
             return "redirect:/";
         } else {
