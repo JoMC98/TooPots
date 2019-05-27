@@ -79,11 +79,17 @@
                         <div th:each="activityType: ${#lists.sort(instructor.activities)}">
                             <table class="tdProfileTableActivity">
                                 <tr>
-                                    <td>
+                                    <td class="tdProfileActivityName">
                                         <label th:text="${activityType.name}"></label>
                                     </td>
                                     <td class="tdProfileActivityLevel">
                                         <label th:text="${activityType.level}"></label>
+                                    </td>
+                                    <td>
+                                        <form action="#" th:action="@{/admin/borrarAsignacion/{id}(id=${activityType.id})}" method="post">
+                                            <input type="submit" class="btn btn-outline-purple botonBorrarAsignacion" value="Borrar asignació"/>
+                                            <input type="text" th:field="${instructor.id}" hidden/>
+                                        </form>
                                     </td>
                                 </tr>
                             </table>
@@ -97,27 +103,11 @@
                     <br><br><a th:href="@{/admin/delete/{id}(id=${user.id})}" class="btn btn-danger">Donar de baixa</a>
                 </td>
                 <td>
-                    <br><br><a th:href="@{/admin/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a>
+                    <br><br>
+                    <a th:href="@{/admin/asignarActivitat/{id}(id=${user.id})}" class="btn btn-success">Assignar activitats</a>
                 </td>
             </tr>
         </table>
-        <div th:if="${noEsPosibleBorrar}">
-            <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                 style="display: block;" aria-modal="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modalTituloBorrar">No es pot borrar aquest tipus d'activitat</h5>
-                            <a th:href="@{/activityType/list}" class="modalBotonCerrar"><i class="icon-remove"></i></a>
-                        </div>
-                        <div class="modalBody">
-                            <label>Hi ha activitats creades</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-backdrop fade show"></div>
-        </div>
         <div th:if="${instructorWithActivities} or ${instructorWithoutActivities}">
             <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  style="display: block;" aria-modal="true">
@@ -137,6 +127,32 @@
                             <div class="modalBotones">
                                 <a th:href="@{/admin/confirmDeletion/{id}(id=${instructor.id})}" class="btn btn-success modalBotonSiNo">Si</a>
                                 <a th:href="@{/admin/instructorProfile/{id}(id=${instructor.id})}" class="btn btn-danger modalBotonSiNo">No</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        </div>
+        <div th:if="${borrarAsignacio}">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;" aria-modal="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modalBotones">
+                                <h5 class="modalTituloBorrar">Es va a eliminar l'asignació</h5>
+                            </div>
+                        </div>
+                        <div class="modalBody">
+                            <label>Es cancelarán totes les activitats creades a partir d'aquesta assignació. Vols continuar?</label>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="modalBotones">
+                                <form action="#" th:action="@{/admin/confirmarBorradoAsignacion/{id}(id=${activityBorrarAsignacio})}" method="post">
+                                    <input type="submit" class="btn btn-success modalBotonSiNo" value="Si"/>
+                                    <a th:href="@{/admin/instructorProfile/{idInstructor}(idInstructor=${instructor.id})}" class="btn btn-danger modalBotonSiNo">No</a>
+                                    <input type="text" th:field="${instructor.id}" hidden/>
+                                </form>
                             </div>
                         </div>
                     </div>

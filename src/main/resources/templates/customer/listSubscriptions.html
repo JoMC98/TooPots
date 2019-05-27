@@ -48,7 +48,7 @@
                     <td rowspan="2" th:if="${activityType.description} == ''" class="tdListAbajo tdListCentroDerechaIzquierda tdListArriba tdListTexto">
                         <label class="sinDescripcion">Sense descripció</label>
                     </td>
-                    <td rowspan="2" class="tdListArriba tdListAbajo tdListBotones tdListIzquierda">
+                    <td class="tdListArriba tdListCentroAbajo tdListBotones tdListIzquierda">
                         <a th:if="${activityType.subscribe}" th:href="@{/customer/unsubscribe/{id}(id=${activityType.id})}" class="btn btn-danger listBotonSubscribir" role="button">Cancel·lar subscripció</a>
                         <a th:unless="${activityType.subscribe}" th:href="@{/customer/subscribe/{id}(id=${activityType.id})}" class="btn btn-success listBotonSubscribir" role="button">Subscriure's</a>
                     </td>
@@ -60,6 +60,9 @@
                     </td>
                     <td th:unless="${activityType.description} == ''" class="tdListCentroArriba tdListCentroDerechaIzquierda tdListAbajo tdListTexto">
                         <label th:text="${activityType.description}"></label>
+                    </td>
+                    <td class="tdListAbajo tdListCentroArriba tdListBotones tdListIzquierda">
+                        <a th:href="@{/activity/filtroActivityType/{id}(id=${activityType.id})}" class="btn btn-info listBotonSubscribir" role="button">Veure activitats</a>
                     </td>
                 </tr>
             </table>

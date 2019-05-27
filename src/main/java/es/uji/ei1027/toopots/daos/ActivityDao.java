@@ -1,6 +1,7 @@
 package es.uji.ei1027.toopots.daos;
 
 import es.uji.ei1027.toopots.model.Activity;
+import es.uji.ei1027.toopots.model.ActivityType;
 import es.uji.ei1027.toopots.rowMapper.ActivityRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -55,16 +56,26 @@ public class ActivityDao {
     }
 
     /* Cancela totes les activitats del monitor */
-    public void cancelAllActivities(int id) {
+    public void cancelAllActivities(int id, String reason) {
         List<Activity> activities = getActivities(id, "Oberta");
         for (Activity ac: activities) {
             jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
-                    "Monitor donat de baixa", "Cancelada", ac.getId());
+                    reason, "Cancelada", ac.getId());
         }
         activities = getActivities(id, "Tancada");
         for (Activity ac: activities) {
             jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
-                    "Monitor donat de baixa", "Cancelada", ac.getId());
+                    reason, "Cancelada", ac.getId());
+        }
+    }
+
+    /* Cancela totes les activitats del monitor que són d'aquest tipus */
+    public void cancelAllActivitiesFromThisType(int id, ActivityType activityType) {
+        List<Activity> activities = jdbcTemplate.query("SELECT * from Activity where activityType=? and state IN ('Oberta', 'Tancada') and idInstructor = ?",
+                new ActivityRowMapper(), activityType.getId(), id);
+        for (Activity ac: activities) {
+            jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
+                    "El monitor ja no pot realitzar activitats d'aquest tipus", "Cancelada", ac.getId());
         }
     }
 
@@ -141,7 +152,7 @@ public class ActivityDao {
         }
     }
 
-    /* Obté totes les activitats amb ixe tipus d'activitat */
+    /* Obté totes les activitats obertes amb ixe tipus d'activitat */
     public List<Activity> getActivitiesByActivityType(int idActivityType) {
         try {
             return jdbcTemplate.query("SELECT * from Activity where activityType=? and state='Oberta'", new ActivityRowMapper(), idActivityType);

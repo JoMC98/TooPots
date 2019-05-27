@@ -178,6 +178,43 @@ public class CustomerController {
         }
     }
 
+    //Desactivar compte
+    @RequestMapping("/deactivate")
+    public String deactivateCustomerAccount(HttpSession session, Model model) {
+        int acceso = controlarAcceso(session, "Customer");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/customer/deactivate");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            userDao.updateRole(user.getId(), "Deactivated");
+            return "redirect:/logout";
+        }
+        return "redirect:/";
+    }
+
+    //Reactivar compte
+    @RequestMapping("/reactivate/{id}")
+    public String reactivateCustomerAccount(HttpSession session, Model model, @PathVariable int id) {
+        Integer idCanDeactivate = (Integer) session.getAttribute("userCanBeDeactivated");
+
+        if (idCanDeactivate != null && idCanDeactivate == id) {
+            Users user = userDao.getUser(id);
+            userDao.updateRole(user.getId(), "Customer");
+            user.setRol("Customer");
+            session.setAttribute("user", user);
+            session.setAttribute("userCanBeDeactivated", null);
+
+            String nextUrl = (String) session.getAttribute("nextUrl");
+            if (nextUrl == null)
+                return "redirect:/";
+            else
+                return "redirect:" + nextUrl;
+        }
+        return "redirect:/login";
+    }
+
     //Llistar totes les reserves del client
     @RequestMapping(value= {"/listReservations", "/listReservations/{state}"}, method = RequestMethod.GET)
     public String listReservations(Model model,  HttpSession session, @PathVariable(name="state", required=false) String state) {

@@ -101,9 +101,30 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2"><br><input class="btn btn-success" type="submit" value="Modificar perfil" /></td>
+                    <td><br><input class="btn btn-success" type="submit" value="Modificar perfil" /></td>
+                    <td><br><button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalBaixa">Donar de baixa</button></td>
                 </tr>
             </table>
         </form>
+        <div class="modal fade show" id="modalBaixa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div class="modalBotones">
+                            <h5 class="modalTituloBorrar">Estàs segur que vols donar-te de baixa?</h5>
+                        </div>
+                    </div>
+                    <div class="modalBody">
+                        <label>Es cancelarán totes les activitats pendents i no podrás tornar a iniciar sessió</label>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="modalBotones">
+                            <a th:href="@{/instructor/delete}" class="btn btn-success modalBotonSiNo">Si</a>
+                            <a th:href="@{/instructor/update}" class="btn btn-danger modalBotonSiNo">No</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

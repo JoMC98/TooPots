@@ -166,7 +166,7 @@ footer {
     margin-bottom: 0px !important;
 }
 .modalBody {
-    margin: 30px 0px;
+    margin: 30px 30px;
 }
 .modalTituloBorrar {
     font-size: 25px;
@@ -403,16 +403,32 @@ footer {
     padding: 0px 30px;
 }
 .profileCertificados {
-    width: 350px;
+    width: 500px;
+    height: 200px;
+    margin-top: 20px;
+    overflow:scroll;
+}
+.profileCertificadosInstructor {
+    width: 400px;
     height: 200px;
     margin-top: 20px;
     overflow:scroll;
 }
 .tdProfileTableActivity {
-    width: 320px;
+    width: 450px;
+}
+.tdProfileTableActivityInstructor{
+    width: 350px;
+}
+.tdProfileActivityName{
+    width: 160px;
 }
 .tdProfileActivityLevel {
     width: 90px;
+}
+
+.botonBorrarAsignacion {
+    width: 150px;
 }
 /*Request*/
 .requestCertificados {

@@ -603,6 +603,47 @@ public class ActivityController {
         return "activity/offer";
     }
 
+    //Mostrar activitats d'un tipus concret
+    @RequestMapping("/filtroActivityType/{id}")
+    public String filtroActivityType(Model model, @PathVariable int id) {
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (activityType == null) {
+            return "redirect:/";
+        }
+
+        List<Activity> activities = activityDao.getActivitiesByActivityType(id);
+        List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
+        for (Activity ac: activities) {
+            List<Reservation> reservations = reservationDao.getReservesFromActivity(ac.getId());
+            ac.setActivityTypeName(activityType.getName());
+            ac.setActivityTypeLevel(activityType.getLevel());
+            float total = 0;
+            for (Reservation res: reservations) {
+                total += res.getNumPeople();
+            }
+
+            total = (total/ac.getMaxNumberPeople())*100;
+            total = (float) Math.floor(total);
+            int ocupation = (int) total;
+            ac.setOcupation(ocupation);
+
+            List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(ac.getId());
+            if (imatges.size() == 1) {
+                ac.setPhotoPrincipal(imatges.get(0).getPhoto());
+            } else {
+                ac.setImages(imatges);
+            }
+            ac.setTotalImages(imatges.size());
+
+
+            activitiesWithOcupation.add(ac);
+        }
+        model.addAttribute("activities", activitiesWithOcupation);
+        model.addAttribute("filtroYorden", new FiltradoYOrden());
+        model.addAttribute("comparator", new NameComparator());
+        return "activity/offer";
+    }
+
     //Reservar una activitat
     @RequestMapping("/book/{id}")
     public String bookActivity(HttpSession session, Model model, @PathVariable int id) {
@@ -662,13 +703,13 @@ public class ActivityController {
         }
     }
 
-    //Mostrar resum reserva
+    //Métode get per a que no falle
     @RequestMapping(value="/summary/{id}")
     public String summaryBooking(@PathVariable int id) {
         return "redirect:/home";
     }
 
-    //Métode get per a que no falle
+    //Mostrar resum reserva
     @RequestMapping(value="/summary/{id}", method = RequestMethod.POST)
     public String processSummaryBooking(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
         int acceso = controlarAcceso(session, "Customer");
@@ -728,13 +769,13 @@ public class ActivityController {
         }
     }
 
-    //Confirmar reserva
+    //Métode get per a que no falle
     @RequestMapping(value="/bookConfirmation/{id}")
     public String confirmBooking(@PathVariable int id) {
         return "redirect:/home";
     }
 
-    //Métode get per a que no falle
+    //Confirmar reserva
     @RequestMapping(value="/bookConfirmation/{id}", method = RequestMethod.POST)
     public String processConfirmBooking(HttpSession session, Model model, @PathVariable int id, @ModelAttribute("reservation") Reservation reservation, BindingResult bindingResult) {
         int acceso = controlarAcceso(session, "Customer");

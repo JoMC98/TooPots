@@ -56,4 +56,9 @@ public class ActivityCertificationDao {
         }
     }
 
+    /*Eliminar asignacio */
+    public void deleteAuthorization(int idCertification, int idActivity) {
+        jdbcTemplate.update("DELETE from Activity_Certification where idCertification=? AND activityType=?", idCertification, idActivity);
+    }
+
 }

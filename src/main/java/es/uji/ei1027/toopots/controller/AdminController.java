@@ -237,6 +237,91 @@ public class AdminController {
         }
     }
 
+    //Borrar asignació d'activitat del monitor
+    @RequestMapping(value="/borrarAsignacion/{id}", method= RequestMethod.POST)
+    public String borrarAsignacio(HttpSession session, Model model, @PathVariable int id,
+                                  @ModelAttribute("instructor") Instructor instructor) {
+
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (activityType == null) {
+            return "redirect:/";
+        }
+        int acceso = controlarAcceso(session, "Admin");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/admin/borrarAsignacion/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = userDao.getUser(instructor.getId());
+            if (user.getRol().equals("Instructor")) {
+                Instructor ins = instructorDao.getInstructor(instructor.getId());
+                ins.setCertifications(certificationDao.getCertifications(instructor.getId()));
+                ins.setActivities(activityCertificationDao.getAuthorizations(instructor.getId()));
+
+                model.addAttribute("user", userDao.getUser(instructor.getId()));
+                model.addAttribute("instructor", ins);
+                model.addAttribute("borrarAsignacio", true);
+                model.addAttribute("activityBorrarAsignacio", activityType.getId());
+                return "admin/instructorProfile";
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Para que no falle el get
+    @RequestMapping(value="/borrarAsignacion/{id}", method= RequestMethod.GET)
+    public String borrarAsignacioGet (@PathVariable int id) {
+        return "redirect:/home";
+    }
+
+    //Borrar asignació d'activitat del monitor
+    @RequestMapping(value="/confirmarBorradoAsignacion/{id}", method= RequestMethod.POST)
+    public String confirmBorrarAsignacio(HttpSession session, Model model, @PathVariable int id,
+                                  @ModelAttribute("instructor") Instructor instructor){
+
+        Users user = userDao.getUser(instructor.getId());
+        ActivityType activityType = activityTypeDao.getActivityType(id);
+        if (user == null || activityType == null) {
+            return "redirect:/admin/instructorProfile/" + instructor.getId();
+        }
+
+        List<ActivityType> authorizations = activityCertificationDao.getAuthorizations(instructor.getId());
+
+        if (! authorizations.contains(activityType)) {
+            return "redirect:/admin/instructorProfile/" + instructor.getId();
+        }
+
+        int acceso = controlarAcceso(session, "Admin");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/admin/borrarAsignacio/" + instructor.getId() + "/" + id);
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            if (user.getRol().equals("Instructor")) {
+                List<Certification> certifications = certificationDao.getCertifications(instructor.getId());
+                for (Certification c: certifications) {
+                    activityCertificationDao.deleteAuthorization(c.getId(), id);
+                }
+                activityDao.cancelAllActivitiesFromThisType(instructor.getId(), activityType);
+                return "redirect:/admin/instructorProfile/" + instructor.getId();
+            } else {
+                return "redirect:/";
+            }
+        } else {
+            return "redirect:/";
+        }
+    }
+
+    //Para que no falle el get
+    @RequestMapping(value="/confirmarBorradoAsignacion/{id}", method= RequestMethod.GET)
+    public String confirmBorrarAsignacioGet (@PathVariable int id) {
+        return "redirect:/home";
+    }
+
+
     //Veure perfil monitor
     @RequestMapping("/instructorProfile/{id}")
     public String seeInstructor(HttpSession session, Model model, @PathVariable int id) {
@@ -254,6 +339,7 @@ public class AdminController {
                 Instructor ins = instructorDao.getInstructor(id);
                 ins.setCertifications(certificationDao.getCertifications(id));
                 ins.setActivities(activityCertificationDao.getAuthorizations(id));
+
                 model.addAttribute("user", userDao.getUser(id));
                 model.addAttribute("instructor", ins);
                 return "admin/instructorProfile";
@@ -345,16 +431,11 @@ public class AdminController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             if (user.getRol().equals("Instructor")) {
-                //TODO TODAS LAS ACTIVIDADES A CANCELED
                 userDao.updateRole(id, "Fired");
-                activityDao.cancelAllActivities(id);
-                return "redirect:/";
-            } else {
-                return "redirect:/";
+                activityDao.cancelAllActivities(id, "Monitor donat de baixa per el administrador");
             }
-        } else {
-            return "redirect:/";
         }
+        return "redirect:/";
     }
 
 

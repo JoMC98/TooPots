@@ -320,7 +320,22 @@ public class InstructorController {
         }
     }
 
-
+    //Donar de baixa al monitor ell mateixa
+    @RequestMapping("/delete")
+    public String confirmDeletionInstructor(HttpSession session, Model model) {
+        int acceso = controlarAcceso(session, "Instructor");
+        if(acceso == NOT_LOGGED) {
+            model.addAttribute("user", new Users());
+            session.setAttribute("nextUrl", "/instructor/delete");
+            return "login";
+        } else if (acceso == USER_AUTHORIZED) {
+            Users user = (Users) session.getAttribute("user");
+            userDao.updateRole(user.getId(), "Fired");
+            activityDao.cancelAllActivities(user.getId(), "Monitor s'ha donat de baixa");
+            return "redirect:/logout";
+        }
+        return "redirect:/";
+    }
 
 
     /*Part utilitzada pels clients*/

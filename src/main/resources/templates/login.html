@@ -22,6 +22,14 @@
                             <label th:if="${conexionRefusedReason == 'BadPassword'}" class="modalUsuario">Nom d'usuari o contrasenya incorrecte</label>
                             <label th:if="${conexionRefusedReason == 'Request'}" class="modalRequest">La sol·licitud encara no s'ha avaluat</label>
                             <label th:if="${conexionRefusedReason == 'Rejected'}" class="modalRejected">La sol·licitud s'ha rebutjat</label>
+                            <label th:if="${conexionRefusedReason == 'Fired'}" class="modalRejected">T'has donat de baixa voluntàriament o has sigut donat de baixa per l'administrador</label>
+                            <label th:if="${conexionRefusedReason == 'Deactivated'}" class="modalRejected">Compte desactivat. Vols reactivar-lo?</label>
+                        </div>
+                        <div th:if="${conexionRefusedReason == 'Deactivated'}" class="modal-footer">
+                            <div class="modalBotones">
+                                <a th:href="@{/customer/reactivate/{id}(id=${userId})}" class="btn btn-success modalBotonSiNo">Si</a>
+                                <a th:href="@{/login}" class="btn btn-danger modalBotonSiNo">No</a>
+                            </div>
                         </div>
                     </div>
                 </div>

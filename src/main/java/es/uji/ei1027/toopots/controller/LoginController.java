@@ -20,7 +20,8 @@ public class LoginController {
     private UsersDao userDao;
 
     @RequestMapping("/login")
-    public String login(Model model) {
+    public String login(Model model, HttpSession session) {
+        session.setAttribute("userCanBeDeactivated", null);
         model.addAttribute("conexionRefused", false);
         model.addAttribute("user", new Users());
         return "login";
@@ -29,6 +30,7 @@ public class LoginController {
     @RequestMapping(value="/login", method=RequestMethod.POST)
     public String checkLogin(Model model, @ModelAttribute("user") Users user,
                              BindingResult bindingResult, HttpSession session) {
+        session.setAttribute("userCanBeDeactivated", null);
         LoginValidator loginValidator = new LoginValidator();
         loginValidator.validate(user, bindingResult);
 
@@ -53,7 +55,12 @@ public class LoginController {
         }
 
         // Autenticats correctament.
-        if (user.getRol().equals("Request") || user.getRol().equals("Rejected")) {
+        if (user.getRol().equals("Request") || user.getRol().equals("Rejected") || user.getRol().equals("Fired")
+                || user.getRol().equals("Deactivated")) {
+            if (user.getRol().equals("Deactivated")) {
+                session.setAttribute("userCanBeDeactivated", user.getId());
+                model.addAttribute("userId", user.getId());
+            }
             model.addAttribute("user", new Users());
             model.addAttribute("conexionRefused", true);
             model.addAttribute("conexionRefusedReason", user.getRol());

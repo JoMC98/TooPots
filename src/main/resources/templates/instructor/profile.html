@@ -75,9 +75,9 @@
                     <br><b>No té cap activitat assignada</b><br>
                 </td>
                 <td class="tdGrupos" th:unless="${#lists.isEmpty(instructor.activities)}">
-                    <div class="profileCertificados">
+                    <div class="profileCertificadosInstructor">
                         <div th:each="activityType: ${#lists.sort(instructor.activities)}">
-                            <table class="tdProfileTableActivity">
+                            <table class="tdProfileTableActivityInstructor">
                                 <tr>
                                     <td>
                                         <label th:text="${activityType.name}"></label>
