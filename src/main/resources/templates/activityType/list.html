@@ -52,7 +52,7 @@
                     <h1 th:if="${level} == Alt">Tipus d'Activitats de Nivell Alt</h1>
                     <h1 th:if="${level} == Extrem">Tipus d'Activitats de Nivell Extrem</h1>
                 </td>
-                <td class="tdBotonAddLista"><a href="add" class="btn btn-success" role="button">Crear Nou Tipus</a></td>
+                <td class="tdBotonAddLista"><a th:href="@{/activityType/add}" class="btn btn-success" role="button">Crear Nou Tipus</a></td>
             </tr>
         </table>
         <br>

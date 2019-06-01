@@ -117,15 +117,27 @@ public class ActivityController {
                 model.addAttribute("errorFoto", true);
             }
 
+            boolean errorTarifas = false;
+
+            float porPersona = activity.getPricePerPerson();
+
+            if (activity.getTarifaMenores().getPrice() >= porPersona ||
+                activity.getTarifaEstudiantes().getPrice() >= porPersona ||
+                activity.getTarifaMayores().getPrice() >= porPersona ||
+                activity.getTarifaGrupos().getPrice() >= porPersona) {
+                errorTarifas = true;
+            }
+
             ActivityValidator activityValidator = new ActivityValidator();
             activityValidator.validate(activity, bindingResult);
 
-            if (bindingResult.hasErrors() || foto[0].getSize() == 0) {
+            if (bindingResult.hasErrors() || foto[0].getSize() == 0 || errorTarifas) {
                 Users user = (Users) session.getAttribute("user");
                 List<ActivityType> asignadas = activityCertificationDao.getAuthorizations(user.getId());
                 Instructor instructor = instructorDao.getInstructor(user.getId());
                 instructor.setActivities(asignadas);
                 model.addAttribute("instructor", instructor);
+                model.addAttribute("errorTarifas", errorTarifas);
                 return "activity/add";
             }
 
@@ -397,7 +409,7 @@ public class ActivityController {
                 System.out.println(bindingResult.toString());
                 return "activity/cancel";
             }
-            activity.setState("Cancelada");
+            activity.setState("Cancel·lada");
             activityDao.cancelActivity(activity);
             return "redirect:/home";
         } else {
@@ -813,7 +825,7 @@ public class ActivityController {
         if (activity == null) {
             return "redirect:/";
         }
-        if (!activity.getState().equals("Cancelada")) {
+        if (!activity.getState().equals("Cancel·lada")) {
             List<ActivityRates> rates = activityRatesDao.getActivityRates(id);
             List<ActivityPhotos> imatges = activityPhotosDao.getPhotos(id);
             if (imatges.size() == 1) {

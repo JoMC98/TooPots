@@ -56,7 +56,7 @@
                         <td><input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="*{maxNumberPeople}" min="1" /></td>
                     </tr>
                     <tr>
-                        <td><label class="inputLabel inputPequeño">Preu estándar per persona</label></td>
+                        <td><label class="inputLabel inputPequeño">Preu genèric</label></td>
                         <td><label class="inputLabel inputPequeño">Punt de trobada</label></td>
                         <td><label class="inputLabel inputPequeño">Hora de trobada</label></td>
                     </tr>
@@ -83,8 +83,9 @@
                             <label class="inputLabel labelTarifa" th:text="*{rateName}"></label>
                         </td>
                         <td>
-                            <input class="input inputTarifa" type="text" th:field="*{price}" maxlength="12"/>
+                            <input class="input inputTarifa" type="text" th:errorclass="needCorrection"th:field="*{price}" maxlength="12"/>
                         </td>
+                        <td rowspan="4" class="errorTarifas" th:if="${errorTarifas}"><label>El preu de les tarifes no pot superar el preu genèric</label></td>
                     </tr>
                     <tr th:object="${activity.tarifaEstudiantes}">
                         <td>

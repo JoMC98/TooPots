@@ -252,7 +252,7 @@ public class CustomerController {
                         actividadValida = true;
                     }
                 } else if (state.equals("canceled")) {
-                    if (activity.getState().equals("Cancelada")) {
+                    if (activity.getState().equals("Cancel·lada")) {
                         actividadValida = true;
                     }
                 } else {

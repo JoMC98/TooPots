@@ -12,7 +12,7 @@
         <h1>Editar activitat</h1>
         <form action="#" th:action="@{/activity/update/{id}(id=${activity.id})}" method="post" enctype="multipart/form-data">
             <label class="inputLabel">Fotos</label><br>
-            <b><label class="inputLabel">Tria un nou arxiu si vols cambiar o afegir alguna imatge</label></b><br>
+            <b><label class="inputLabel">Tria un nou arxiu si vols canviar o afegir alguna imatge</label></b><br>
             <table class="marginAuto">
                 <tr>
                     <td class="marginAuto" th:each="photo,iterstat : ${photos}">
@@ -52,7 +52,7 @@
                     <td><input class="input inputPequeño" th:errorclass="needCorrection" type="number" th:field="*{maxNumberPeople}" min="1" /></td>
                 </tr>
                 <tr>
-                    <td><label class="inputLabel inputPequeño">Preu estándar per persona</label></td>
+                    <td><label class="inputLabel inputPequeño">Preu genèric</label></td>
                     <td><label class="inputLabel inputPequeño">Punt de trobada</label></td>
                     <td><label class="inputLabel inputPequeño">Hora de trobada</label></td>
                 </tr>

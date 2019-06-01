@@ -60,12 +60,12 @@ public class ActivityDao {
         List<Activity> activities = getActivities(id, "Oberta");
         for (Activity ac: activities) {
             jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
-                    reason, "Cancelada", ac.getId());
+                    reason, "Cancel·lada", ac.getId());
         }
         activities = getActivities(id, "Tancada");
         for (Activity ac: activities) {
             jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
-                    reason, "Cancelada", ac.getId());
+                    reason, "Cancel·lada", ac.getId());
         }
     }
 
@@ -75,7 +75,7 @@ public class ActivityDao {
                 new ActivityRowMapper(), activityType.getId(), id);
         for (Activity ac: activities) {
             jdbcTemplate.update("UPDATE Activity SET cancelationReason=?, state=? where idActivity=?",
-                    "El monitor ja no pot realitzar activitats d'aquest tipus", "Cancelada", ac.getId());
+                    "El monitor ja no pot realitzar activitats d'aquest tipus", "Cancel·lada", ac.getId());
         }
     }
 
@@ -130,7 +130,7 @@ public class ActivityDao {
             } else if (state.equals("closed")) {
                 estat = "Tancada";
             } else if (state.equals("canceled")) {
-                estat = "Cancelada";
+                estat = "Cancel·lada";
             } else if (state.equals("done")) {
                 estat = "Realitzada";
             } else {

@@ -324,6 +324,9 @@ footer {
 .tdListTexto {
     width: 200px;
 }
+.tdListTextoPrecio {
+    width: 230px;
+}
 .tdListTextoName {
     width: 300px;
 }
@@ -463,11 +466,11 @@ footer {
 .bienvenidaPequeña {
     font-weight: bold;
     font-size: 50px;
-    color: red;
+    color: #25A7DF;
     text-decoration: none;
 }
 .bienvenidaPequeña:hover {
-    color: red;
+    color: #1D83AF;
     text-decoration: none;
 }
 
@@ -697,4 +700,11 @@ footer {
 .btn-outline-purple:hover {
     color: white !important;
     background-color: #DF25D9 !important;
+}
+
+/*Añadir actividad*/
+.errorTarifas {
+    width: 250px;
+    color: red;
+    font-size: 16px;
 }
