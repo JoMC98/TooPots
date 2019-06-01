@@ -9,6 +9,9 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
         <div th:if="${noEsPosibleBorrar}">
             <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  style="display: block;" aria-modal="true">

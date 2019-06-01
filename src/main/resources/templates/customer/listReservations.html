@@ -7,6 +7,9 @@
         <meta charset="UTF-8" />
     </head>
     <body layout:fragment="content">
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
         <table class="marginAuto">
             <tr>
                 <td><a th:href="@{/customer/listReservations/all}" class="btn btn-outline-success botonListaActividades" role="button">Totes les reserves</a></td>

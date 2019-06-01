@@ -160,6 +160,9 @@
             </div>
             <div class="modal-backdrop fade show"></div>
         </div>
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
     </body>
 </html>
 

@@ -121,5 +121,25 @@
                 </td>
             </tr>
         </table>
+        <div th:if="${bookingDone}">
+            <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;" aria-modal="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modalTituloConfirmar">Reserva confirmada</h5>
+                            <a th:href="@{/activity/offer}" class="modalBotonCerrar"><i class="icon-remove"></i></a>
+                        </div>
+                        <div class="modalBody">
+                            <label th:if="${bookingPagada}">Ja està pagada i no es pot cancel·lar</label>
+                            <label th:unless="${bookingPagada}">Encara no està pagada i es pot cancel·lar</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-backdrop fade show"></div>
+        </div>
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
     </body>
 </html>

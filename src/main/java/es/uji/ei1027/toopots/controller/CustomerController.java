@@ -173,6 +173,8 @@ public class CustomerController {
             }
             customer.setId(viejo.getId());
             customerDao.updateCustomer(customer);
+            session.setAttribute("profileUpdated", true);
+
             return "redirect:/";
         } else {
             return "redirect:/customer/update";
@@ -208,10 +210,12 @@ public class CustomerController {
             session.setAttribute("userCanBeDeactivated", null);
 
             String nextUrl = (String) session.getAttribute("nextUrl");
+            session.setAttribute("customerReactivated", true);
             if (nextUrl == null)
                 return "redirect:/";
             else
                 return "redirect:" + nextUrl;
+
         }
         return "redirect:/login";
     }
@@ -279,6 +283,15 @@ public class CustomerController {
                     activities.add(activity);
                 }
             }
+
+            Boolean reservationCanceled = (Boolean) session.getAttribute("reservationCanceled");
+            if (reservationCanceled != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Reserva cancel·lada amb éxit");
+                model.addAttribute("modalHref", "/customer/listReservations");
+                session.setAttribute("reservationCanceled", null);
+            }
+
             model.addAttribute("estat", state);
             model.addAttribute("activities",activities);
             return "customer/listReservations";
@@ -455,6 +468,7 @@ public class CustomerController {
         } else if (acceso == USER_AUTHORIZED) {
             if (reservation.getState().equals("Pendent")) {
                 reservationDao.deleteReservation(reservation.getId());
+                session.setAttribute("reservationCanceled", true);
             }
             return "redirect:/customer/listReservations";
         } else {

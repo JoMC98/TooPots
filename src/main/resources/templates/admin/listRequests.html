@@ -9,6 +9,9 @@
               href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
     </head>
     <body layout:fragment="content">
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
         <h1>Llista de sol·licituds</h1><br>
         <div th:if="${#lists.isEmpty(instructors)}">
             No hi ha cap sol·licitud

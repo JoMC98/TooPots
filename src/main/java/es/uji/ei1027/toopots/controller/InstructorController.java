@@ -166,6 +166,9 @@ public class InstructorController {
             MultipartFile file = cert[i];
             saveCertificate(file, newUser.getId(), names.get(i), i+1);
         }
+
+        session.setAttribute("requestRegistered", true);
+
         return "redirect:../";
     }
 
@@ -265,6 +268,7 @@ public class InstructorController {
             }
 
             instructorDao.updateInstructor(instructor);
+            session.setAttribute("profileUpdated", true);
             return "redirect:/";
         } else {
             return "redirect:/instructor/update";
@@ -312,6 +316,63 @@ public class InstructorController {
 
                 activitiesWithOcupation.add(ac);
             }
+
+            Boolean passwdUpdated = (Boolean) session.getAttribute("passwdUpdated");
+            if (passwdUpdated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Contrasenya modificada amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("passwdUpdated", null);
+            }
+
+            Boolean profileUpdated = (Boolean) session.getAttribute("profileUpdated");
+            if (profileUpdated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "El perfil s'ha modificat amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("profileUpdated", null);
+            }
+
+            Boolean activityCreated = (Boolean) session.getAttribute("activityCreated");
+            if (activityCreated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Activitat creada amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("activityCreated", null);
+            }
+
+            Boolean activityUpdated = (Boolean) session.getAttribute("activityUpdated");
+            if (activityUpdated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Activitat modificada amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("activityUpdated", null);
+            }
+
+            Boolean activityOpened = (Boolean) session.getAttribute("activityOpened");
+            if (activityOpened != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Activitat oberta amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("activityOpened", null);
+            }
+
+            Boolean activityClosed = (Boolean) session.getAttribute("activityClosed");
+            if (activityClosed != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Activitat tancada amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("activityClosed", null);
+            }
+
+            Boolean activityCanceled = (Boolean) session.getAttribute("activityCanceled");
+            if (activityCanceled != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Activitat cancel·lada amb éxit");
+                model.addAttribute("modalHref", "/instructor/listActivities/opened");
+                session.setAttribute("activityCanceled", null);
+            }
+
             model.addAttribute("activities", activitiesWithOcupation);
             model.addAttribute("estat", state);
             return "instructor/listActivities";

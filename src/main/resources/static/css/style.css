@@ -173,6 +173,16 @@ footer {
     margin-bottom: 0px !important;
     color: #CB1900;
 }
+.modalTituloConfirmar {
+    font-size: 25px;
+    margin-bottom: 0px !important;
+    color: green;
+}
+.modalTituloUpdate {
+    font-size: 25px;
+    margin-bottom: 0px !important;
+    color: blue;
+}
 .modalBotones {
     margin: auto !important;
     text-align: center !important;

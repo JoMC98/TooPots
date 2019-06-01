@@ -34,7 +34,7 @@ public class ReservationDao {
     }
 
     /* Afegeix la reserva a la base de dades */
-    public void addReservation(Reservation reservation, Activity activity) {
+    public boolean addReservation(Reservation reservation, Activity activity) {
         Date actualDate = new Date();
         Date date = Date.from(activity.getDates().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -48,6 +48,8 @@ public class ReservationDao {
                 reservation.getNumUnder16(), reservation.getNumStudents(),
                 reservation.getNumAdults(), reservation.getNumOver60(), reservation.getTotalPrice(), reservation.getTransactionNumber(),
                 reservation.getIdActivity(), reservation.getIdCustomer(), state);
+
+        return state=="Pagada";
     }
 
     public List<SummaryPrice> calcularPrecio(Reservation r, Activity a, HashMap<String, Float> t) {

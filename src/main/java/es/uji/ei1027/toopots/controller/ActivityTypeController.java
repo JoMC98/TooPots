@@ -66,6 +66,31 @@ public class ActivityTypeController {
             } else {
                 lista = activityTypeDao.getActivityTypesByLevel(level);
             }
+
+            Boolean activityTypeCreated = (Boolean) session.getAttribute("activityTypeCreated");
+            if (activityTypeCreated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Tipus d'activitat creat amb éxit");
+                model.addAttribute("modalHref", "/activityType/list");
+                session.setAttribute("activityTypeCreated", null);
+            }
+
+            Boolean activityTypeUpdated = (Boolean) session.getAttribute("activityTypeUpdated");
+            if (activityTypeUpdated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Tipus d'activitat modificada amb éxit");
+                model.addAttribute("modalHref", "/activityType/list");
+                session.setAttribute("activityTypeUpdated", null);
+            }
+
+            Boolean activityTypeDeleted = (Boolean) session.getAttribute("activityTypeDeleted");
+            if (activityTypeDeleted != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Tipus d'activitat borrat amb éxit");
+                model.addAttribute("modalHref", "/activityType/list");
+                session.setAttribute("activityTypeDeleted", null);
+            }
+
             model.addAttribute("activityTypes", lista);
             model.addAttribute("level", level);
             return "activityType/list";
@@ -129,6 +154,8 @@ public class ActivityTypeController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            session.setAttribute("activityTypeCreated", true);
             return "redirect:list";
         } else {
             return "redirect:/activityType/add";
@@ -183,7 +210,7 @@ public class ActivityTypeController {
             }
 
             activityTypeDao.updateActivityType(activityType);
-
+            session.setAttribute("activityTypeUpdated", true);
             return "redirect:../list";
         } else {
             return "redirect:/activityType/update/" + id;
@@ -214,6 +241,7 @@ public class ActivityTypeController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                session.setAttribute("activityTypeDeleted", true);
                 activityTypeDao.deleteActivityType(id);
                 return "redirect:../list";
             } else {

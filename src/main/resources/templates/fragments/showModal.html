@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"/>
+    </head>
+    <body>
+        <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;" aria-modal="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" >
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5></h5>
+                        <a th:href="@{${modalHref}}" class="modalBotonCerrar"><i class="icon-remove"></i></a>
+                    </div>
+                    <div class="modalBody">
+                        <label class="modalTituloConfirmar" th:text="${modalInfo}"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"></div>
+    </body>
+</html>

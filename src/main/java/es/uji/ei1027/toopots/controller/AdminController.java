@@ -66,6 +66,23 @@ public class AdminController {
             return "login";
         } else if (acceso == USER_AUTHORIZED) {
             List<Users> users = userDao.getRequests();
+
+            Boolean passwdUpdated = (Boolean) session.getAttribute("passwdUpdated");
+            if (passwdUpdated != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Contrasenya modificada amb éxit");
+                model.addAttribute("modalHref", "/admin/home");
+                session.setAttribute("passwdUpdated", null);
+            }
+
+            Boolean instructorDeleted = (Boolean) session.getAttribute("instructorDeleted");
+            if (instructorDeleted != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "S'ha donat de baixa al monitor");
+                model.addAttribute("modalHref", "/admin/home");
+                session.setAttribute("instructorDeleted", null);
+            }
+
             model.addAttribute("total", users.size());
             return "admin/home";
         } else {
@@ -114,6 +131,23 @@ public class AdminController {
                 ins.setCertifications(certificationDao.getCertifications(us.getId()));
                 instructors.add(ins);
             }
+
+            Boolean requestRejected = (Boolean) session.getAttribute("requestRejected");
+            if (requestRejected != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Sol·licitud rebutjada amb éxit");
+                model.addAttribute("modalHref", "/admin/listRequests");
+                session.setAttribute("requestRejected", null);
+            }
+
+            Boolean requestAcepted = (Boolean) session.getAttribute("requestAcepted");
+            if (requestAcepted != null) {
+                model.addAttribute("modalAppears", true);
+                model.addAttribute("modalInfo", "Sol·licitud aceptada amb éxit");
+                model.addAttribute("modalHref", "/admin/listRequests");
+                session.setAttribute("requestAcepted", null);
+            }
+
             model.addAttribute("instructors", instructors);
             return "admin/listRequests";
         } else {
@@ -136,6 +170,7 @@ public class AdminController {
         } else if (acceso == USER_AUTHORIZED) {
             if (user.getRol().equals("Request")) {
                 userDao.updateRole(id, "Instructor");
+                session.setAttribute("requestAcepted", true);
                 return "redirect:/admin/listRequests";
             } else {
                 return "redirect:/";
@@ -160,6 +195,7 @@ public class AdminController {
         } else if (acceso == USER_AUTHORIZED) {
             if (user.getRol().equals("Request")) {
                 userDao.updateRole(id, "Rejected");
+                session.setAttribute("requestRejected", true);
                 return "redirect:/admin/listRequests";
             } else {
                 return "redirect:/";
@@ -231,6 +267,7 @@ public class AdminController {
             }
             activityCertificationDao.addActivityCertification(authorization);
 
+            session.setAttribute("asignacioCreated", true);
             return "redirect:/admin/instructorProfile/" + id;
         } else {
             return "redirect:/admin/asignarActivitat/" + id;
@@ -306,6 +343,7 @@ public class AdminController {
                     activityCertificationDao.deleteAuthorization(c.getId(), id);
                 }
                 activityDao.cancelAllActivitiesFromThisType(instructor.getId(), activityType);
+                session.setAttribute("asignacioDeleted", true);
                 return "redirect:/admin/instructorProfile/" + instructor.getId();
             } else {
                 return "redirect:/";
@@ -339,6 +377,22 @@ public class AdminController {
                 Instructor ins = instructorDao.getInstructor(id);
                 ins.setCertifications(certificationDao.getCertifications(id));
                 ins.setActivities(activityCertificationDao.getAuthorizations(id));
+
+                Boolean asignacioCreated = (Boolean) session.getAttribute("asignacioCreated");
+                if (asignacioCreated != null) {
+                    model.addAttribute("modalAppears", true);
+                    model.addAttribute("modalInfo", "S'ha assignat el tipus d'activitat");
+                    model.addAttribute("modalHref", "/admin/instructorProfile/" + id);
+                    session.setAttribute("asignacioCreated", null);
+                }
+
+                Boolean asignacioDeleted = (Boolean) session.getAttribute("asignacioDeleted");
+                if (asignacioDeleted != null) {
+                    model.addAttribute("modalAppears", true);
+                    model.addAttribute("modalInfo", "S'ha eliminat l'assignació amb éxit");
+                    model.addAttribute("modalHref", "/admin/instructorProfile/" + id);
+                    session.setAttribute("asignacioDeleted", null);
+                }
 
                 model.addAttribute("user", userDao.getUser(id));
                 model.addAttribute("instructor", ins);
@@ -435,6 +489,7 @@ public class AdminController {
                 activityDao.cancelAllActivities(id, "Monitor donat de baixa per el administrador");
             }
         }
+        session.setAttribute("instructorDeleted", true);
         return "redirect:/";
     }
 

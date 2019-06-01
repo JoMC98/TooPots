@@ -185,6 +185,8 @@ public class ActivityController {
                 activityRatesDao.addActivityRates(tarifa);
             }
 
+            session.setAttribute("activityCreated", true);
+
             return "redirect:/";
         } else {
             return "redirect:/activity/add";
@@ -362,6 +364,8 @@ public class ActivityController {
                         "Prova un altra data",
                         "ClauPrimariaDuplicada");
             }
+            session.setAttribute("activityUpdated", true);
+
             return "redirect:/";
         } else {
             return "redirect:/activity/update/" + id;
@@ -411,6 +415,7 @@ public class ActivityController {
             }
             activity.setState("Cancel·lada");
             activityDao.cancelActivity(activity);
+            session.setAttribute("activityCanceled", true);
             return "redirect:/home";
         } else {
             return "redirect:/activity/cancel/" + id;
@@ -433,6 +438,7 @@ public class ActivityController {
             if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
                 activity.setState("Tancada");
                 activityDao.updateActivityState(activity);
+                session.setAttribute("activityClosed", true);
                 return "redirect:/home";
             } else {
                 return "redirect:/";
@@ -458,6 +464,8 @@ public class ActivityController {
             if (activity.getState().equals("Oberta") || activity.getState().equals("Tancada")) {
                 activity.setState("Oberta");
                 activityDao.updateActivityState(activity);
+
+                session.setAttribute("activityOpened", true);
                 return "redirect:/home";
             } else {
                 return "redirect:/";
@@ -498,7 +506,7 @@ public class ActivityController {
 
     //Oferta d'activitats
     @RequestMapping("/offer")
-    public String offer(Model model) {
+    public String offer(HttpSession session, Model model) {
         List<Activity> activities = activityDao.getActivities("Oberta");
         List<Activity> activitiesWithOcupation = new ArrayList<Activity>();
         for (Activity ac: activities) {
@@ -527,6 +535,46 @@ public class ActivityController {
 
             activitiesWithOcupation.add(ac);
         }
+
+        Boolean bookingDone = (Boolean) session.getAttribute("bookingDone");
+        if (bookingDone != null) {
+            model.addAttribute("bookingDone", true);
+            model.addAttribute("bookingPagada", bookingDone);
+            session.setAttribute("bookingDone", null);
+        }
+
+        Boolean passwdUpdated = (Boolean) session.getAttribute("passwdUpdated");
+        if (passwdUpdated != null) {
+            model.addAttribute("modalAppears", true);
+            model.addAttribute("modalInfo", "Contrasenya modificada amb éxit");
+            model.addAttribute("modalHref", "/activity/offer");
+            session.setAttribute("passwdUpdated", null);
+        }
+
+        Boolean profileUpdated = (Boolean) session.getAttribute("profileUpdated");
+        if (profileUpdated != null) {
+            model.addAttribute("modalAppears", true);
+            model.addAttribute("modalInfo", "El perfil s'ha modificat amb éxit");
+            model.addAttribute("modalHref", "/activity/offer");
+            session.setAttribute("profileUpdated", null);
+        }
+
+        Boolean requestRegistered = (Boolean) session.getAttribute("requestRegistered");
+        if (requestRegistered != null) {
+            model.addAttribute("modalAppears", true);
+            model.addAttribute("modalInfo", "Sol·licitud registrada amb éxit");
+            model.addAttribute("modalHref", "/activity/offer");
+            session.setAttribute("requestRegistered", null);
+        }
+
+        Boolean customerReactivated = (Boolean) session.getAttribute("customerReactivated");
+        if (customerReactivated != null) {
+            model.addAttribute("modalAppears", true);
+            model.addAttribute("modalInfo", "Compte resactivat amb éxit");
+            model.addAttribute("modalHref", "/activity/offer");
+            session.setAttribute("customerReactivated", null);
+        }
+
         model.addAttribute("activities", activitiesWithOcupation);
         model.addAttribute("filtroYorden", new FiltradoYOrden());
         model.addAttribute("comparator", new NameComparator());
@@ -809,9 +857,10 @@ public class ActivityController {
             reservation.setIdCustomer(user.getId());
             Activity activity = activityDao.getActivity(id);
 
-            reservationDao.addReservation(reservation, activity);
+            boolean pagada = reservationDao.addReservation(reservation, activity);
 
-            return "redirect:../..";
+            session.setAttribute("bookingDone", pagada);
+            return "redirect:/";
         } else {
             return "redirect:/";
         }

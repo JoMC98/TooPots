@@ -70,6 +70,7 @@ public class UserController {
             if (ret) {
                 user.setPasswd(passwordEncryptor.encryptPassword(newUser.getPasswd()));
                 userDao.updatePassword(user);
+                session.setAttribute("passwdUpdated", true);
                 return "redirect:/";
             } else {
                 return "user/updatePasswd";

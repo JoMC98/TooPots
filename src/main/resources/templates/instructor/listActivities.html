@@ -113,6 +113,8 @@
                 </tr>
             </table>
         </div>
-        <br>
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
     </body>
 </html>

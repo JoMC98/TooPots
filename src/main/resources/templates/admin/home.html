@@ -15,5 +15,8 @@
                 <i class="icon-envelope-alt"></i> Tens <label th:text="${total}"></label> sol·licituds pendents
             </a>
         </div>
+        <div th:if="${modalAppears}">
+            <div th:replace="fragments/showModal"></div>
+        </div>
     </body>
 </html>
