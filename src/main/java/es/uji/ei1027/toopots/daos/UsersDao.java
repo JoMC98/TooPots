@@ -26,6 +26,7 @@ public class UsersDao implements UserDao {
     @Override
     public Users loadUserByUsername(String username, String passwd) {
         Users user = getUser(username);
+        System.out.println(user);
 
         if (user == null)
             return null; // Usuari no trobat
@@ -81,7 +82,7 @@ public class UsersDao implements UserDao {
     /* Obté l'usuari amb el username donat. Torna null si no existeix. */
     public Users getUser(String username) {
         try {
-            return jdbcTemplate.queryForObject("SELECT * from Users WHERE username=?", new UsersRowMapper(), username);
+            return jdbcTemplate.queryForObject("SELECT * from Users WHERE username=" +  username, new UsersRowMapper());
         }
         catch(EmptyResultDataAccessException e) {
             return null;
